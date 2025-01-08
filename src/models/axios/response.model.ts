@@ -1,5 +1,5 @@
 import { AxiosHeaders } from "axios";
-import { IMensajes } from "../../../../Web-FrontEnd-Farmacia/src/models/context/global/mensajes.model";
+import { IMensajes } from "../../../../barcoazulfrontreact/src/models/context/global/mensajes.model";
 
 export interface IResponse {
   data: any;
