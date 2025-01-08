@@ -1,0 +1,33 @@
+.empresa {
+  &-periodo {
+    @apply h-full gap-y-2 flex flex-col;
+
+    &-container {
+      @apply grid md:grid-cols-2;
+    }
+
+    &-bloque {
+      @apply p-2 border-4 dark:border-gray-800;
+    }
+
+    &-months {
+      @apply py-1 grid sm:grid-cols-2 dark:border-gray-800;
+
+      &-check {
+        @apply py-2 border dark:border-gray-700;
+      }
+    }
+  }
+
+  &-configuracion {
+    @apply gap-y-2 flex flex-col;
+
+    &-bloques {
+      @apply h-full grid grid-cols-1 lg:grid-cols-2;
+    }
+
+    &-container {
+      @apply p-1 gap-y-2 flex flex-col border-4 dark:border-gray-800;
+    }
+  }
+}

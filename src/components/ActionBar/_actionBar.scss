@@ -1,0 +1,27 @@
+.action-bar {
+  &-container {
+    @apply relative m-0.5 flex items-center m:justify-center;
+  }
+  &-button {
+    @apply h-7 m:h-[26px] w-full max-w-[30px] p-0.5;
+    @apply rounded-sm scale-100 duration-100;
+    @apply hover:scale-125 hover:shadow-inner;
+    @apply dark:text-white  hover:text-white dark:hover:text-white;
+
+    &-consultar {
+      @apply action-bar-button;
+      @apply hover:bg-primary-600 hover:shadow-primary-500;
+    }
+    &-modificar {
+      @apply action-bar-button;
+      @apply hover:bg-secondary-600 hover:shadow-secondary-700;
+    }
+    &-eliminar {
+      @apply action-bar-button;
+      @apply hover:bg-red-600 hover:shadow-red-400;
+    }
+  }
+  &-icon {
+    @apply size-full;
+  }
+}

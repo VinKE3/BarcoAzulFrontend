@@ -1,0 +1,36 @@
+.button-base-bg-border {
+  @apply button-base border;
+
+  &-primary {
+    @apply button-base-bg-border button-base-bg-primary;
+    @apply border-primary-700 hover:border-primary-600;
+  }
+  &-secondary {
+    @apply button-base-bg-border button-base-bg-secondary;
+    @apply border-secondary-700 hover:border-secondary-600;
+  }
+  &-transparent {
+    @apply button-base-bg-border button-base-bg-transparent;
+  }
+
+  &-red {
+    @apply button-base-bg-border button-base-bg-red;
+    @apply border-[#C11C1C] hover:border-red-600;
+  }
+  &-blue {
+    @apply button-base-bg-border button-base-bg-blue;
+    @apply border-blue-700 hover:border-blue-600;
+  }
+  &-green {
+    @apply button-base-bg-border button-base-bg-green;
+    @apply border-emerald-600 hover:border-emerald-500;
+  }
+  &-cyan {
+    @apply button-base-bg-border button-base-bg-cyan;
+    @apply border-cyan-600 hover:border-cyan-500;
+  }
+  &-gray {
+    @apply button-base-bg-border button-base-bg-gray;
+    @apply border-gray-500 hover:border-gray-600;
+  }
+}

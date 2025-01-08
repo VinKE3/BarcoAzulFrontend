@@ -1,0 +1,72 @@
+.cliente-table {
+  th {
+    &:first-child {
+      @apply min-w-[80px];
+    }
+    &:nth-child(2) {
+      @apply min-w-[150px];
+    }
+    &:last-child {
+      @apply w-[90px] min-w-[90px];
+    }
+  }
+}
+
+.cliente-contacto-table {
+  th {
+    text-align: center;
+    &:first-child {
+      min-width: 150px;
+    }
+    &:nth-child(2) {
+      min-width: 150px;
+      text-align: left;
+    }
+    &:nth-child(3) {
+      min-width: 100px;
+      width: 100%;
+      text-align: left;
+    }
+    &:last-child {
+      min-width: 90px;
+      width: 90px;
+    }
+  }
+}
+
+.cliente-direccion-table {
+  th {
+    text-align: center;
+    &:first-child {
+      min-width: 100px;
+      width: 100%;
+      text-align: left;
+    }
+    &:nth-child(2),
+    &:nth-child(3) {
+      min-width: 100px;
+    }
+    &:last-child {
+      min-width: 90px;
+      width: 90px;
+    }
+  }
+}
+
+.cliente-personal-table {
+  th {
+    text-align: center;
+    &:first-child {
+      text-align: left;
+      min-width: 150px;
+      width: 100%;
+    }
+    &:nth-child(2) {
+      min-width: 150px;
+    }
+    &:last-child {
+      min-width: 90px;
+      width: 90px;
+    }
+  }
+}

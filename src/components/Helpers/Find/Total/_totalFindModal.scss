@@ -1,0 +1,16 @@
+.total-find-modal-table {
+  th {
+    @apply md:min-w-[100px] text-right;
+
+    &:first-child {
+      @apply min-w-[120px] text-left;
+    }
+    &:nth-child(2),
+    &:nth-child(5) {
+      @apply md:min-w-[120px] text-right;
+    }
+    &:last-child {
+      @apply md:min-w-[100px] text-right;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.label-base {
+  @apply leading-none text-mini font-[600] uppercase select-none;
+
+  &-checkbox {
+    @apply text-transparent;
+  }
+}

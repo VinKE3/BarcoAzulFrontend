@@ -1,0 +1,15 @@
+.loading {
+  &-container {
+    @apply h-full w-full flex items-center justify-center;
+    @apply text-white;
+
+    &-absolute {
+      @apply absolute top-0 left-0 z-20 loading-container;
+      @apply bg-gray-900/20 dark:bg-gray-500/25;
+    }
+  }
+  &-logo-masy {
+    @apply absolute top-[15px] left-2 w-48 h-14 p-1.5 rounded-sm opacity-60;
+    @apply bg-white;
+  }
+}

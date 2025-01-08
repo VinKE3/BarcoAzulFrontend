@@ -1,0 +1,24 @@
+.empty-dialog {
+  &-container {
+    @apply z-30 h-auto w-full min-w-[400px] sm:w-[50%] sm:max-w-[600px];
+    @apply py-5 px-6;
+    @apply flex flex-col gap-y-3;
+    @apply select-none rounded-xl shadow-lg;
+    @apply bg-white dark:bg-[#1C1D21];
+    @apply shadow-gray-600 dark:shadow-gray-500;
+  }
+
+  &-title {
+    @apply text-2xl uppercase font-semibold;
+  }
+
+  &-text {
+    @apply font-medium text-base;
+  }
+
+  &-button {
+    &-container {
+      @apply py-1 flex items-center justify-end font-semibold gap-x-2;
+    }
+  }
+}

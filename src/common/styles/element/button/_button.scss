@@ -1,0 +1,52 @@
+.button-base {
+  @apply py-1.5 px-2.5;
+  @apply flex items-center justify-center;
+  @apply font-[500] text-sm;
+  @apply rounded-md transition-all;
+  @apply focus:outline-transparent dark:focus:outline-transparent;
+
+  &-text {
+    @apply pl-1 pt-0.5;
+    @apply leading-none;
+
+    &-hidden {
+      @apply button-base-text hidden md:block;
+
+      &-info {
+        @apply button-base-text-hidden;
+        @apply text-xs;
+      }
+    }
+  }
+
+  &-icon {
+    @apply size-5;
+  }
+
+  //Asigna el alto del botón a la par de los inputs
+  &-input {
+    @apply button-base;
+    @apply py-[5px] uppercase;
+  }
+
+  //Botones unidos a inputs se anida uno o más
+  &-anidado {
+    @apply button-base;
+    @apply min-w-fit;
+    @apply mt-0.5 py-[5px] px-2.5 rounded-none rounded-r-md;
+
+    &-plano {
+      @apply button-base-anidado;
+      @apply rounded-none;
+    }
+  }
+
+  //Contenedor utilizado para botones dentro de tablas u otros contenedores
+  &-container {
+    @apply flex items-center py-1 gap-x-1;
+
+    &-center {
+      @apply button-base-container justify-center;
+    }
+  }
+}

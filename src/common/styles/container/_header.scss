@@ -1,0 +1,41 @@
+.header {
+  &-title {
+    @apply w-full;
+    @apply p-2 m:p-0;
+    @apply flex flex-wrap items-center justify-center m:justify-start;
+    @apply gap-2 m:gap-x-1;
+
+    &-button {
+      @apply size-9 min-w-11 m:min-w-min;
+      @apply flex items-center justify-center;
+      @apply p-1;
+      @apply border-base-color m:border-0 rounded;
+      @apply cursor-pointer duration-100;
+      @apply text-base-color;
+
+      &-mobile {
+        @apply header-title-button;
+        @apply hover:text-primary-600 dark:hover:text-primary-600;
+
+        &-icon {
+          @apply m:size-6;
+        }
+      }
+    }
+
+    &-container {
+      @apply h-full min-w-[65%];
+      @apply flex flex-1 flex-wrap items-center;
+      @apply gap-x-1;
+      @apply text-wrap uppercase;
+    }
+
+    &-text {
+      @apply text-m font-semibold leading-none;
+    }
+    &-username {
+      @apply font-bold leading-none;
+      @apply text-base-primary;
+    }
+  }
+}

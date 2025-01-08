@@ -1,0 +1,1 @@
+export {default as CuentaPorPagarDetalle} from "./CuentaPorPagar.detalle"

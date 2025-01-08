@@ -1,0 +1,10 @@
+.unidadMedida-table {
+  th {
+    &:first-child {
+      @apply min-w-[110px];
+    }
+    &:nth-child(2) {
+      @apply w-full min-w-[100px];
+    }
+  }
+}

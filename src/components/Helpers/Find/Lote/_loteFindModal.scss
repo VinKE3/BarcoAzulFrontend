@@ -1,0 +1,19 @@
+.lote-find-modal-table {
+  th {
+    @apply text-center;
+    &:first-child {
+      @apply w-[90px];
+    }
+    &:nth-child(2) {
+      @apply w-full;
+    }
+    &:nth-child(3) {
+      @apply w-[100px];
+    }
+
+    &:nth-child(4),
+    &:nth-child(6) {
+      @apply w-[80px];
+    }
+  }
+}

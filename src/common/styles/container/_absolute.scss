@@ -1,0 +1,4 @@
+.container-absolute {
+  @apply absolute h-screen w-screen;
+  @apply flex items-center justify-center;
+}

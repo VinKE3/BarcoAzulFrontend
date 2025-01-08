@@ -1,0 +1,13 @@
+.menu-base {
+  &-bg-color {
+    @apply bg-white dark:bg-[#1A232E];
+  }
+
+  &-text-color {
+    @apply text-gray-700 dark:text-white;
+  }
+}
+
+.border-base-color {
+  @apply border border-gray-300 dark:border-gray-700;
+}

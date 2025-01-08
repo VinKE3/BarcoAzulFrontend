@@ -1,0 +1,37 @@
+.sidebar {
+  @apply fixed m:static top-0 m:top-20 z-20;
+  @apply h-full m:h-auto w-full min-w-[225px];
+  @apply flex flex-col items-center gap-y-4;
+  @apply rounded-tl rounded-bl;
+  @apply m:transition-all m:duration-300;
+
+  &-visible {
+    @apply right-full m:w-[100px] min-w-[80px];
+  }
+  &-hidden {
+    @apply right-0 m:w-[235px] min-w-[235px];
+  }
+
+  &-logo {
+    &-container {
+      @apply w-full py-4 px-3 gap-1.5 flex items-center m:justify-center cursor-pointer duration-200;
+      @apply hover:bg-primary-900;
+    }
+    &-img {
+      @apply h-10 w-20 rounded-sm;
+    }
+    &-text {
+      @apply font-semibold text-lg;
+    }
+  }
+
+  &-primary {
+    @apply bg-gradient-to-tr from-primary-950 via-primary-900 to-primary-950 text-white;
+  }
+  &-light {
+    @apply bg-gradient-to-tr from-[#F4F5F4] via-[#e7e8e7] to-[#d8d8d8] text-gray-700;
+  }
+  &-dark {
+    @apply bg-gradient-to-tr from-gray-800 via-gray-800 to-gray-900 text-white;
+  }
+}

@@ -1,0 +1,8 @@
+.tipo-cambio-table {
+  th {
+    @apply min-w-[100px] text-center;
+  }
+  th:last-child {
+    @apply w-[90px] min-w-[90px];
+  }
+}

@@ -1,0 +1,20 @@
+.referencia-find-modal-table {
+  th {
+    @apply text-center;
+    &:first-child {
+      @apply w-[60px];
+    }
+    &:nth-child(2) {
+      @apply w-[125px];
+    }
+    &:nth-child(3) {
+      @apply w-[80px];
+    }
+    &:nth-child(4) {
+      @apply w-[120px] text-left;
+    }
+    &:nth-child(5) {
+      @apply w-[90px];
+    }
+  }
+}

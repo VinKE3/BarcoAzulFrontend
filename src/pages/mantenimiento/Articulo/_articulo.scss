@@ -1,0 +1,27 @@
+.articulo-table {
+  th {
+    &:first-child {
+      @apply min-w-[80px];
+    }
+    &:nth-child(2) {
+      @apply min-w-[80px];
+    }
+    &:nth-child(3) {
+      @apply min-w-[80px];
+    }
+    &:nth-child(4) {
+      @apply min-w-[40px];
+    }
+    &:nth-child(5) {
+      @apply min-w-[40px] text-center;
+    }
+    &:nth-child(6),
+    &:nth-child(7),
+    &:nth-child(8) {
+      @apply min-w-[50px] text-center;
+    }
+    &:last-child {
+      @apply w-[90px] min-w-[90px];
+    }
+  }
+}

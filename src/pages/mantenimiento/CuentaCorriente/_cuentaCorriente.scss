@@ -1,0 +1,10 @@
+.cuenta-corriente-table {
+  th {
+    &:nth-child(4) {
+      @apply min-w-[60px] text-center;
+    }
+    &:last-child {
+      @apply w-[90px] min-w-[90px];
+    }
+  }
+}

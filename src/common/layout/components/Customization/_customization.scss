@@ -1,0 +1,53 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.customization {
+  &-container {
+    @apply absolute z-20 top-20 md:top-36 right-[10px];
+    @apply text-base-color;
+  }
+  &-menu {
+    @apply p-1 flex items-center justify-center rounded-md cursor-pointer;
+    @apply text-white bg-gray-900 dark:bg-primary-700 hover:bg-primary-600 dark:hover:bg-primary-600;
+
+    &-icon {
+      @apply h-[20px];
+      animation: spin 10s infinite linear;
+    }
+  }
+  &-items {
+    @apply absolute right-0 z-50 w-48 mt-1 p-2 flex flex-col rounded-md border;
+    @apply menu-base-bg-color;
+    @apply border-base-color;
+
+    &-item {
+      @apply w-full gap-y-1 flex flex-col items-center;
+
+      &-text {
+        @apply w-full pl-2 font-semibold text-mini;
+      }
+
+      &-theme-group {
+        @apply overflow-hidden w-auto max-w-fit;
+        @apply flex items-center justify-center;
+        @apply border-base-color rounded-lg;
+
+        &-icon {
+          @apply h-10 py-1 px-2 cursor-pointer;
+        }
+        &-sun-icon {
+          @apply bg-gradient-to-tl from-cyan-400 to-sky-500 text-yellow-400;
+        }
+        &-moon-icon {
+          @apply bg-gradient-to-tr from-blue-950 to-sky-900 text-yellow-400;
+        }
+      }
+    }
+  }
+}

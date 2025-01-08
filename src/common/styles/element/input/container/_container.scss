@@ -1,0 +1,43 @@
+&-container {
+  @apply w-full py-1 flex flex-col justify-end gap-y-[2px];
+
+  &-100 {
+    @apply input-base-container;
+  }
+  &-75 {
+    @apply input-base-container md:w-3/4;
+  }
+  &-50 {
+    @apply input-base-container md:w-1/2;
+  }
+  &-40 {
+    @apply input-base-container md:w-[40%];
+  }
+  &-45 {
+    @apply input-base-container md:w-[45%];
+  }
+  &-33 {
+    @apply input-base-container md:w-1/3;
+  }
+  &-25 {
+    @apply input-base-container md:w-1/4;
+  }
+  &-20 {
+    @apply input-base-container md:w-1/5;
+  }
+  &-auto {
+    @apply input-base-container mx-2 md:w-auto md:min-w-fit;
+  }
+  &-button {
+    @apply flex items-center;
+  }
+}
+
+&-row {
+  @apply gap-0.5 flex flex-col md:flex-row;
+
+  &-between {
+    @apply input-base-row;
+    @apply justify-between;
+  }
+}

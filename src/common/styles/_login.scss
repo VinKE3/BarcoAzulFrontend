@@ -1,0 +1,107 @@
+//Se coloca en esta carpeta debido a que tailwind.scss choca con los estilos por la cascada
+.login {
+  @apply overflow-y-auto h-screen w-screen;
+  @apply flex items-center justify-center;
+  @apply bg-gradient-to-t from-neutral-200 via-slate-300 to-zinc-300;
+
+  &-container {
+    @apply overflow-hidden;
+    @apply h-full m:h-[80%] xl:h-[75%] min-h-[400px] m:max-h-[700px];
+    @apply w-full m:w-[90%] xl:w-[75%] xl:max-w-[1200px];
+    @apply flex items-center justify-center;
+    @apply rounded-lg;
+    @apply bg-white shadow-xl;
+  }
+
+  &-logo {
+    &-container {
+      @apply h-full w-0 md:w-[60%];
+      @apply py-2;
+      @apply flex flex-col items-center justify-center gap-2;
+      @apply bg-primary-600;
+      border-radius: 0px 400px 400px 0px;
+    }
+    &-svg {
+      @apply hidden md:block h-1/2;
+    }
+
+    &-text {
+      @apply hidden md:block h-1/3 w-full;
+      @apply py-1;
+      @apply flex flex-col;
+      @apply leading-none text-center text-wrap font-semibold select-none uppercase;
+      @apply text-transparent md:text-white;
+
+      &-masy {
+        @apply text-3xl lg:text-5xl;
+      }
+      &-frase {
+        @apply font-medium text-md lg:text-lg;
+      }
+    }
+  }
+
+  &-form {
+    @apply overflow-y-auto h-full lg:w-[40%];
+    @apply px-5 xl:px-10;
+    @apply flex flex-col items-end justify-center;
+    @apply select-none;
+
+    &-container {
+      @apply w-full;
+      @apply flex flex-col justify-center gap-y-1;
+      @apply text-gray-700;
+    }
+
+    &-title {
+      @apply py-2;
+      @apply flex flex-col gap-2;
+      @apply leading-none text-center font-bold uppercase;
+
+      &-text {
+        @apply leading-none text-3xl;
+      }
+      &-rubro {
+        @apply leading-none text-5xl text-primary-600;
+      }
+      &-p {
+        @apply leading-none text-lg;
+      }
+    }
+
+    &-input {
+      @apply mt-0.5 py-1.5 pl-3.5;
+      @apply decoration-0 rounded-md border;
+      @apply font-medium;
+      @apply bg-slate-100/50 border-gray-400 ring-gray-400;
+      @apply placeholder:font-normal placeholder:text-gray-600 selection:bg-primary-200;
+      @apply focus:ring-1 focus:ring-inset focus:border-primary-600 focus:ring-primary-700;
+
+      &-container {
+        @apply px-4 md:px-0;
+        @apply flex flex-col items-center justify-center gap-y-3;
+      }
+      &-group {
+        @apply w-full flex flex-col;
+      }
+    }
+
+    &-label {
+      @apply w-full;
+      @apply leading-none font-semibold text-sm uppercase;
+    }
+
+    &-button {
+      @apply w-full;
+      @apply my-2 px-10 py-3;
+      @apply leading-none font-medium rounded-lg outline-none transition-all;
+      @apply text-white bg-primary-600;
+      @apply hover:bg-primary-500 focus:bg-primary-500;
+    }
+
+    &-copy {
+      @apply w-full flex items-end justify-center;
+      @apply leading-none text-center font-semibold text-base uppercase;
+    }
+  }
+}

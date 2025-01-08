@@ -1,0 +1,7 @@
+.vehiculo-table {
+  th {
+    &:first-child {
+      @apply min-w-[110px];
+    }
+  }
+}

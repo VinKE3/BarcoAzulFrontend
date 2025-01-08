@@ -1,0 +1,9 @@
+.home {
+  &-title {
+    @apply leading-none text-4xl font-semibold select-none;
+  }
+  &-text {
+    @apply mt-5;
+    @apply leading-none font-medium select-none;
+  }
+}

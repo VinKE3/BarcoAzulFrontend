@@ -1,0 +1,30 @@
+.tab-base {
+  @apply overflow-y-auto h-full rounded;
+
+  &-list {
+    @apply overflow-x-auto flex;
+    @apply bg-gray-200 dark:bg-gray-800;
+
+    &-button {
+      @apply h-full;
+      @apply flex flex-col md:flex-row items-center justify-center gap-x-2;
+      @apply py-2.5 px-5;
+      @apply font-semibold text-sm uppercase;
+      @apply hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none;
+    }
+
+    &-icon {
+      @apply size-[20px];
+    }
+
+    &-selected {
+      @apply text-white bg-gray-700 dark:bg-primary-600 border-gray-700 dark:border-primary-600 hover:bg-gray-700 dark:hover:bg-primary-700;
+    }
+  }
+
+  &-container {
+    @apply h-full;
+    @apply py-2;
+    @apply flex flex-col gap-y-2;
+  }
+}

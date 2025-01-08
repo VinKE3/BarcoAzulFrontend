@@ -1,0 +1,35 @@
+.table-base {
+  &-td {
+    &-multiple {
+      @apply flex flex-wrap m:flex-col gap-x-2;
+
+      &-fit {
+        @apply table-base-td-multiple;
+        @apply max-w-fit;
+      }
+      &-center {
+        @apply table-base-td-multiple;
+        @apply items-center;
+      }
+      &-end {
+        @apply table-base-td-multiple;
+        @apply items-end;
+      }
+    }
+
+    &-container {
+      @apply w-full gap-x-0.5 flex items-center;
+    }
+
+    &-text {
+      @apply w-[50px] min-w-[50px];
+      @apply leading-none m:text-right;
+    }
+    &-sub-text {
+      @apply leading-none m:text-xs font-semibold;
+    }
+    &-number {
+      @apply leading-none w-full max-w-[60px] font-bold;
+    }
+  }
+}

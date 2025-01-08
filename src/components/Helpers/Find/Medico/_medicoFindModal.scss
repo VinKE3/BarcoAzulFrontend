@@ -1,0 +1,15 @@
+.medico-find-modal-table {
+  th {
+    @apply text-center;
+
+    &:first-child {
+      @apply w-[100px];
+    }
+    &:nth-child(2) {
+      @apply text-left;
+    }
+    &:last-child {
+      @apply w-[70px];
+    }
+  }
+}

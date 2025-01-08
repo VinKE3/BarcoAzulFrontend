@@ -1,0 +1,26 @@
+.input-base {
+  @apply w-full;
+  @apply mt-0.5 py-0.5 pl-2.5;
+  @apply rounded-md border;
+  @apply text-sm font-medium;
+  @apply decoration-0 focus:ring-1 focus:ring-inset;
+  @apply dark:bg-[#2a2c30];
+  @apply border-gray-400 dark:border-gray-600;
+  @apply placeholder:text-mini placeholder:uppercase placeholder:text-gray-500 dark:placeholder:text-gray-300;
+  @apply selection:bg-primary-200 dark:selection:bg-primary-600;
+  @apply focus:ring-primary-600 focus:border-primary-600 focus:dark:shadow-sm focus:dark:shadow-primary-600;
+  @apply disabled:bg-[#f5f5f5] dark:disabled:bg-[#0b0b0b];
+  @apply disabled:text-gray-700 dark:disabled:text-white;
+  @apply disabled:placeholder:text-gray-400 disabled:opacity-100;
+
+  &-button {
+    @apply input-base;
+    @apply w-full rounded-r-none;
+  }
+
+  &-textarea {
+    @apply input-base h-[70px] min-h-[40px];
+  }
+
+  @import "container/container";
+}

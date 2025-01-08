@@ -1,0 +1,8 @@
+.button-group {
+  &-container {
+    @apply py-1;
+    @apply flex items-center justify-start;
+    @apply gap-x-1.5 md:gap-x-1;
+    @apply select-none;
+  }
+}

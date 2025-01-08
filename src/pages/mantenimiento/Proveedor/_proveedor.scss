@@ -1,0 +1,60 @@
+.proveedor-table {
+  th {
+    @apply text-center;
+
+    &:first-child {
+      @apply min-w-[60px];
+    }
+    &:nth-child(2),
+    &:nth-child(4) {
+      @apply min-w-[150px];
+    }
+    &:nth-child(3) {
+      @apply w-full min-w-[200px] text-left;
+    }
+    &:last-child {
+      @apply w-[90px] min-w-[90px];
+    }
+  }
+}
+.proveedor-contacto-table {
+  th {
+    text-align: center;
+    &:first-child {
+      min-width: 150px;
+    }
+    &:nth-child(2) {
+      min-width: 150px;
+      text-align: left;
+    }
+    &:nth-child(3) {
+      min-width: 100px;
+      width: 100%;
+      text-align: left;
+    }
+    &:last-child {
+      min-width: 90px;
+      width: 90px;
+    }
+  }
+}
+.proveedor-cuenta-corriente-table {
+  th {
+    text-align: center;
+    &:first-child {
+      min-width: 200px;
+      width: 100%;
+      text-align: left;
+    }
+    &:nth-child(2) {
+      min-width: 50px;
+    }
+    &:nth-child(3) {
+      min-width: 100px;
+    }
+    &:last-child {
+      min-width: 90px;
+      width: 90px;
+    }
+  }
+}

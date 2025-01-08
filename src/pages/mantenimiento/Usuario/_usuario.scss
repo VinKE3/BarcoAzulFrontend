@@ -1,0 +1,71 @@
+.usuario-table {
+  th {
+    &:first-child {
+      @apply min-w-[120px] text-left;
+    }
+    &:nth-child(2) {
+      @apply min-w-[150px] text-center;
+    }
+    &:nth-child(3) {
+      @apply min-w-[90px] text-center;
+    }
+  }
+}
+
+.configuracion-modal {
+  &-button {
+    @apply w-full py-2 text-mini font-semibold text-center uppercase transition-all;
+    @apply dark:text-white hover:shadow-gray-900/20;
+
+    &-group {
+      @apply overflow-hidden w-full flex flex-wrap md:flex-nowrap border rounded divide-y sm:divide-y-0 sm:divide-x;
+      @apply border-gray-900 dark:border-gray-700 divide-gray-900 dark:divide-gray-700;
+    }
+    &-inicial {
+      @apply configuracion-modal-button rounded-lg rounded-r-none border-r-0;
+    }
+    &-medio {
+      @apply configuracion-modal-button rounded-r-none border-r-0 rounded-l-none;
+    }
+    &-final {
+      @apply configuracion-modal-button rounded-lg rounded-l-none border-l-0;
+    }
+    &-activo {
+      @apply configuracion-modal-button;
+      @apply bg-primary-600 text-white;
+    }
+  }
+
+  &-menu {
+    @apply flex justify-between w-full px-2 py-3;
+    @apply text-m font-semibold uppercase;
+    @apply transition-colors duration-300;
+    @apply dark:bg-transparent border dark:border-gray-700;
+
+    &-container {
+      @apply overflow-y-auto max-h-[250px];
+    }
+    &-text {
+      @apply pl-0.5 text-m;
+      @apply text-base-primary;
+    }
+    &-icon {
+      @apply h-5 w-5 transform duration-150;
+    }
+    &-open {
+      @apply bg-gray-200 dark:bg-gray-700;
+    }
+    &-close {
+      @apply bg-gray-50;
+    }
+    &-item {
+      @apply text-sm cursor-pointer border;
+      @apply dark:bg-zinc-900 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800;
+
+      &-selected {
+        @apply px-3 py-1.5;
+        @apply text-white bg-gray-700 dark:bg-gray-600;
+      }
+    }
+  }
+}

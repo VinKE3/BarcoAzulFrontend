@@ -1,0 +1,21 @@
+.pedido-find-modal-table {
+  th {
+    @apply text-center;
+
+    &:first-child {
+      @apply min-w-[125px] text-left;
+    }
+    &:nth-child(2) {
+      @apply min-w-[70px];
+    }
+    &:nth-child(3) {
+      @apply min-w-[130px] text-left;
+    }
+    &:nth-child(4) {
+      @apply min-w-[90px];
+    }
+    &:last-child {
+      @apply min-w-[60px];
+    }
+  }
+}

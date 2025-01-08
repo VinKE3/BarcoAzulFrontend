@@ -1,0 +1,20 @@
+.pedidos-find-modal {
+  @apply md:w-[50%];
+
+  &-container {
+    @apply mb-2;
+  }
+}
+
+.pedidos-find-modal-table {
+  th {
+    @apply text-center;
+
+    &:first-child {
+      @apply w-full min-w-[125px] text-left;
+    }
+    &:nth-child(2) {
+      @apply min-w-[60px];
+    }
+  }
+}

@@ -1,0 +1,8 @@
+.button-select-base {
+  @apply py-1.5 px-3.5 flex items-center justify-center;
+  @apply rounded-md transition-all;
+
+  &-container {
+    @apply py-[3px] flex justify-center;
+  }
+}

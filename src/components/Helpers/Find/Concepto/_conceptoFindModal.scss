@@ -1,0 +1,17 @@
+.concepto-find-modal-table {
+  th {
+    @apply text-center;
+    &:first-child {
+      @apply w-[90px];
+    }
+    &:nth-child(2) {
+      @apply w-[120px];
+    }
+    &:nth-child(3) {
+      @apply w-full text-left;
+    }
+    &:last-child {
+      @apply w-[90px];
+    }
+  }
+}

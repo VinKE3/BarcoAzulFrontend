@@ -1,0 +1,45 @@
+.modal-base {
+  @apply fixed top-0 left-0 z-40;
+  @apply h-full w-full;
+  @apply flex items-center justify-center;
+  @apply bg-gray-500/30 dark:bg-black/50;
+
+  &-dialog {
+    @apply relative;
+    @apply h-full w-full sm:max-h-[80%] md:h-auto md:w-auto;
+    @apply p-4 rounded-sm;
+    @apply flex flex-col gap-y-2;
+    @apply main-base-bg-color;
+  }
+
+  &-content {
+    @apply overflow-y-auto;
+    @apply py-1 px-1.5;
+    @apply flex flex-col;
+
+    &-secondary {
+      @apply modal-base-content;
+      @apply gap-y-2;
+
+      &-container {
+        @apply filter-base;
+        @apply gap-y-2.5;
+      }
+    }
+
+    &-header {
+      @apply flex items-center justify-between uppercase select-none;
+
+      &-title {
+        @apply leading-none text-lg font-semibold;
+      }
+      &-sub-title {
+        @apply leading-none text-md font-semibold select-none uppercase;
+        @apply text-base-primary;
+      }
+      &-icon {
+        @apply h-7 cursor-pointer;
+      }
+    }
+  }
+}

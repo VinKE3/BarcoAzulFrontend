@@ -1,0 +1,46 @@
+.form-base {
+  @apply overflow-y-auto;
+  @apply flex flex-col gap-y-2;
+
+  &-container {
+    @apply h-auto;
+    @apply p-1 sm:p-2;
+    @apply flex flex-col;
+    @apply border-base-color;
+    @apply rounded-md;
+    @apply shadow-lg dark:shadow-gray-900;
+    @apply main-base-bg-color;
+  }
+
+  &-detalle {
+    @apply flex flex-col gap-y-1 m:gap-y-0;
+
+    &-item {
+      @apply h-full;
+      @apply flex flex-col m:flex-row items-center justify-end;
+      @apply leading-none text-mini m:text-[13px] text-end;
+
+      &-text {
+        @apply form-base-detalle-item;
+        @apply w-full pr-1.5;
+        @apply font-semibold;
+        @apply border-base-color;
+        @apply border-t-0;
+      }
+      &-number {
+        @apply form-base-detalle-item;
+        @apply w-full m:w-auto min-w-[90px];
+        @apply py-0.5 m:pr-1.5;
+        @apply font-bold;
+        @apply border-base-color;
+        @apply border-t-0 border-l-0;
+      }
+      &-input {
+        @apply form-base-detalle-item;
+        @apply input-base;
+        @apply min-w-[73px];
+        @apply py-0 m-0 text-xs;
+      }
+    }
+  }
+}

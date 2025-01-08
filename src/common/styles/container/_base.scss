@@ -1,0 +1,45 @@
+@layer base {
+  html {
+    font-family: "Roboto", system-ui, sans-serif;
+  }
+}
+
+.base {
+  @apply flex;
+}
+
+//Estructura body envuelve [header & main]
+.body-base {
+  @apply overflow-hidden;
+  @apply min-h-screen w-full;
+  @apply flex flex-col;
+  @apply body-base-bg-color;
+  @apply text-base-color;
+
+  &-bg-color {
+    @apply bg-[#F4F5F4] dark:bg-[#0F1114];
+  }
+}
+
+.header-base {
+  @apply min-h-[112px] md:min-h-[60px] w-full;
+  @apply py-1 px-2;
+  @apply flex flex-wrap-reverse m:flex-nowrap items-center justify-between;
+  @apply select-none;
+}
+
+.main-base {
+  height: calc(100vh - 112px); /* Resta la altura de la cabecera en pantallas pequeñas */
+
+  @media (min-width: 768px) {
+    height: calc(100vh - 60px); /* Resta la altura de la cabecera en pantallas más grandes */
+  }
+
+  @apply w-full;
+  @apply p-2 sm:px-6;
+  @apply flex flex-col gap-y-2;
+
+  &-bg-color {
+    @apply bg-white dark:bg-[#1C1D21];
+  }
+}

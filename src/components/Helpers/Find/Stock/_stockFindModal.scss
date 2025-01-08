@@ -1,0 +1,11 @@
+.stock-find-modal-table {
+  th {
+    &:first-child {
+      @apply w-full;
+    }
+    &:nth-child(2),
+    &:nth-child(3) {
+      @apply min-w-[140px] text-right;
+    }
+  }
+}

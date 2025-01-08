@@ -1,0 +1,23 @@
+.orden-compra-find-modal-table {
+  th {
+    @apply text-center;
+    &:first-child {
+      @apply w-[60px];
+    }
+    &:nth-child(2) {
+      @apply w-[100px];
+    }
+    &:nth-child(3) {
+      @apply w-[70px];
+    }
+    &:nth-child(4) {
+      @apply w-[140px] text-left;
+    }
+    &:nth-child(5) {
+      @apply w-[90px];
+    }
+    &:nth-child(6) {
+      @apply w-[100px];
+    }
+  }
+}

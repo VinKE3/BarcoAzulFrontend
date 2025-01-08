@@ -1,0 +1,14 @@
+.cliente-find-modal-table {
+  th {
+    @apply text-center;
+    &:first-child {
+      @apply w-[70px];
+    }
+    &:nth-child(2) {
+      @apply w-[100px];
+    }
+    &:last-child {
+      @apply w-full text-left;
+    }
+  }
+}

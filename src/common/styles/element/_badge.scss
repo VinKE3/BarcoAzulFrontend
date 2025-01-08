@@ -1,0 +1,56 @@
+.badge-base {
+  @apply inline-flex items-center;
+  @apply m:py-0.5 px-1.5;
+  @apply rounded-md ring-1 ring-inset;
+  @apply leading-none text-mini text-center font-semibold select-none;
+  @apply dark:text-white;
+
+  &-primary {
+    @apply badge-base;
+    @apply bg-primary-100 dark:bg-primary-700;
+    @apply text-primary-800;
+    @apply ring-primary-800/80;
+  }
+  &-secondary {
+    @apply badge-base;
+    @apply bg-secondary-50 dark:bg-secondary-700;
+    @apply text-secondary-800;
+    @apply ring-secondary-800/80;
+  }
+  &-gray {
+    @apply badge-base;
+    @apply bg-slate-100 dark:bg-gray-700;
+    @apply text-gray-800;
+    @apply ring-gray-800/80;
+  }
+  &-blue {
+    @apply badge-base;
+    @apply text-xs bg-blue-200 dark:bg-blue-600;
+    @apply text-blue-900;
+    @apply ring-blue-800/80 dark:ring-blue-600;
+  }
+  &-green {
+    @apply badge-base;
+    @apply bg-emerald-100 dark:bg-emerald-700;
+    @apply text-emerald-800;
+    @apply ring-emerald-800/80 dark:ring-emerald-700;
+  }
+  &-yellow {
+    @apply badge-base;
+    @apply bg-amber-100 dark:bg-[#d58f1d];
+    @apply text-amber-900;
+    @apply ring-amber-800/80 dark:ring-[#d58f1d];
+  }
+  &-red {
+    @apply badge-base;
+    @apply bg-red-200/80 dark:bg-red-600;
+    @apply text-red-800;
+    @apply ring-red-800/70 dark:ring-red-600;
+  }
+  &-indigo {
+    @apply badge-base;
+    @apply bg-indigo-200 dark:bg-indigo-600;
+    @apply text-indigo-800;
+    @apply ring-indigo-900/20 dark:ring-indigo-600;
+  }
+}

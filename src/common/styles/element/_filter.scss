@@ -1,0 +1,13 @@
+.filter-base {
+  @apply relative w-full;
+  @apply mt-2 pt-[9px] pb-1 px-2;
+  @apply flex flex-col;
+  @apply border-base-color rounded-sm;
+
+  &-text {
+    @apply absolute top-0;
+    @apply leading-none text-minixs uppercase select-none;
+    @apply -translate-y-1/2;
+    @apply main-base-bg-color;
+  }
+}

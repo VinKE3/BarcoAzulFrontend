@@ -1,0 +1,13 @@
+.distrito-table {
+  th {
+    &:first-child {
+      @apply min-w-[60px];
+    }
+    &:nth-child(2) {
+      @apply min-w-[100px];
+    }
+    &:last-child {
+      @apply w-[90px] min-w-[90px];
+    }
+  }
+}

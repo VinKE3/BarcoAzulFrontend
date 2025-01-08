@@ -1,0 +1,90 @@
+.navbar {
+  @apply h-screen m:h-auto w-full;
+  @apply flex flex-col items-center select-none;
+
+  &-menu {
+    @apply relative w-full;
+
+    &-button {
+      @apply h-10 flex items-center cursor-pointer hover:bg-primary-900;
+
+      &-compact {
+        @apply m:h-fit py-2 flex-col justify-center;
+      }
+      &-full {
+        @apply m:h-10;
+      }
+    }
+
+    &-icon {
+      @apply h-full m:h-7 w-14 m:w-10 py-2 m:py-0 px-2 flex items-center justify-center;
+    }
+    &-text {
+      @apply h-full;
+      @apply flex-1 flex items-center;
+      @apply leading-none font-medium;
+
+      &-compact {
+        @apply m:text-mini;
+      }
+
+      &-full {
+        @apply m:text-sm;
+      }
+    }
+    &-arrow {
+      &-container {
+        @apply h-full py-2.5 px-2;
+      }
+      &-icon {
+        @apply h-full w-full transition-all;
+      }
+    }
+  }
+
+  &-sub-menu {
+    &-container {
+      @apply max-h-[250px] flex flex-col;
+      @apply text-m outline-none;
+      @apply dark:border-gray-700 rounded-md;
+      @apply bg-transparent dark:bg-transparent;
+    }
+    &-compact {
+      @apply overflow-y-auto absolute top-0 left-[84px];
+      @apply max-h-[255px] w-[200px];
+      @apply ml-2.5 rounded-r-md;
+      @apply menu-base-bg-color;
+      @apply menu-base-text-color;
+      @apply shadow-lg dark:shadow-md;
+      @apply shadow-gray-400 dark:shadow-gray-700;
+    }
+    &-full {
+      @apply pl-3;
+    }
+
+    &-button {
+      @apply relative py-2 px-1 flex;
+      @apply leading-none text-m m:text-sm font-semibold;
+      @apply transition-colors;
+      @apply hover:bg-primary-700 dark:hover:bg-primary-600 hover:text-white;
+    }
+    &-icon {
+      @apply h-full m:h-5 w-12 m:w-8;
+      @apply py-2 m:py-0 mr-1;
+      @apply flex items-center justify-center;
+    }
+
+    &-text {
+      @apply text-sm;
+    }
+    &-separator {
+      @apply before:top-1/4 before:left-[5px] before:h-[5px] before:w-[5px] before:border-2 before:rounded-full pr-1.5;
+      &-visible {
+        @apply before:border-gray-700 before:dark:border-gray-700;
+      }
+      &-hidden {
+        @apply before:border-gray-200 before:dark:border-gray-200;
+      }
+    }
+  }
+}

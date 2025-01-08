@@ -1,0 +1,16 @@
+.linea-table {
+  th {
+    &:first-child {
+      @apply min-w-[110px];
+    }
+    &:nth-child(2) {
+      @apply w-full min-w-[100px];
+    }
+    &:nth-child(3) {
+      @apply min-w-[130px] text-center;
+    }
+    &:last-child {
+      @apply w-[90px] min-w-[90px];
+    }
+  }
+}

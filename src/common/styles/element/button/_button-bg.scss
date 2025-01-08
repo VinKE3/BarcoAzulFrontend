@@ -1,0 +1,60 @@
+.button-base-bg {
+  @apply text-white;
+  @apply disabled:bg-gray-700 dark:disabled:bg-gray-800;
+  @apply disabled:hover:bg-gray-700;
+
+  &-primary {
+    @apply button-base-bg;
+    @apply bg-primary-700 hover:bg-primary-600;
+    @apply focus:bg-primary-500 focus:dark:bg-primary-600;
+  }
+  &-secondary {
+    @apply button-base-bg;
+    @apply bg-secondary-700 hover:bg-secondary-600;
+    @apply focus:bg-secondary-500 focus:dark:bg-secondary-600;
+  }
+  &-transparent {
+    @apply button-base-bg;
+    @apply font-semibold border-gray-400;
+    @apply text-gray-600 dark:text-white hover:text-white;
+    @apply bg-transparent/5 hover:bg-red-600 hover:border-red-600;
+  }
+  &-blue {
+    @apply button-base-bg;
+    @apply bg-blue-700 hover:bg-blue-600;
+    @apply focus:bg-blue-500 focus:dark:bg-blue-600;
+  }
+  &-cyan {
+    @apply button-base-bg;
+    @apply bg-cyan-600 hover:bg-cyan-500;
+    @apply focus:bg-cyan-500 focus:dark:bg-cyan-600;
+  }
+  &-red {
+    @apply button-base-bg;
+    @apply bg-[#C11C1C] hover:bg-red-600;
+    @apply focus:bg-red-500 focus:dark:bg-red-600;
+  }
+  &-green {
+    @apply button-base-bg;
+    @apply bg-emerald-700 hover:bg-emerald-600;
+    @apply focus:bg-emerald-500 focus:dark:bg-emerald-600;
+  }
+
+  &-orange {
+    @apply button-base-bg;
+    @apply bg-orange-600  dark:bg-orange-500;
+    @apply hover:bg-orange-500 dark:hover:bg-orange-400;
+    @apply focus:bg-orange-400 focus:dark:bg-orange-500;
+  }
+  &-indigo {
+    @apply button-base-bg;
+    @apply bg-[#7b6edd] dark:bg-indigo-700;
+    @apply hover:bg-indigo-500;
+    @apply focus:bg-indigo-500 focus:dark:bg-indigo-400;
+  }
+  &-gray {
+    @apply button-base-bg;
+    @apply bg-gray-500 hover:bg-gray-600;
+    @apply focus:bg-gray-400 focus:dark:bg-gray-400;
+  }
+}

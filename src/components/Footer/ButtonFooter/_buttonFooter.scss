@@ -1,0 +1,5 @@
+.footer {
+  &-button-container {
+    @apply flex items-center justify-end gap-x-1;
+  }
+}

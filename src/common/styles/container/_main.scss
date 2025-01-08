@@ -1,0 +1,23 @@
+.main {
+  &-header {
+    @apply h-auto m:h-fit;
+    @apply flex flex-wrap flex-col sm:flex-row justify-between sm:items-center;
+    @apply sm:gap-y-2;
+
+    &-title {
+      @apply text-2xl font-bold uppercase leading-none select-none;
+    }
+
+    &-sub-title {
+      @apply text-xl font-bold uppercase leading-none select-none;
+    }
+  }
+
+  &-body {
+    @apply overflow-auto h-full;
+    @apply p-1 sm:py-3 sm:px-4;
+    @apply flex flex-col gap-y-1;
+    @apply rounded-md shadow;
+    @apply main-base-bg-color;
+  }
+}

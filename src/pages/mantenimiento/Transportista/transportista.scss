@@ -1,0 +1,7 @@
+.transportista-table {
+  th {
+    &:first-child {
+      @apply min-w-[120px];
+    }
+  }
+}

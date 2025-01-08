@@ -1,0 +1,11 @@
+.text-base {
+  &-color {
+    @apply text-gray-700 dark:text-white;
+  }
+  &-primary {
+    @apply text-primary-600 dark:text-primary-400;
+  }
+  &-secondary {
+    @apply text-secondary-600 dark:text-secondary-500;
+  }
+}
