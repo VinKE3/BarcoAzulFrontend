@@ -3,64 +3,52 @@ import { IStockFindTable } from "./stockFindModal.model";
 
 export interface IArticuloFindModal {
   inputFocus: string;
-  almacenId: string;
 }
 
 export interface IArticuloFindFilter {
+  codigoBarras: string;
   descripcion: string;
+  isActivo: boolean;
 }
 
 export const defaultArticuloFindFilter: IArticuloFindFilter = {
+  codigoBarras: "",
   descripcion: "",
+  isActivo: true,
 };
+
+export interface IArticuloFindTable {
+  actualizarPrecio: boolean;
+  codigoBarras: string;
+  controlarStock: boolean;
+  descripcion: string;
+  id: string;
+  isActivo: boolean;
+  monedaId: string;
+  precioCompra: number;
+  precioVenta: number;
+  stock: number;
+  unidadMedidaAbreviatura: string;
+}
+
 export interface IArticuloFind extends IArticuloFindTable {
   origen: string;
 }
 
 export const defaultArticuloFind: IArticuloFind = {
-  origen: "",
-  id: "",
+  actualizarPrecio: false,
+  codigoBarras: "",
+  controlarStock: false,
   descripcion: "",
-  farmacologiaId: "",
-  farmacologiaNombre: "",
-  grupoFarmacologicoDescripcion: "",
-  grupoFarmacologicoId: "",
-  lineaCodigoInterno: "",
-  lineaDescripcion: "",
-  lineaId: "",
-  loteId: "",
-  loteNumero: "",
-  loteFechaVencimiento: "",
+  id: "",
+  isActivo: true,
   monedaId: "",
-  precioCaja: 0,
-  precioUnitario: 0,
-  stockCajas: 0,
-  stockUnidades: 0,
-  unidadMedidaId: "",
-  unidadMedidaAlternaId: "",
+  precioCompra: 0,
+  precioVenta: 0,
+  stock: 0,
+  unidadMedidaAbreviatura: "",
+  origen: "articuloFind",
 };
-
-export interface IArticuloFindTable {
-  id: string;
-  descripcion: string;
-  farmacologiaId: string;
-  farmacologiaNombre: string;
-  grupoFarmacologicoDescripcion: string;
-  grupoFarmacologicoId: string;
-  lineaCodigoInterno: string;
-  lineaDescripcion: string; //Laboratorio
-  lineaId: string;
-  loteId: string;
-  loteNumero: string;
-  loteFechaVencimiento: string;
-  monedaId: string;
-  precioCaja: number;
-  precioUnitario: number;
-  stockCajas: number;
-  stockUnidades: number;
-  unidadMedidaId: string;
-  unidadMedidaAlternaId: string;
-}
 
 export interface IArticuloFindAdicional {
   stock: IStockFindTable[];

@@ -2,99 +2,92 @@
 import { useMemo } from "react";
 import { Column } from "react-table";
 import { IArticuloFind, IArticuloFindTable } from "../../../../models";
-import { handleNumber } from "../../../../util";
+import { handleNumber, handleMonedaRow } from "../../../../util";
 import { SelectButton } from "../../SelectButton";
 
-const useArticuloFindColumn = (inputFocus: string): Column<IArticuloFindTable>[] => {
+const useArticuloFindColumn = (
+  inputFocus: string
+): Column<IArticuloFindTable>[] => {
   return useMemo<Column<IArticuloFindTable>[]>(
     () => [
       {
-        Header: "Sel",
+        Header: "Acciones",
         Cell: ({ row }: { row: { original: IArticuloFindTable } }) => (
-          <div className="button-base-container-center">
+          <div className="helper-select-container">
             <SelectButton
-              retorno={
-                {
-                  ...row.original,
-                  origen: "articuloFind",
-                } as IArticuloFind
-              }
+              retorno={{ ...row.original, origen: "articuloFind" }}
               inputFocus={inputFocus}
             />
           </div>
         ),
       },
       {
-        Header: "Código",
-        accessor: "id",
-        Cell: ({ value }: { value: string }) => {
-          return <p className="text-center">{value}</p>;
-        },
-      },
-      {
         Header: "Descripción",
-        accessor: "descripcion",
+        accessor: "id",
+        Cell: ({ row }: { row: { original: IArticuloFindTable } }) => {
+          const { codigoBarras, descripcion } = row.original;
+          return (
+            <div className="table-base-multiple">
+              <p>{codigoBarras}</p>
+              <p className="table-base-multiple-sub-text">{descripcion}</p>
+            </div>
+          );
+        },
       },
       {
         Header: "Unidad",
-        accessor: "unidadMedidaId",
+        accessor: "unidadMedidaAbreviatura",
         Cell: ({ value }: { value: string }) => {
           return <p className="text-center">{value}</p>;
         },
       },
       {
-        Header: "Cantidad Und",
-        accessor: "stockUnidades",
-        Cell: ({ value }: { value: number }) => {
-          return (
-            <p title="Cantidad Unidades" className="text-right">
-              {handleNumber(value, false, true)}
-            </p>
-          );
-        },
-      },
-      {
-        Header: "Precio Und",
-        accessor: "precioUnitario",
-        Cell: ({ value }: { value: number }) => {
-          return (
-            <p title="Precio Unitario" className="text-right">
-              {handleNumber(value, false, true)}
-            </p>
-          );
-        },
-      },
-      {
-        Header: "Unidad Alt.",
-        accessor: "unidadMedidaAlternaId",
+        Header: "M",
+        accessor: "monedaId",
         Cell: ({ value }: { value: string }) => {
-          return <p className="text-center">{value}</p>;
-        },
-      },
-      {
-        Header: "Cantidad Caja",
-        accessor: "stockCajas",
-        Cell: ({ value }: { value: number }) => {
           return (
-            <p title="Cantidad Cajas" className="text-right">
-              {handleNumber(value, false, true)}
-            </p>
+            <div className="flex justify-center">
+              <p className="table-base-badge-gray">{handleMonedaRow(value)}</p>
+            </div>
           );
         },
       },
       {
-        Header: "Precio Caja",
-        accessor: "precioCaja",
+        Header: "Precios",
+        accessor: "precioVenta",
+        Cell: ({ row }: { row: { original: IArticuloFindTable } }) => {
+          const { precioVenta, precioCompra } = row.original;
+          return (
+            <div className="table-base-multiple">
+              <div className="table-base-multiple-container">
+                <p className="table-base-multiple-text">Compra:</p>
+                <p className="table-base-multiple-monto">
+                  {handleNumber(precioCompra, false, true)}
+                </p>
+              </div>
+              <div className="table-base-multiple-container">
+                <p className="table-base-multiple-text">Venta:</p>
+                <p className="table-base-multiple-monto">
+                  {handleNumber(precioVenta, false, true)}
+                </p>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "Stock",
+        accessor: "stock",
         Cell: ({ value }: { value: number }) => {
           return (
-            <p title="Precio Cajas" className="text-right">
+            <p className="text-right table-base-multiple-monto">
               {handleNumber(value, false, true)}
             </p>
           );
         },
       },
     ],
-    []
+    [inputFocus]
   );
 };
 

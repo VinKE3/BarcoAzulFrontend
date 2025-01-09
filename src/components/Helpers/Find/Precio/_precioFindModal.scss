@@ -1,0 +1,13 @@
+.precio-find-modal-table {
+  th {
+    text-align: center;
+    &:first-child {
+      min-width: 60px;
+      width: 60px;
+    }
+    &:nth-child(2) {
+      text-align: right;
+      min-width: 100px;
+    }
+  }
+}

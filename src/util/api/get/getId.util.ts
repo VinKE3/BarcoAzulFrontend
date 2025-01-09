@@ -12,10 +12,13 @@ import { get } from "./get.util";
 export const getId = async (
   globalContext: IGlobalContext,
   id: ModalIdType,
-  menu?: string
+  menu?: string,
+  incluirReferencias: boolean = false
 ): Promise<any> => {
   const { api } = globalContext;
   const selectedMenu: string = menu ?? api.menu; // Determinar el menú seleccionado
-  const url: string = `${selectedMenu}/${id}`;
+  const url: string = `${selectedMenu}/${id}${
+    incluirReferencias ? `?incluirReferencias=${true}` : ""
+  }`;
   return await get({ globalContext, menu: url }); // Llamada al servicio para obtener la data
 };

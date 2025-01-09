@@ -4,17 +4,19 @@ import { addDays, format, isBefore, parse } from "date-fns";
 import { es } from "date-fns/locale";
 import {
   defaultTipoCambio,
+  IArticuloCompleto,
   ICombo,
   ICuentaBancaria,
   IGlobalContext,
   IPersonal,
   IPersonalTable,
+  IPrecios,
   ITipoCambio,
   ITipoPago,
 } from "../../../models";
 import { getId } from "../../api";
-import { handleToast } from "../../global";
-import { handleClearMensajes, handleSetErrorMensaje } from "../mensajes.util";
+import { handleToast, roundNumber } from "../../global";
+import { handleClearMensajes, handleSetErrorMensaje, handleSetTextos } from "../mensajes.util";
 
 /**
  * Enfoca un elemento HTML y desplaza la ventana de visualización hacia la parte superior.
@@ -298,4 +300,113 @@ export const handleTiposAfectacion = (
       ? !["10", "20", "30"].includes(x.id)
       : ["10", "20", "30"].includes(x.id)
   );
+};
+
+/**
+ * Convierte los precios de un artículo a una moneda diferente usando el tipo de cambio proporcionado.
+ * @param setGlobalContext Función para actualizar el contexto global.
+ * @param tipo El tipo de conversión, puede ser "venta" o "compra".
+ * @param monedaId El ID de la moneda de destino ("D" para dólares).
+ * @param tipoCambio El tipo de cambio a usar para la conversión.
+ * @param articulo El artículo cuyos precios se van a convertir.
+ * @param redondeo La cantidad de decimales a usar en el redondeo.
+ * @returns Un objeto con los precios convertidos.
+ */
+export const handleConvertPrecios = (
+  setGlobalContext: React.Dispatch<React.SetStateAction<IGlobalContext>>,
+  tipo: "venta" | "compra",
+  monedaId: string,
+  tipoCambio: number = 0,
+  articulo: IArticuloCompleto,
+  redondeo: number = 2
+): IPrecios => {
+  const { descripcion, precioVenta1, precioVenta2, precioVenta3, precioVenta4, precioCompra, precioCompraDescuento } =
+    articulo;
+
+  // Si la monedaId del parámetro es igual a la monedaId del artículo, retornar los precios originales
+  if (monedaId === articulo.monedaId) {
+    return {
+      precioVenta1,
+      precioVenta2,
+      precioVenta3,
+      precioVenta4,
+      precioCompra,
+      precioCompraDescuento,
+    };
+  }
+
+  // Validación: Si el tipo de cambio es cero, mostrar advertencia y retornar los precios por defecto
+  if (tipoCambio === 0) {
+    handleSetTextos(
+      setGlobalContext,
+      "detalle",
+      [
+        "No es posible hacer la conversión de precios si el tipo de cambio es cero (0.00).",
+        "Los precios no se han convertido.",
+      ],
+      3
+    );
+    return {
+      precioVenta1,
+      precioVenta2,
+      precioVenta3,
+      precioVenta4,
+      precioCompra,
+      precioCompraDescuento,
+    };
+  }
+
+  // Función auxiliar para convertir los precios
+  const convertirPrecio = (precio: number) =>
+    monedaId === "D" ? roundNumber(precio / tipoCambio, redondeo) : roundNumber(precio * tipoCambio, redondeo);
+
+  // Crear objeto de precios convertidos
+  let precios: IPrecios = {
+    precioCompra: convertirPrecio(precioCompra),
+    precioCompraDescuento: convertirPrecio(precioCompraDescuento),
+    precioVenta1: convertirPrecio(precioVenta1),
+    precioVenta2: convertirPrecio(precioVenta2),
+    precioVenta3: convertirPrecio(precioVenta3),
+    precioVenta4: convertirPrecio(precioVenta4),
+  };
+
+  // Si el tipo es "compra", establecer los precios de venta a 0
+  if (tipo === "compra") {
+    precios = {
+      ...precios,
+      precioVenta1: 0,
+      precioVenta2: 0,
+      precioVenta3: 0,
+      precioVenta4: 0,
+    };
+  }
+
+  // Mostrar notificación de éxito
+  handleToast("info", `${descripcion} ha sido convertido al tipo de cambio actual.`);
+  return precios;
+};
+
+/**
+ * Calcula el impuesto de bolsa según la fecha de emisión.
+ * @param emision La fecha de emisión en formato string (YYYY-MM-DD).
+ * @returns El valor del impuesto de bolsa basado en el año de emisión.
+ */
+export const handleImpuestoBolsa = (emision: string): number => {
+  const date = new Date(emision);
+  if (!isNaN(date.getTime())) {
+    const year = date.getFullYear();
+    switch (year) {
+      case 2019:
+        return 0.1;
+      case 2020:
+        return 0.2;
+      case 2021:
+        return 0.3;
+      case 2022:
+        return 0.4;
+      default:
+        return year > 2022 ? 0.5 : 0;
+    }
+  }
+  return 0;
 };

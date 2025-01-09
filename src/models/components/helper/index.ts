@@ -11,6 +11,7 @@ export * from "./medicoFindModal.model";
 export * from "./ordenCompraFindModal.model";
 export * from "./pedidoFindModal.model";
 export * from "./pedidosFindModal.model";
+export * from "./precioFindModal.model";
 export * from "./proveedorFindModal.model";
 export * from "./referenciaFindModal.model";
 export * from "./stockFindModal.model";

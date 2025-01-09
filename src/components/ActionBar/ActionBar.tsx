@@ -2,7 +2,13 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { BiSolidEdit } from "react-icons/bi";
 import { TbEyeSearch } from "react-icons/tb";
 import { useGlobalContext } from "../../hooks";
-import { IActionBar, IModal, ModalCrudType, adminPermisos, defaultMensajes } from "../../models";
+import {
+  IActionBar,
+  IModal,
+  ModalCrudType,
+  adminPermisos,
+  defaultMensajes,
+} from "../../models";
 
 /**
  * Componente ActionBar que retorna botones para consultar, modificar y eliminar registros dentro de una tabla
@@ -35,8 +41,13 @@ const ActionBar: React.FC<IActionBar> = ({
   const handleAction = (tipo: ModalCrudType): void => {
     if (returnRetorno) {
       // Si returnRetorno está definido, asigna a form.retorno los datos de la fila, sumado al tipo de acción, isTablas e isPermitido
-      const retorno = { ...rowData, [tipoModalProp]: tipo, isTablas, isPermitido };
-
+      const retorno = {
+        ...rowData,
+        [tipoModalProp]: tipo,
+        isTablas,
+        isPermitido,
+      };
+      console.log(retorno, "retorno");
       setGlobalContext((x) => ({
         ...x,
         form: { ...x.form, retorno },

@@ -1,26 +1,49 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useGlobalContext } from "../../../../../../../hooks";
 import {
+  IMoneda,
   IArticulosPersonal,
   IEntradaArticulos,
   IEntradaArticulosTablas,
   defaultEntradaArticulosTablas,
+  IMotivoArticulos,
 } from "../../../../../../../models";
+import {
+  handleClearMensajes,
+  handleHelpModal,
+  helpModalMap,
+} from "../../../../../../../util";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { TbDeviceIpadSearch } from "react-icons/tb";
 interface IProps {
   data: IEntradaArticulos;
   handleData: (x: any) => Promise<void> | void;
+  handleGetTipoCambio: (retorno: boolean) => Promise<number>;
 }
-const EntradaArticulosCabecera: React.FC<IProps> = ({ data, handleData }) => {
+const EntradaArticulosCabecera: React.FC<IProps> = ({
+  data,
+  handleData,
+  handleGetTipoCambio,
+}) => {
   //#region useState
-  const { globalContext } = useGlobalContext();
-  const { modal, form, extra } = globalContext;
+  const { globalContext, setGlobalContext } = useGlobalContext();
+  const { api, modal, form, extra } = globalContext;
   const { primer } = modal;
   const { element } = extra;
 
-  const { personal }: IEntradaArticulosTablas =
+  const { personal, serie, monedas, motivos }: IEntradaArticulosTablas =
     form.tablas || defaultEntradaArticulosTablas;
   const { inputs } = element;
+
   //#endregion
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>): void => {
+    if (e.key !== "Enter") return;
+
+    e.stopPropagation();
+    handleHelpModal(setGlobalContext, "proveedorFind");
+  };
+
   return (
     <div className="form-base-container guia-remision-form">
       <div className="modal-base-content">
@@ -38,7 +61,7 @@ const EntradaArticulosCabecera: React.FC<IProps> = ({ data, handleData }) => {
               className="input-base"
             />
           </div>
-          <div className="input-base-container-25">
+          <div className="input-base-container-50">
             <label htmlFor="numero" className="label-base">
               Número
             </label>
@@ -53,7 +76,7 @@ const EntradaArticulosCabecera: React.FC<IProps> = ({ data, handleData }) => {
           </div>
           <div className="input-base-container-25">
             <label htmlFor="fechaEmision" className="label-base">
-              Emisión
+              Fecha
             </label>
             <input
               type="date"
@@ -65,23 +88,9 @@ const EntradaArticulosCabecera: React.FC<IProps> = ({ data, handleData }) => {
               className="input-base"
             />
           </div>
-          {/* <div className="input-base-container-25">
-            <label htmlFor="fechaIngreso" className="label-base">
-              Ingreso
-            </label>
-            <input
-              type="date"
-              id="fechaIngreso"
-              name="fechaIngreso"
-              value={data.fechaIngreso}
-              onChange={handleData}
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            />
-          </div> */}
         </div>
         <div className="input-base-row">
-          <div className="input-base-container-33">
+          <div className="input-base-container-50">
             <label htmlFor="personalId" className="label-base">
               Encargado
             </label>
@@ -105,6 +114,148 @@ const EntradaArticulosCabecera: React.FC<IProps> = ({ data, handleData }) => {
               ))}
             </select>
           </div>
+          <div className="input-base-container-33">
+            <label htmlFor="monedaId" className="label-base">
+              Moneda
+            </label>
+            <select
+              id="monedaId"
+              name="monedaId"
+              value={data.monedaId ?? ""}
+              onChange={handleData}
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            >
+              {monedas.map((x: IMoneda) => (
+                <option key={x.id} value={x.id}>
+                  {x.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="input-base-container-33">
+            <label htmlFor="tipoCambio" className="label-base">
+              Tipo de Cambio
+            </label>
+            <div className="input-base-container-button">
+              <input
+                type="number"
+                inputMode="numeric"
+                ref={inputs["tipoCambio"]}
+                id="tipoCambio"
+                name="tipoCambio"
+                value={data.tipoCambio}
+                disabled
+                className={
+                  primer.tipo !== "consultar" && !api.loading
+                    ? "input-base-button"
+                    : "input-base"
+                }
+              />
+              {primer.tipo !== "consultar" && !api.loading && (
+                <button
+                  id="buttonConsultarTipoCambio"
+                  name="buttonConsultarTipoCambio"
+                  title="Presione [ALT + Z] para consultar a SUNAT."
+                  accessKey="z"
+                  onClick={() => handleGetTipoCambio(false)}
+                  onKeyDown={handleKeyDown}
+                  disabled={data.detalles.length > 0}
+                  className="button-base-anidado button-base-bg-primary"
+                >
+                  <FaMoneyBillTransfer
+                    strokeWidth={2}
+                    size="2rem"
+                    className="button-base-icon"
+                  />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="input-base-row">
+          <div className="input-base-container-33">
+            <label htmlFor="motivoId" className="label-base">
+              Motivo Ingreso
+            </label>
+            <select
+              ref={inputs["motivoId"]}
+              id="motivoId"
+              name="motivoId"
+              value={data.motivoId ?? ""}
+              onChange={handleData}
+              autoFocus
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            >
+              <option key="default" value="">
+                SELECCIONAR
+              </option>
+              {motivos.map((x: IMotivoArticulos) => (
+                <option key={x.id} value={x.id}>
+                  {x.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="input-base-container-100">
+            <label htmlFor="proveedorNombre" className="label-base">
+              Proveedor
+            </label>
+            <div className="input-base-container-button">
+              <input
+                id="proveedorNombre"
+                name="proveedorNombre"
+                placeholder="Proveedor"
+                value={data.proveedorNombre ?? ""}
+                disabled
+                className={
+                  primer.tipo !== "registrar"
+                    ? "input-base"
+                    : "input-base-button"
+                }
+              />
+              {primer.tipo === "registrar" && (
+                <button
+                  ref={inputs["buttonProveedorFind"]}
+                  id="buttonProveedorFind"
+                  name="buttonProveedorFind"
+                  title="Presione [ALT + C] para adjuntar proveedor."
+                  accessKey="c"
+                  onClick={() =>
+                    handleHelpModal(setGlobalContext, "proveedorFind")
+                  }
+                  onKeyDown={handleKeyDown}
+                  className="button-base-anidado button-base-bg-primary"
+                >
+                  <TbDeviceIpadSearch
+                    strokeWidth={2}
+                    size="2rem"
+                    className="button-base-icon"
+                  />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="input-base-row">
+          <div className="input-base-container-100">
+            <label htmlFor="proveedorDireccion" className="label-base">
+              Concepto
+            </label>
+            <input
+              id="proveedorDireccion"
+              name="proveedorDireccion"
+              placeholder="Concepto"
+              value={data.proveedorDireccion ?? ""}
+              onChange={handleData}
+              autoComplete="off"
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            />
+          </div>
+        </div>
+        <div className="input-base-row">
           <div className="input-base-container-100">
             <label htmlFor="observacion" className="label-base">
               Observación

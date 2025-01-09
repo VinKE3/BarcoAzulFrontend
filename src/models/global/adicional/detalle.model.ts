@@ -3,80 +3,42 @@ import { CrudType } from "../../types";
 export interface IDetalle {
   tipo: CrudType;
   detalleId: number;
-
-  //Articulo
+  id: string;
+  lineaId: string | null;
+  subLineaId: string | null;
   articuloId: string;
+  unidadMedidaId: string | null;
+  marcaId: number | null;
   descripcion: string;
-  //Articulo
-
-  //Unidad Medida
-  pastilla: string;
-  //Unidad Medida
-
-  //Lote
-  loteId: string;
-  loteNumero: string;
-  loteFechaVencimiento: string;
-  //Lote
-
-  //Medico
-  medicoId: number | null;
-  medicoNombres: string | null;
-  medicoCMP: string | null;
-  //Medico
-
-  //AfectacionIGV
-  tipoAfectacionIGVId: string;
-  porcentajeIGV: number;
-  //AfectacionIGV
-
-  //Calculados
-  montoIGV: number;
-  subTotal: number;
-  //Calculados
-
+  codigoBarras: string | null;
   cantidad: number;
   precioUnitario: number;
+  subTotal: number;
+  montoIGV: number;
   importe: number;
+  presentacion: string | null;
+  unidadMedidaDescripcion: string | null;
+  precioCompra: number;
 }
 export const defaultDetalle: IDetalle = {
   tipo: "registrar",
   detalleId: 0,
-
-  //Articulo
+  id: "",
+  lineaId: null,
+  subLineaId: null,
   articuloId: "",
+  unidadMedidaId: null,
+  marcaId: null,
   descripcion: "",
-  //Articulo
-
-  //Unidad Medida
-  pastilla: "T",
-  //Unidad Medida
-
-  //Lote
-  loteId: "",
-  loteNumero: "",
-  loteFechaVencimiento: "",
-  //Lote
-
-  //Medico
-  medicoId: null,
-  medicoNombres: null,
-  medicoCMP: null,
-  //Medico
-
-  //AfectacionIGV
-  tipoAfectacionIGVId: "10",
-  porcentajeIGV: 0,
-  //AfectacionIGV
-
-  //Calculados
-  montoIGV: 0,
-  subTotal: 0,
-  //Calculados
-
+  codigoBarras: null,
   cantidad: 1,
   precioUnitario: 0,
+  subTotal: 0,
+  montoIGV: 0,
   importe: 0,
+  presentacion: null,
+  unidadMedidaDescripcion: "",
+  precioCompra: 0,
 };
 
 export interface IDetalleVenta extends IDetalle {
@@ -89,7 +51,7 @@ export const defaultDetalleVenta: IDetalleVenta = {
   precioOriginal: 0,
 };
 
-export interface IDetalleCompra extends Omit<IDetalle, "medicoId"> {}
+export interface IDetalleCompra extends IDetalle {}
 
 export const defaultDetalleCompra: IDetalleCompra = {
   ...defaultDetalle,

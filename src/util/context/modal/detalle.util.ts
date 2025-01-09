@@ -1,20 +1,10 @@
 import {
-  IDocumentoVentaDetalle,
-  IGuiaRemisionDetalle,
-  INotaCreditoDetalle,
-  IOrdenCompraDetalle,
-  IPedidoDetalle,
-  ITransferenciaDetalle,
+  ICotizacionDetalle,
 } from "../../../models";
 
 /** Definición del tipo IDetalle que puede ser uno de varios tipos de detalles */
 type IDetalle =
-  | IDocumentoVentaDetalle
-  | IPedidoDetalle
-  | INotaCreditoDetalle
-  | IGuiaRemisionDetalle
-  | IOrdenCompraDetalle
-  | ITransferenciaDetalle;
+  | ICotizacionDetalle
 
 /**
  * Maneja las operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para los detalles de un documento específico.

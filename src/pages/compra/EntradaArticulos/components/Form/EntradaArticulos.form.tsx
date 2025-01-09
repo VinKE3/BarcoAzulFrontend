@@ -12,10 +12,14 @@ import {
   BasicKeyHandler,
   ButtonFooter,
   Messages,
+  ProveedorFindModal,
 } from "../../../../../components";
 import { useFocus, useGlobalContext } from "../../../../../hooks";
 import {
   IEntradaArticulos,
+  IEntradaArticulosVarios,
+  defaultEntradaArticulosVarios,
+  IProveedorFind,
   defaultEntradaArticulos,
 } from "../../../../../models";
 import {
@@ -23,6 +27,8 @@ import {
   handleInputType,
   handleResetContext,
   handleSetInputs,
+  handleSetRetorno,
+  handleTipoCambio,
 } from "../../../../../util";
 import {
   EntradaArticulosCabecera,
@@ -35,23 +41,32 @@ const EntradaArticulosForm: React.FC = () => {
   const backPage: string = `/${privateRoutes.COMPRAS}/${comprasRoutes.ENTRADAARTICULOS}`;
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { modal, form, mensajes, extra } = globalContext;
-  const { segundo } = modal;
+  const { primer, segundo } = modal;
   const { simplificado } = extra;
+  const { retorno } = form;
   const mensaje = mensajes.filter((x) => x.origen === "form" && x.tipo >= 0);
   const [data, setData] = useState<IEntradaArticulos>(
     form.data || defaultEntradaArticulos
   );
+  console.log(data, "data");
+  const [adicional, setAdicional] = useState<IEntradaArticulosVarios>(
+    defaultEntradaArticulosVarios
+  );
   const inputs = useFocus(
-    "motivoIngresoId",
+    "tipoDocumentoId",
+    "clienteId",
+    "tipoCambio",
+    "guiaRemision",
 
     //Detalles
-    "pastilla",
+    "descripcion",
     "cantidad",
+    "precioUnitario",
+    "importe",
     //Detalles
 
     //Botones
-    "buttonArticuloFind",
-    "buttonLoteFind"
+    "buttonArticuloFind"
     //Botones
   );
   //#endregion
@@ -83,8 +98,59 @@ const EntradaArticulosForm: React.FC = () => {
   useEffect(() => {
     handleSetInputs(setGlobalContext, inputs);
   }, [inputs]);
+
+  useEffect(() => {
+    primer.tipo === "registrar" && handleLoad();
+  }, [primer.tipo]);
+
+  useEffect(() => {
+    retorno && retorno.origen === "proveedorFind" && handleProveedor(retorno);
+  }, [retorno]);
   //#endregion
+
   //#region Funciones
+
+  const handleLoad = async (): Promise<void> => {
+    if (primer.tipo === "registrar") {
+      const tipoCambio: number = await handleGetTipoCambio(true, false);
+      setData((x) => ({ ...x, tipoCambio }));
+    }
+  };
+
+  const handleProveedor = (proveedor: IProveedorFind): void => {
+    const { id, numeroDocumentoIdentidad, nombre, direccion } = proveedor;
+
+    setData((x) => ({
+      ...x,
+      proveedorId: id,
+      proveedorNumeroDocumentoIdentidad: numeroDocumentoIdentidad,
+      proveedorNombre: nombre,
+      proveedorDireccion: direccion,
+    }));
+  };
+
+  const handleGetTipoCambio = async (
+    retorno: boolean = false,
+    showError: boolean = true
+  ): Promise<number> => {
+    const { precioVenta } = await handleTipoCambio(
+      globalContext,
+      setGlobalContext,
+      data.fechaEmision,
+      inputs,
+      false,
+      "form",
+      showError
+    );
+
+    if (!retorno) {
+      setData((x) => ({ ...x, tipoCambio: precioVenta }));
+      return 0;
+    }
+
+    if (precioVenta === 0) return 0;
+    return precioVenta;
+  };
   const handleData = ({
     target,
   }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -102,6 +168,18 @@ const EntradaArticulosForm: React.FC = () => {
       return newData;
     });
   };
+
+  const handleAdicional = ({
+    target,
+  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+    const { name, type, value: rawValue } = target;
+    const value =
+      type === "checkbox" ? (target as HTMLInputElement).checked : rawValue;
+    setAdicional((x) => ({ ...x, [name]: value }));
+
+    const retorno = { origen: name, [name]: value };
+    handleSetRetorno(setGlobalContext, retorno);
+  };
   //#endregion
   return (
     <>
@@ -114,11 +192,17 @@ const EntradaArticulosForm: React.FC = () => {
 
         <BasicKeyHandler selector={"guia-remision-form"}>
           <div className="form-base">
-            <EntradaArticulosCabecera data={data} handleData={handleData} />
-            {/* <EntradaArticulosDetalle
+            <EntradaArticulosCabecera
+              data={data}
+              handleData={handleData}
+              handleGetTipoCambio={handleGetTipoCambio}
+            />
+            <EntradaArticulosDetalle
               dataGeneral={data}
               setDataGeneral={setData}
-            /> */}
+              adicional={adicional}
+              handleAdicional={handleAdicional}
+            />
           </div>
 
           <ButtonFooter
@@ -128,13 +212,12 @@ const EntradaArticulosForm: React.FC = () => {
           />
         </BasicKeyHandler>
       </div>
-
-      {/* {segundo.origen === "articuloFind" && (
-        <ArticuloFindModal
-          inputFocus="cantidad"
-          almacenId={simplificado.almacenId}
-        />
-      )} */}
+      {segundo.origen === "proveedorFind" && (
+        <ProveedorFindModal inputFocus="tipoPagoId" />
+      )}
+      {segundo.origen === "articuloFind" && (
+        <ArticuloFindModal inputFocus="cantidad" />
+      )}
     </>
   );
 };

@@ -6,6 +6,7 @@ export * from './Medico';
 export * from './OrdenCompra';
 export * from './Pedido';
 export * from './Pedidos';
+export * from './Precio';
 export * from './Proveedor';
 export * from './Referencia';
 export * from './Stock';

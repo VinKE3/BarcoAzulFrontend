@@ -72,7 +72,6 @@ const useEntradaArticulosDetalleColumn = (
             isAdminPermisos={true}
             returnRetorno={true}
             rowData={{ ...row.original, origen: "detalle" }}
-            showModificar={false}
           />
         ),
       });

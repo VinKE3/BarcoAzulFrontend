@@ -17,3 +17,4 @@ export const defaultTipoAfectacionIGVAdicional: ITipoAfectacionIGVAdicional = {
   isGratuito: false,
   tiposAfectacionIGV: [],
 };
+

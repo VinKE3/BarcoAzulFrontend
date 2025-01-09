@@ -1,5 +1,11 @@
 import { format } from "date-fns";
-import { defaultDocumentoFilter, IDocumentoFilter } from "../../global";
+import {
+  defaultDetalle,
+  defaultDocumentoFilter,
+  IDetalle,
+  IDocumentoFilter,
+  IMoneda,
+} from "../../global";
 import { CrudType } from "../../types";
 
 export interface IEntradaArticulos {
@@ -14,10 +20,11 @@ export interface IEntradaArticulos {
   proveedorDireccion: string | null;
   personalId: string | null;
   fechaEmision: string;
-  monedaId: string | null;
+  monedaId: string;
   tipoCambio: number;
   numeroOP: string | null;
   observacion: string | null;
+  motivoId: string | null;
   detalles: IEntradaArticulosDetalle[];
 }
 
@@ -33,49 +40,18 @@ export const defaultEntradaArticulos: IEntradaArticulos = {
   proveedorDireccion: null,
   personalId: null,
   fechaEmision: format(new Date(), "yyyy-MM-dd"),
-  monedaId: null,
+  monedaId: "S",
   tipoCambio: 0,
   numeroOP: null,
   observacion: null,
+  motivoId: null,
   detalles: [],
 };
 
-export interface IEntradaArticulosDetalle {
-  tipo: CrudType;
-  detalleId: number;
-  lineaId: string | null;
-  subLineaId: string | null;
-  articuloId: string;
-  unidadMedidaId: string | null;
-  marcaId: number;
-  descripcion: string;
-  codigoBarras: string | null;
-  cantidad: number;
-  precioUnitario: number;
-  subTotal: number;
-  montoIGV: number;
-  importe: number;
-  presentacion: string | null;
-  unidadMedidaDescripcion: string | null;
-}
+export interface IEntradaArticulosDetalle extends IDetalle {}
 
 export const defaultEntradaArticulosDetalle: IEntradaArticulosDetalle = {
-  tipo: "registrar",
-  detalleId: 0,
-  lineaId: null,
-  subLineaId: null,
-  articuloId: "",
-  unidadMedidaId: null,
-  marcaId: 0,
-  descripcion: "",
-  codigoBarras: null,
-  cantidad: 0,
-  precioUnitario: 0,
-  subTotal: 0,
-  montoIGV: 0,
-  importe: 0,
-  presentacion: null,
-  unidadMedidaDescripcion: null,
+  ...defaultDetalle,
 };
 
 export interface IArticulosPersonal {
@@ -98,14 +74,32 @@ export const defaultArticulosPersonal: IArticulosPersonal = {
   isActivo: false,
 };
 
+export interface IMotivoArticulos {
+  id: string;
+  descripcion: string;
+  isActivo: boolean;
+  tipo: string;
+}
+
+export const defaultMotivo: IMotivoArticulos = {
+  id: "",
+  descripcion: "",
+  isActivo: false,
+  tipo: "",
+};
+
 export interface IEntradaArticulosTablas {
   personal: IArticulosPersonal[];
+  motivos: IMotivoArticulos[];
+  monedas: IMoneda[];
   serie: string;
 }
 
 export const defaultEntradaArticulosTablas: IEntradaArticulosTablas = {
   personal: [],
+  monedas: [],
   serie: "",
+  motivos: [],
 };
 
 export interface IEntradaArticulosFilter extends IDocumentoFilter {
@@ -129,3 +123,11 @@ export interface IEntradaArticulosTable {
   isBloqueado: boolean;
   isAnulado: boolean;
 }
+
+export interface IEntradaArticulosVarios {
+  articuloVarios: boolean;
+}
+
+export const defaultEntradaArticulosVarios: IEntradaArticulosVarios = {
+  articuloVarios: false,
+};

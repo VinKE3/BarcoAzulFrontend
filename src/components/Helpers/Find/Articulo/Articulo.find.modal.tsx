@@ -1,16 +1,14 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { FaKitMedical } from "react-icons/fa6";
-import { SiShutterstock } from "react-icons/si";
 import { useDebounce, useGlobalContext } from "../../../../hooks";
 import {
-  defaultArticuloFindAdicional,
-  defaultArticuloFindFilter,
   IArticuloFind,
   IArticuloFindAdicional,
   IArticuloFindFilter,
   IArticuloFindModal,
   IArticuloFindTable,
   IStockFindTable,
+  defaultArticuloFindAdicional,
+  defaultArticuloFindFilter,
 } from "../../../../models";
 import {
   get,
@@ -24,21 +22,14 @@ import {
 import { TableKeyHandler } from "../../../Keys";
 import { ModalHelp } from "../../../Modal";
 import { Table } from "../../../Table";
-import { SelectButton } from "../../SelectButton";
-import { ArticuloAlternativoFindModal } from "../ArticuloAlternativo";
-import { StockFindModal } from "../Stock";
 import useArticuloFindColumn from "./articuloFindModal.column";
 
-const ArticuloFindModal: React.FC<IArticuloFindModal> = ({
-  inputFocus,
-  almacenId,
-}) => {
+const ArticuloFindModal: React.FC<IArticuloFindModal> = ({ inputFocus }) => {
   //#region useState
-  const menu: string = "Mantenimiento/Articulo/Buscar";
+  const menu: string = "Mantenimiento/Articulo/Listar";
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { modal, form, extra } = globalContext;
   const { retorno } = form;
-  const { tercer } = modal;
   const { row } = globalContext.table;
   const { inputs } = extra.element;
 
@@ -46,30 +37,23 @@ const ArticuloFindModal: React.FC<IArticuloFindModal> = ({
     defaultArticuloFindFilter
   );
   const [data, setData] = useState<IArticuloFindTable[]>([]);
-  const [adicional, setAdicional] = useState<IArticuloFindAdicional>(
-    defaultArticuloFindAdicional
-  );
   const search = useDebounce(filter);
   const columns = useArticuloFindColumn(inputFocus);
   //#endregion
 
   //#region useEffect
-  useEffect(() => {
-    modal.tercer.tipo && handleModalTercero(retorno as string);
-  }, [modal.tercer]);
-
-  useEffect(() => {
-    retorno &&
-      retorno.origen === "articuloAlternativoFind" &&
-      tableKeyDown(retorno);
-  }, [retorno]);
+  // useEffect(() => {
+  //   retorno &&
+  //     retorno.origen === "articuloAlternativoFind" &&
+  //     tableKeyDown(retorno);
+  // }, [retorno]);
 
   useEffect(() => {
     handleListarDataVenta();
   }, [search]);
 
   useEffect(() => {
-    data.length > 0 && handleArticuloAdicional(row as number);
+    data.length > 0;
   }, [data, row]);
   //#endregion
 
@@ -83,8 +67,9 @@ const ArticuloFindModal: React.FC<IArticuloFindModal> = ({
   const handleListarDataVenta = async (): Promise<void> => {
     try {
       const urlParams = new URLSearchParams({
-        almacenId: almacenId,
+        codigoBarras: search.codigoBarras,
         descripcion: search.descripcion,
+        isActivo: "true",
       });
       const { data }: { data: IArticuloFindTable[] } = await get({
         globalContext,
@@ -96,66 +81,6 @@ const ArticuloFindModal: React.FC<IArticuloFindModal> = ({
       handleSetErrorMensaje(setGlobalContext, error, "help");
     }
   };
-
-  const handleAdicional = async (name: string, data: any): Promise<void> => {
-    setAdicional((x) => ({ ...x, [name]: data }));
-  };
-
-  const handleArticuloAdicional = async (row: number): Promise<void> => {
-    const fila = data[row];
-    handleAdicional("articulo", fila);
-  };
-
-  const handleModalTercero = async (origen: string): Promise<void> => {
-    switch (origen) {
-      case "stock": {
-        const menu: string = "Mantenimiento/Articulo/GetStockPorAlmacen";
-        const urlParams = new URLSearchParams({
-          id: modal.tercer.id as string,
-        });
-        const data: IStockFindTable[] = await get({
-          globalContext,
-          menu,
-          urlParams,
-        });
-        handleAdicional(origen, data);
-        break;
-      }
-      case "farma":
-      case "grupo": {
-        const menu =
-          origen === "farma"
-            ? "Mantenimiento/Farmacologia"
-            : "Mantenimiento/GrupoFarmacologico";
-        await handleInitialData(globalContext, null, "tercer", menu)
-          .then((response) => {
-            setGlobalContext((x) => ({
-              ...x,
-              api: { ...x.api, origen: "form" },
-            }));
-            handleAdicional(origen, response);
-          })
-          .catch((error) => {
-            handleResetMensajeError(
-              setGlobalContext,
-              true,
-              true,
-              error,
-              "help"
-            );
-          });
-        break;
-      }
-
-      default: {
-        break;
-      }
-    }
-  };
-
-  // const handleCloseSubModal = (): void => {
-  //   handleClearModalProp(setGlobalContext, "tercer", false, true);
-  // };
 
   const tableKeyDown = (row: IArticuloFindTable): void => {
     const retorno: IArticuloFind = { ...row, origen: "articuloFind" };
@@ -171,12 +96,27 @@ const ArticuloFindModal: React.FC<IArticuloFindModal> = ({
         handleKeyDown={tableKeyDown}
         title="Consultar Artículos"
         inputFocus={inputFocus}
-        classNameModal="articulo-find-modal md:min-h-fit md:min-w-[90%]"
+        classNameModal="articulo-find-modal  md:min-w-[90%]"
       >
         <div className="card-base">
           <div className="card-base-container-full">
             <div className="input-base-row">
-              <div className="input-base-container-100">
+              <div className="input-base-container-50">
+                <label htmlFor="codigoBarrasFilter" className="label-base">
+                  Código
+                </label>
+                <input
+                  id="codigoBarrasFilter"
+                  name="codigoBarras"
+                  placeholder="Código"
+                  value={filter.codigoBarras}
+                  onChange={handleDataVenta}
+                  autoComplete="off"
+                  autoFocus
+                  className="input-base"
+                />
+              </div>
+              <div className="input-base-container-50">
                 <label htmlFor="descripcionFilter" className="label-base">
                   Descripción
                 </label>
@@ -192,7 +132,6 @@ const ArticuloFindModal: React.FC<IArticuloFindModal> = ({
                 />
               </div>
             </div>
-
             <Table
               data={data}
               columns={columns}
@@ -203,86 +142,8 @@ const ArticuloFindModal: React.FC<IArticuloFindModal> = ({
               tableClassName="articulo-find"
             />
           </div>
-
-          <div className="card-base-container-mini">
-            <div className="card-base-block">
-              <span className="card-base-label">Laboratorio</span>
-              <span className="card-base-input">
-                {adicional.articulo.lineaDescripcion ?? ""}
-              </span>
-            </div>
-            <div className="card-base-block">
-              <span className="card-base-label">Farmacología</span>
-              <span className="card-base-input">
-                {adicional.articulo.farmacologiaNombre ?? ""}
-              </span>
-            </div>
-            <div className="card-base-block">
-              <span className="card-base-label">Grupo Farmacológico</span>
-              <span className="card-base-input">
-                {adicional.articulo.grupoFarmacologicoDescripcion ?? ""}
-              </span>
-            </div>
-            <div className="card-base-block">
-              <div className="grid grid-cols-2">
-                <span className="card-base-label">Stock Tiendas</span>
-                <span className="card-base-label">Alternativos</span>
-              </div>
-              <div className="grid grid-cols-2">
-                <div className="button-base-container-center">
-                  <SelectButton
-                    isSubModal={true}
-                    subModalProp="tercer"
-                    subModal={{ id: adicional.articulo.id, menu: "stock" }}
-                    Icon={SiShutterstock}
-                  />
-                </div>
-                <div className="button-base-container-center">
-                  <SelectButton
-                    isSubModal={true}
-                    subModalProp="tercer"
-                    subModal={{
-                      id: adicional.articulo.id,
-                      menu: "alternativo",
-                    }}
-                    Icon={FaKitMedical}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </ModalHelp>
-
-      {/* {tercer.tipo && retorno === "farma" && (
-        <FarmacologiaModal
-          customData={adicional.farmacologia}
-          customModal={modal.tercer}
-          onClose={handleCloseSubModal}
-        />
-      )}
-      {tercer.tipo && retorno === "grupo" && (
-        <GrupoFarmacologicoModal
-          customData={adicional.grupoFarmacologico}
-          customModal={modal.tercer}
-          onClose={handleCloseSubModal}
-        />
-      )} */}
-      {tercer.tipo && retorno === "stock" && (
-        <StockFindModal
-          title={
-            data.find((x) => x.id === modal.tercer.id)?.descripcion as string
-          }
-          data={adicional.stock}
-        />
-      )}
-      {tercer.tipo && retorno === "alternativo" && (
-        <ArticuloAlternativoFindModal
-          almacenId={almacenId}
-          articulo={adicional.articulo}
-          inputFocus={inputFocus}
-        />
-      )}
     </TableKeyHandler>
   );
 };

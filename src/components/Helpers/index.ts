@@ -6,6 +6,7 @@ export * from './Find/Medico';
 export * from './Find/OrdenCompra';
 export * from './Find/Pedido';
 export * from './Find/Pedidos';
+export * from './Find/Precio';
 export * from './Find/Proveedor';
 export * from './Find/Referencia';
 export * from './Find/Stock';

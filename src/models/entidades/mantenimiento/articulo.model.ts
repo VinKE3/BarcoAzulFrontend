@@ -6,15 +6,16 @@ import { ICombo, IMoneda, defaultMoneda } from "../../global";
 
 export interface IArticulo {
   id: string;
-  lineaId: string | null;
-  subLineaId: string | null;
+  lineaId: string;
+  subLineaId: string;
   articuloId: string;
   tipoExistenciaId: string;
   unidadMedidaId: string;
-  marcaId: string;
+  unidadMedidaDescripcion: string;
+  marcaId: number;
   descripcion: string;
   observacion: string;
-  codigoBarras: string | null;
+  codigoBarras: string;
   peso: number;
   monedaId: string;
 
@@ -37,6 +38,7 @@ export interface IArticulo {
 
   precioIncluyeIGV: boolean;
   percepcionCompra: boolean;
+  activarCostoDescuento: boolean;
   isActivo: boolean;
   controlarStock: boolean;
   actualizarPrecioCompra: boolean;
@@ -45,13 +47,14 @@ export interface IArticulo {
 
 export const defaultArticulo: IArticulo = {
   id: "",
-  codigoBarras: null,
+  codigoBarras: "",
   lineaId: "",
   subLineaId: "",
   articuloId: "",
   tipoExistenciaId: "",
   unidadMedidaId: "",
-  marcaId: "",
+  unidadMedidaDescripcion: "",
+  marcaId: 0,
   descripcion: "",
   observacion: "",
   peso: 0,
@@ -70,6 +73,7 @@ export const defaultArticulo: IArticulo = {
   stockMinimo: 0,
   stockMax: 0,
   precioIncluyeIGV: true,
+  activarCostoDescuento: true,
   percepcionCompra: false,
   isActivo: true,
   controlarStock: true,
