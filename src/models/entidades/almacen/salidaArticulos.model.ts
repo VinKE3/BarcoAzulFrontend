@@ -1,108 +1,96 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import { format } from "date-fns";
-import { defaultDocumentoFilter, ICombo, IDocumentoFilter, ISerie } from "../../global";
+import {
+  defaultDocumentoFilter,
+  ICombo,
+  IDocumentoFilter,
+  ISerie,
+  IDetalle,
+  defaultDetalle,
+  IMoneda,
+} from "../../global";
 import { CrudType } from "../../types";
+import { IArticulosPersonal, IMotivoArticulos } from "./entradaArticulos.model";
 
 export interface ISalidaArticulos {
-  id: string;
-  tipoId: string | null;
-
+  empresaId: string;
+  proveedorId: string | null;
   tipoDocumentoId: string | null;
   serie: string;
   numero: string;
-
-  proveedorId: string | null;
   clienteId: string | null;
-
+  proveedorNumeroDocumentoIdentidad: string | null;
+  proveedorNombre: string | null;
+  proveedorDireccion: string | null;
+  personalId: string | null;
   fechaEmision: string;
-  horaEmision: string | null;
-  fechaSalida: string;
-
-  motivoSalidaId: string;
+  monedaId: string;
+  tipoCambio: number;
+  numeroOP: string | null;
   observacion: string | null;
-
-  numeroDocumento: string | null;
+  motivoId: string | null;
 
   detalles: ISalidaArticulosDetalle[];
 }
 
 export const defaultSalidaArticulos: ISalidaArticulos = {
-  id: "",
-  tipoId: null,
+  empresaId: "",
+  proveedorId: null,
   tipoDocumentoId: null,
   serie: "",
   numero: "",
-
-  proveedorId: null,
   clienteId: null,
-
+  proveedorNumeroDocumentoIdentidad: null,
+  proveedorNombre: null,
+  proveedorDireccion: null,
+  personalId: null,
   fechaEmision: format(new Date(), "yyyy-MM-dd"),
-  horaEmision: format(new Date(), "HH:mm:ss"),
-  fechaSalida: format(new Date(), "yyyy-MM-dd"),
-
-  motivoSalidaId: "",
+  monedaId: "S",
+  tipoCambio: 0,
+  numeroOP: null,
   observacion: null,
-
-  numeroDocumento: null,
-
+  motivoId: null,
   detalles: [],
 };
 
-export interface ISalidaArticulosDetalle {
-  tipo: CrudType;
-
-  detalleId: number;
-
-  articuloId: string;
-  descripcion: string;
-
-  cantidad: number;
-  pastilla: string;
-
-  loteId: string;
-  loteNumero: string;
-  loteFechaVencimiento: string;
-}
+export interface ISalidaArticulosDetalle extends IDetalle {}
 
 export const defaultSalidaArticulosDetalle: ISalidaArticulosDetalle = {
-  tipo: "registrar",
-
-  detalleId: 0,
-
-  articuloId: "",
-  descripcion: "",
-
-  cantidad: 0,
-  pastilla: "",
-
-  loteId: "",
-  loteNumero: "",
-  loteFechaVencimiento: "",
+  ...defaultDetalle,
 };
 
 export interface ISalidaArticulosTablas {
-  series: ISerie[];
-  motivosSalida: ICombo[];
+  personal: IArticulosPersonal[];
+  motivos: IMotivoArticulos[];
+  monedas: IMoneda[];
+  serie: string;
 }
 
 export const defaultSalidaArticulosTablas: ISalidaArticulosTablas = {
-  series: [],
-  motivosSalida: [],
+  personal: [],
+  monedas: [],
+  serie: "",
+  motivos: [],
 };
 
-export interface ISalidaArticulosFilter extends IDocumentoFilter {}
+export interface ISalidaArticulosFilter extends IDocumentoFilter {
+  observacion: string;
+}
 
 export const defaultSalidaArticulosFilter: ISalidaArticulosFilter = {
   ...defaultDocumentoFilter,
+  observacion: "",
 };
 
 export interface ISalidaArticulosTable {
   id: string;
   numeroDocumento: string;
-
-  fechaEmision: string;
-  fechaSalida: string;
-  horaEmision: string;
-  
-  motivoSalidaDescripcion: string;
+  personalNombre: string;
+  concepto: string;
+  observacion: string;
+  monedaId: string;
+  total: number;
+  isCancelado: boolean;
+  isBloqueado: boolean;
   isAnulado: boolean;
 }

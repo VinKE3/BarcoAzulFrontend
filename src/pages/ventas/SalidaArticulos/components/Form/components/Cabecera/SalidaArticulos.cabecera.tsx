@@ -3,20 +3,21 @@ import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { TbDeviceIpadSearch } from "react-icons/tb";
 import { useGlobalContext } from "../../../../../../../hooks";
 import {
-  defaultEntradaArticulosTablas,
+  defaultSalidaArticulosTablas,
   IArticulosPersonal,
-  IEntradaArticulos,
-  IEntradaArticulosTablas,
+  ISalidaArticulos,
+  ISalidaArticulosTablas,
   IMoneda,
   IMotivoArticulos,
 } from "../../../../../../../models";
 import { handleHelpModal } from "../../../../../../../util";
+
 interface IProps {
-  data: IEntradaArticulos;
+  data: ISalidaArticulos;
   handleData: (x: any) => Promise<void> | void;
   handleGetTipoCambio: (retorno: boolean) => Promise<number>;
 }
-const EntradaArticulosCabecera: React.FC<IProps> = ({
+const SalidaArticulosCabecera: React.FC<IProps> = ({
   data,
   handleData,
   handleGetTipoCambio,
@@ -27,11 +28,9 @@ const EntradaArticulosCabecera: React.FC<IProps> = ({
   const { primer } = modal;
   const { element } = extra;
 
-  const { personal, monedas, motivos }: IEntradaArticulosTablas =
-    form.tablas || defaultEntradaArticulosTablas;
+  const { personal, monedas, motivos }: ISalidaArticulosTablas =
+    form.tablas || defaultSalidaArticulosTablas;
   const { inputs } = element;
-
-  //#endregion
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>): void => {
     if (e.key !== "Enter") return;
@@ -39,9 +38,9 @@ const EntradaArticulosCabecera: React.FC<IProps> = ({
     e.stopPropagation();
     handleHelpModal(setGlobalContext, "proveedorFind");
   };
-
+  //#endregion
   return (
-    <div className="form-base-container entrada-articulos-form">
+    <div className="form-base-container salida-articulos-form">
       <div className="modal-base-content">
         <div className="input-base-row">
           <div className="input-base-container-25">
@@ -273,4 +272,4 @@ const EntradaArticulosCabecera: React.FC<IProps> = ({
   );
 };
 
-export default EntradaArticulosCabecera;
+export default SalidaArticulosCabecera;

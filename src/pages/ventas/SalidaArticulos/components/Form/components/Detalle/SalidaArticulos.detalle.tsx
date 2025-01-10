@@ -11,12 +11,12 @@ import {
 import { useGlobalContext } from "../../../../../../../hooks";
 import {
   IArticuloCompleto,
-  IEntradaArticulos,
-  IEntradaArticulosDetalle,
+  ISalidaArticulos,
+  ISalidaArticulosDetalle,
   IEntradaArticulosVarios,
   IPrecioFind,
   defaultArticuloCompleto,
-  defaultEntradaArticulosDetalle,
+  defaultSalidaArticulosDetalle,
 } from "../../../../../../../models";
 import {
   getId,
@@ -32,17 +32,16 @@ import {
   handleValPrecio,
   roundNumber,
 } from "../../../../../../../util";
-import { useEntradaArticulosDetalleColumn } from "../../../Column";
+import { useSalidaArticulosDetalleColumn } from "../../../Column";
 interface IProps {
-  dataGeneral: IEntradaArticulos;
-  setDataGeneral: React.Dispatch<React.SetStateAction<IEntradaArticulos>>;
+  dataGeneral: ISalidaArticulos;
+  setDataGeneral: React.Dispatch<React.SetStateAction<ISalidaArticulos>>;
   adicional: IEntradaArticulosVarios;
   handleAdicional: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => Promise<void> | void;
 }
-
-const EntradaArticulosDetalle: React.FC<IProps> = ({
+const SalidaArticulosDetalle: React.FC<IProps> = ({
   dataGeneral,
   setDataGeneral,
   adicional,
@@ -60,11 +59,11 @@ const EntradaArticulosDetalle: React.FC<IProps> = ({
   const [articuloCompleto, setArticuloCompleto] = useState<IArticuloCompleto>(
     defaultArticuloCompleto
   );
-  const [data, setData] = useState<IEntradaArticulosDetalle>(
-    defaultEntradaArticulosDetalle
+  const [data, setData] = useState<ISalidaArticulosDetalle>(
+    defaultSalidaArticulosDetalle
   );
 
-  const columns = useEntradaArticulosDetalleColumn(primer.tipo);
+  const columns = useSalidaArticulosDetalleColumn(primer.tipo);
   //#endregion
 
   //#region useEffect
@@ -80,7 +79,7 @@ const EntradaArticulosDetalle: React.FC<IProps> = ({
       handlePrecio(retorno as IPrecioFind);
     retorno &&
       retorno.origen === "detalle" &&
-      handleActionBar(retorno as IEntradaArticulosDetalle);
+      handleActionBar(retorno as ISalidaArticulosDetalle);
   }, [retorno]);
 
   useEffect(() => {
@@ -131,7 +130,7 @@ const EntradaArticulosDetalle: React.FC<IProps> = ({
     });
   };
 
-  const handleActionBar = (detalle: IEntradaArticulosDetalle): void => {
+  const handleActionBar = (detalle: ISalidaArticulosDetalle): void => {
     if (detalle.tipo === "eliminar") {
       handleCrudDetalles(dataGeneral, setDataGeneral, detalle);
       return;
@@ -294,16 +293,16 @@ const EntradaArticulosDetalle: React.FC<IProps> = ({
       ...handleValPrecio(data.precioUnitario),
     ];
 
-    // if (data.precioCompra > data.precioUnitario) {
-    //   textos.push(
-    //     `El precio de venta ${roundNumber(
-    //       data.precioUnitario,
-    //       4
-    //     )} está por debajo del precio de compra ${roundNumber(
-    //       data.precioCompra
-    //     )}.`
-    //   );
-    // }
+    if (data.precioCompra > data.precioUnitario) {
+      textos.push(
+        `El precio de venta ${roundNumber(
+          data.precioUnitario,
+          4
+        )} está por debajo del precio de compra ${roundNumber(
+          data.precioCompra
+        )}.`
+      );
+    }
 
     if (!data.importe || data.importe <= 0) {
       textos.push("El importe debe ser mayor que 0");
@@ -327,7 +326,7 @@ const EntradaArticulosDetalle: React.FC<IProps> = ({
 
   const handleClear = (): void => {
     setArticuloCompleto(defaultArticuloCompleto);
-    setData(defaultEntradaArticulosDetalle);
+    setData(defaultSalidaArticulosDetalle);
     handleFocus(inputs["cantidad"]);
   };
   const handleKeyDown = async (e: any): Promise<void> => {
@@ -367,9 +366,8 @@ const EntradaArticulosDetalle: React.FC<IProps> = ({
     }
   };
   //#endregion
-
   return (
-    <div className="form-base-container entrada-articulos-form">
+    <div className="form-base-container salida-articulos-form">
       {mensaje.length > 0 && <Messages />}
       <div className="filter-base">
         <span className="filter-base-text">Detalles</span>
@@ -600,4 +598,4 @@ const EntradaArticulosDetalle: React.FC<IProps> = ({
   );
 };
 
-export default EntradaArticulosDetalle;
+export default SalidaArticulosDetalle;

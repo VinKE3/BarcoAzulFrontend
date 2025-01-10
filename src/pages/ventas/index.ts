@@ -3,3 +3,8 @@ export * from "./CuentaPorCobrar/components/Column/cuentaPorCobrar.column";
 export * from "./CuentaPorCobrar/components/Column/cuentaPorCobrarDetalle.column";
 export * from "./CuentaPorCobrar/components/Filter/CuentaPorCobrar.filter";
 export * from "./CuentaPorCobrar/components/Form/CuentaPorCobrar.form";
+export * from "./SalidaArticulos/SalidaArticulos";
+export * from "./SalidaArticulos/components/Column/salidaArticulos.column";
+export * from "./SalidaArticulos/components/Column/salidaArticulosDetalle.column";
+export * from "./SalidaArticulos/components/Filter/SalidaArticulos.filter";
+export * from "./SalidaArticulos/components/Form/SalidaArticulos.form";

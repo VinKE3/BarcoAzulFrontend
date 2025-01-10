@@ -1,13 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { BasicKeyHandler } from "../../../../../components";
 import { useDebounce, useGlobalContext } from "../../../../../hooks";
 import {
-  IEntradaArticulosFilter,
-  IEntradaArticulosTable,
-  defaultEntradaArticulosFilter,
+  ISalidaArticulosFilter,
+  ISalidaArticulosTable,
+  defaultSalidaArticulosFilter,
 } from "../../../../../models";
 import {
   getListar,
@@ -17,15 +14,15 @@ import {
   resetPagination,
 } from "../../../../../util";
 
-const EntradaArticulosFilter: React.FC = () => {
+const SalidaArticulosFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, table, modal, mensajes } = globalContext;
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
-  const [filter, setFilter] = useState<IEntradaArticulosFilter>(
-    defaultEntradaArticulosFilter
+  const [filter, setFilter] = useState<ISalidaArticulosFilter>(
+    defaultSalidaArticulosFilter
   );
   const search = useDebounce(filter);
   //#endregion
@@ -61,7 +58,7 @@ const EntradaArticulosFilter: React.FC = () => {
         fechaInicio: search.fechaInicio,
         fechaFin: search.fechaFin,
       });
-      const { data, total }: { data: IEntradaArticulosTable[]; total: number } =
+      const { data, total }: { data: ISalidaArticulosTable[]; total: number } =
         await getListar(globalContext, params);
       setGlobalContext((x) => ({ ...x, table: { ...x.table, data, total } }));
       handleSetRefrescar(setGlobalContext, false);
@@ -71,8 +68,8 @@ const EntradaArticulosFilter: React.FC = () => {
   };
   //#endregion
   return (
-    <BasicKeyHandler selector={"entrada-articulos-filter"}>
-      <div className="filter-base entrada-articulos-filter">
+    <BasicKeyHandler selector={"salida-articulos-filter"}>
+      <div className="filter-base salida-articulos-filter">
         <span className="filter-base-text">Filtrar por</span>
         <div className="input-base-row">
           <div className="input-base-container-33">
@@ -123,4 +120,4 @@ const EntradaArticulosFilter: React.FC = () => {
   );
 };
 
-export default EntradaArticulosFilter;
+export default SalidaArticulosFilter;

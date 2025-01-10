@@ -6,7 +6,6 @@ import {
   IDocumentoFilter,
   IMoneda,
 } from "../../global";
-import { CrudType } from "../../types";
 
 export interface IEntradaArticulos {
   empresaId: string;

@@ -6,6 +6,7 @@ import {
   almacenRoutes,
   comprasRoutes,
   privateRoutes,
+  ventasRoute,
 } from "../../../../../common";
 import {
   ArticuloFindModal,
@@ -16,11 +17,11 @@ import {
 } from "../../../../../components";
 import { useFocus, useGlobalContext } from "../../../../../hooks";
 import {
-  IEntradaArticulos,
+  ISalidaArticulos,
   IEntradaArticulosVarios,
   defaultEntradaArticulosVarios,
   IProveedorFind,
-  defaultEntradaArticulos,
+  defaultSalidaArticulos,
 } from "../../../../../models";
 import {
   handleBackPage,
@@ -30,23 +31,20 @@ import {
   handleSetRetorno,
   handleTipoCambio,
 } from "../../../../../util";
-import {
-  EntradaArticulosCabecera,
-  EntradaArticulosDetalle,
-} from "./components";
+import { SalidaArticulosCabecera, SalidaArticulosDetalle } from "./components";
 
-const EntradaArticulosForm: React.FC = () => {
+const SalidaArticulosForm: React.FC = () => {
   //#region useState
   const navigate = useNavigate();
-  const backPage: string = `/${privateRoutes.COMPRAS}/${comprasRoutes.ENTRADAARTICULOS}`;
+  const backPage: string = `/${privateRoutes.VENTAS}/${ventasRoute.SALIDAPRODUCCION}`;
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { modal, form, mensajes, extra } = globalContext;
   const { primer, segundo } = modal;
   const { simplificado } = extra;
   const { retorno } = form;
   const mensaje = mensajes.filter((x) => x.origen === "form" && x.tipo >= 0);
-  const [data, setData] = useState<IEntradaArticulos>(
-    form.data || defaultEntradaArticulos
+  const [data, setData] = useState<ISalidaArticulos>(
+    form.data || defaultSalidaArticulos
   );
   console.log(data, "data");
   const [adicional, setAdicional] = useState<IEntradaArticulosVarios>(
@@ -185,19 +183,19 @@ const EntradaArticulosForm: React.FC = () => {
     <>
       <div className="main-base">
         <div className="main-header">
-          <h4 className="main-header-sub-title">{`${modal.primer.tipo} ingreso de artículos`}</h4>
+          <h4 className="main-header-sub-title">{`${modal.primer.tipo} salida de artículos`}</h4>
         </div>
 
         {mensaje.length > 0 && <Messages />}
 
-        <BasicKeyHandler selector={"entrada-articulos-form"}>
+        <BasicKeyHandler selector={"salida-articulos-form"}>
           <div className="form-base">
-            <EntradaArticulosCabecera
+            <SalidaArticulosCabecera
               data={data}
               handleData={handleData}
               handleGetTipoCambio={handleGetTipoCambio}
             />
-            <EntradaArticulosDetalle
+            <SalidaArticulosDetalle
               dataGeneral={data}
               setDataGeneral={setData}
               adicional={adicional}
@@ -222,4 +220,4 @@ const EntradaArticulosForm: React.FC = () => {
   );
 };
 
-export default EntradaArticulosForm;
+export default SalidaArticulosForm;
