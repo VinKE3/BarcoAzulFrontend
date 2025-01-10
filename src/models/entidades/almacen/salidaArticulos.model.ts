@@ -9,7 +9,6 @@ import {
   defaultDetalle,
   IMoneda,
 } from "../../global";
-import { CrudType } from "../../types";
 import { IArticulosPersonal, IMotivoArticulos } from "./entradaArticulos.model";
 
 export interface ISalidaArticulos {
@@ -24,12 +23,14 @@ export interface ISalidaArticulos {
   proveedorDireccion: string | null;
   personalId: string | null;
   fechaEmision: string;
+  fechaInicio: string;
+  concepto: string | null;
   monedaId: string;
   tipoCambio: number;
   numeroOP: string | null;
   observacion: string | null;
   motivoId: string | null;
-
+  total: number;
   detalles: ISalidaArticulosDetalle[];
 }
 
@@ -45,11 +46,14 @@ export const defaultSalidaArticulos: ISalidaArticulos = {
   proveedorDireccion: null,
   personalId: null,
   fechaEmision: format(new Date(), "yyyy-MM-dd"),
+  fechaInicio: format(new Date(), "yyyy-MM-dd"),
+  concepto: null,
   monedaId: "S",
   tipoCambio: 0,
   numeroOP: null,
   observacion: null,
   motivoId: null,
+  total: 0,
   detalles: [],
 };
 

@@ -54,7 +54,7 @@ const SalidaArticulosFilter: React.FC = () => {
   const handleListar = async (): Promise<void> => {
     try {
       const params = new URLSearchParams({
-        observacion: search.observacion,
+        numeroDocumento: search.numeroDocumento,
         fechaInicio: search.fechaInicio,
         fechaFin: search.fechaFin,
       });
@@ -73,14 +73,14 @@ const SalidaArticulosFilter: React.FC = () => {
         <span className="filter-base-text">Filtrar por</span>
         <div className="input-base-row">
           <div className="input-base-container-33">
-            <label htmlFor="observacionFilter" className="label-base">
-              Observación
+            <label htmlFor="numeroDocumentoFilter" className="label-base">
+              N° Documento
             </label>
             <input
-              id="observacionFilter"
-              name="observacion"
-              placeholder="Número Documento"
-              value={filter.observacion}
+              id="numeroDocumentoFilter"
+              name="numeroDocumento"
+              placeholder="N° Documento"
+              value={filter.numeroDocumento}
               onChange={handleData}
               autoComplete="off"
               autoFocus

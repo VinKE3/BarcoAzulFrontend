@@ -44,7 +44,7 @@ const useEntradaArticulosColumn = (): Column<IEntradaArticulosTable>[] => {
         },
       },
       {
-        Header: "Cantidad",
+        Header: "Total",
         accessor: "total",
         Cell: ({ value }: { value: number }) => {
           return (

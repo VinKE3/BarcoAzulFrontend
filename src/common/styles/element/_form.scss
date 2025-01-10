@@ -13,30 +13,31 @@
   }
 
   &-detalle {
-    @apply flex flex-col gap-y-1 m:gap-y-0;
+    @apply flex flex-col;
 
-    &-item {
-      @apply h-full;
+    &-row {
       @apply flex flex-col m:flex-row items-center justify-end;
       @apply leading-none text-mini m:text-[13px] text-end;
 
-      &-text {
-        @apply form-base-detalle-item;
-        @apply w-full pr-1.5;
-        @apply font-semibold;
+      &-item {
+        @apply w-full;
+        @apply pr-1.5 py-1;
         @apply border-base-color;
         @apply border-t-0;
       }
+
+      &-text {
+        @apply form-base-detalle-row-item;
+        @apply font-semibold;
+      }
       &-number {
-        @apply form-base-detalle-item;
-        @apply w-full m:w-auto min-w-[90px];
-        @apply py-0.5 m:pr-1.5;
+        @apply form-base-detalle-row-item;
+        @apply m:w-auto min-w-[90px];
         @apply font-bold;
-        @apply border-base-color;
-        @apply border-t-0 border-l-0;
+        @apply border-l-0;
       }
       &-input {
-        @apply form-base-detalle-item;
+        @apply form-base-detalle-row-item;
         @apply input-base;
         @apply min-w-[73px];
         @apply py-0 m-0 text-xs;

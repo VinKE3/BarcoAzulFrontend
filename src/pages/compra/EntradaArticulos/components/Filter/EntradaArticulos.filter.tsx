@@ -82,7 +82,7 @@ const EntradaArticulosFilter: React.FC = () => {
             <input
               id="observacionFilter"
               name="observacion"
-              placeholder="Número Documento"
+              placeholder="Observación"
               value={filter.observacion}
               onChange={handleData}
               autoComplete="off"

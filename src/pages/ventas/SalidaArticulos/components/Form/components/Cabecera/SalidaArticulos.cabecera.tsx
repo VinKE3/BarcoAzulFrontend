@@ -70,14 +70,14 @@ const SalidaArticulosCabecera: React.FC<IProps> = ({
             />
           </div>
           <div className="input-base-container-25">
-            <label htmlFor="fechaEmision" className="label-base">
+            <label htmlFor="fechaInicio" className="label-base">
               Fecha
             </label>
             <input
               type="date"
-              id="fechaEmision"
-              name="fechaEmision"
-              value={data.fechaEmision}
+              id="fechaInicio"
+              name="fechaInicio"
+              value={data.fechaInicio ?? ""}
               onChange={handleData}
               disabled={primer.tipo === "consultar" || data.detalles.length > 0}
               className="input-base"
@@ -235,14 +235,14 @@ const SalidaArticulosCabecera: React.FC<IProps> = ({
         </div>
         <div className="input-base-row">
           <div className="input-base-container-100">
-            <label htmlFor="proveedorDireccion" className="label-base">
+            <label htmlFor="concepto" className="label-base">
               Concepto
             </label>
             <input
-              id="proveedorDireccion"
-              name="proveedorDireccion"
+              id="concepto"
+              name="concepto"
               placeholder="Concepto"
-              value={data.proveedorDireccion ?? ""}
+              value={data.concepto ?? ""}
               onChange={handleData}
               autoComplete="off"
               disabled={primer.tipo === "consultar"}

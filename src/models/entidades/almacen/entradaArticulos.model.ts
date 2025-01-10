@@ -24,6 +24,7 @@ export interface IEntradaArticulos {
   numeroOP: string | null;
   observacion: string | null;
   motivoId: string | null;
+  total: number;
   detalles: IEntradaArticulosDetalle[];
 }
 
@@ -44,6 +45,7 @@ export const defaultEntradaArticulos: IEntradaArticulos = {
   numeroOP: null,
   observacion: null,
   motivoId: null,
+  total: 0,
   detalles: [],
 };
 

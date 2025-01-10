@@ -26,6 +26,7 @@ import {
   handleFocus,
   handleHelpModal,
   handleInputType,
+  handleNumber,
   handleSetTextos,
   handleToast,
   handleValCantidad,
@@ -64,6 +65,10 @@ const SalidaArticulosDetalle: React.FC<IProps> = ({
   );
 
   const columns = useSalidaArticulosDetalleColumn(primer.tipo);
+
+  const footerItems = [
+    { text: "TOTAL", value: Number(dataGeneral.total), show: true },
+  ];
   //#endregion
 
   //#region useEffect
@@ -588,6 +593,21 @@ const SalidaArticulosDetalle: React.FC<IProps> = ({
         border={true}
         tableClassName="documento-venta-detalle-table"
       />
+      <div className="form-base-detalle">
+        {footerItems.map((item, index) => (
+          <div key={index} className="form-base-detalle-row">
+            {item.show !== false && (
+              <>
+                <p className="form-base-detalle-row-text">{item.text}</p>
+                <p className="form-base-detalle-row-number">
+                  {handleNumber(item.value, true, true)}
+                </p>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+
       {segundo.origen === "precioFind" && (
         <PrecioFindModal
           articulo={articuloCompleto}

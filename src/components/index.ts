@@ -5,7 +5,6 @@ export * from "./EmptyDialog";
 export * from "./Footer/ButtonFooter";
 export * from "./Footer";
 export * from "./Helpers/Find/Articulo";
-export * from "./Helpers/Find/ArticuloAlternativo";
 export * from "./Helpers/Find/Cliente";
 export * from "./Helpers/Find/Lote";
 export * from "./Helpers/Find/Medico";

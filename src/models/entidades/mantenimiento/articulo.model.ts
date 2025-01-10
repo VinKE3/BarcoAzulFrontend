@@ -7,7 +7,7 @@ import { ICombo, IMoneda, defaultMoneda } from "../../global";
 export interface IArticulo {
   id: string;
   lineaId: string;
-  subLineaId: string;
+  subLineaId: string | null;
   articuloId: string;
   tipoExistenciaId: string;
   unidadMedidaId: string;
