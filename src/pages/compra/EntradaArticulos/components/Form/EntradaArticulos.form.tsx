@@ -2,11 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  almacenRoutes,
-  comprasRoutes,
-  privateRoutes,
-} from "../../../../../common";
+import { comprasRoutes, privateRoutes } from "../../../../../common";
 import {
   ArticuloFindModal,
   BasicKeyHandler,

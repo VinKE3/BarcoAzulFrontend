@@ -9,10 +9,10 @@ const Finanzas = () => {
       <>
         <Route
           path="/"
-          element={<Navigate to={finanzasRoutes.MOVIMIENTOBANCARIO} />}
+          element={<Navigate to={finanzasRoutes.MOVIMIENTOCUENTABANCARIA} />}
         />
         <Route
-          path={finanzasRoutes.MOVIMIENTOBANCARIO}
+          path={finanzasRoutes.MOVIMIENTOCUENTABANCARIA}
           element={<MovimientoBancario />}
         />
         {/* <Route

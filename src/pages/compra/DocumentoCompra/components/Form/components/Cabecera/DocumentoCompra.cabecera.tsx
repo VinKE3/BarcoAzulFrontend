@@ -62,10 +62,11 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
   const [documentosCompraPendientes, setDocumentosCompraPendientes] = useState<
     IDocumentoCompraPendiente[]
   >([]);
+
+  console.log(documentosCompraPendientes);
   //#endregion
 
   //#region useEffect
-
 
   const simulateChangeEvent = (
     name: string,
@@ -661,7 +662,7 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
                   </option>
                   {documentosCompraPendientes.map(
                     (x: IDocumentoCompraPendiente) => (
-                      <option key={x.id} value={x.id}>
+                      <option key={x.id} value={x.numeroDocumento}>
                         {x.numeroDocumento}
                       </option>
                     )

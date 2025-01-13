@@ -3,6 +3,8 @@ import {
   IDocumentoFilter,
   defaultDocumentoFilter,
   IMoneda,
+  IDetalle,
+  defaultDetalle,
 } from "../../global";
 import { format } from "date-fns";
 
@@ -43,25 +45,6 @@ export interface IDocumentoCompra {
   detalles: IDocumentoCompraDetalle[];
 }
 
-export interface IDocumentoCompraDetalle {
-  detalleId: number;
-  lineaId: string;
-  subLineaId: string;
-  articuloId: string;
-  unidadMedidaId: string;
-  marcaId: number;
-  descripcion: string;
-  codigoBarras: string;
-  cantidad: number;
-  precioUnitario: number;
-  subTotal: number;
-  montoIGV: number;
-  importe: number;
-  presentacion: string;
-  unidadMedidaDescripcion: string;
-  cantidadPendiente: number;
-}
-
 export const defaultDocumentoCompra: IDocumentoCompra = {
   id: "",
   empresaId: "",
@@ -99,13 +82,19 @@ export const defaultDocumentoCompra: IDocumentoCompra = {
   detalles: [],
 };
 
+export interface IDocumentoCompraDetalle extends IDetalle {}
+
+export const defaultDocumentoCompraDetalle: IDocumentoCompraDetalle = {
+  ...defaultDetalle,
+};
+
 export interface IDocumentoCompraFilter extends IDocumentoFilter {
-  proveedor: string;
+  proveedorNombre: string;
 }
 
 export const defaultDocumentoCompraFilter: IDocumentoCompraFilter = {
   ...defaultDocumentoFilter,
-  proveedor: "",
+  proveedorNombre: "",
 };
 
 export interface ITiposPago {

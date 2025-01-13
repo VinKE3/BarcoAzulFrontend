@@ -16,7 +16,9 @@ import {
 const DocumentoCompraFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { table, modal, mensajes } = globalContext;
+  const { table, modal, mensajes, extra } = globalContext;
+  const { simplificado } = extra;
+  const { fechaFin, fechaInicio } = simplificado;
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
@@ -47,9 +49,9 @@ const DocumentoCompraFilter: React.FC = () => {
   const handleListar = async (): Promise<void> => {
     try {
       const params = new URLSearchParams({
-        proveedor: search.proveedor,
-        fechaInicio: search.fechaInicio,
-        fechaFin: search.fechaFin,
+        proveedorNombre: search.proveedorNombre,
+        fechaInicio: fechaInicio,
+        fechaFin: fechaFin,
       });
       const { data, total }: { data: IDocumentoCompraTable[]; total: number } =
         await getListar(globalContext, params);
@@ -65,21 +67,19 @@ const DocumentoCompraFilter: React.FC = () => {
       <span className="filter-base-text">Filtrar por</span>
       <BasicKeyHandler selector="articulo-filter">
         <div className="input-base-row">
-          <div className="input-base-container-33 articulo-filter">
-            <div className="input-base-container-75">
-              <label htmlFor="proveedorFilter" className="label-base">
-                Proveedor
-              </label>
-              <input
-                id="proveedorFilter"
-                name="proveedor"
-                placeholder="Descripción"
-                value={filter.proveedor}
-                onChange={handleData}
-                autoComplete="off"
-                className="input-base"
-              />
-            </div>
+          <div className="input-base-container-75 articulo-filter">
+            <label htmlFor="proveedorNombreFilter" className="label-base">
+              Proveedor
+            </label>
+            <input
+              id="proveedorNombreFilter"
+              name="proveedorNombre"
+              placeholder="Proveedor Nombre"
+              value={filter.proveedorNombre}
+              onChange={handleData}
+              autoComplete="off"
+              className="input-base"
+            />
           </div>
           <div className="input-base-container-20">
             <label htmlFor="fechaInicio" className="label-base">
@@ -89,7 +89,7 @@ const DocumentoCompraFilter: React.FC = () => {
               type="date"
               id="fechaInicio"
               name="fechaInicio"
-              value={filter.fechaInicio}
+              value={fechaInicio}
               onChange={handleData}
               className="input-base"
             />
@@ -102,7 +102,7 @@ const DocumentoCompraFilter: React.FC = () => {
               type="date"
               id="fechaFin"
               name="fechaFin"
-              value={filter.fechaFin}
+              value={fechaFin}
               onChange={handleData}
               className="input-base"
             />

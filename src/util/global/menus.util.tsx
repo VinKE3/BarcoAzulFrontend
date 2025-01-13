@@ -1,20 +1,19 @@
 import { WrenchScrewdriverIcon } from "@heroicons/react/20/solid";
-import { FaUsers, FaCoins } from "react-icons/fa6";
-import { MdArticle } from "react-icons/md";
 import { BiSolidCoin } from "react-icons/bi";
-import { GiSellCard, GiBuyCard } from "react-icons/gi";
+import { FaUsers } from "react-icons/fa6";
+import { GiBuyCard, GiSellCard } from "react-icons/gi";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { IoMdBarcode } from "react-icons/io";
+import { MdArticle } from "react-icons/md";
+import { comprasRoutes } from "../../common/routes/compras.routes";
+import { finanzasRoutes } from "../../common/routes/finanzas.routes";
 import { mantenimientoRoutes } from "../../common/routes/mantenimiento.routes";
 import { privateRoutes } from "../../common/routes/routes";
-import { IMenuElement, ISubMenuElement } from "../../models";
-import { tesoreriaRoutes } from "../../common/routes/tesoreria.routes";
-import { comprasRoutes } from "../../common/routes/compras.routes";
 import { ventasRoute } from "../../common/routes/ventas.routes";
-import { finanzasRoutes } from "../../common/routes/finanzas.routes";
+import { IMenuElement, ISubMenuElement } from "../../models";
 
 //#region Variables
-const { MANTENIMIENTO, TESORERIA, COMPRAS, VENTAS, FINANZAS } = privateRoutes;
+const { MANTENIMIENTO, COMPRAS, VENTAS, FINANZAS } = privateRoutes;
 const {
   CLIENTE,
   PROVEEDOR,
@@ -35,7 +34,6 @@ const {
   CUADRESTOCK,
   TIPOCAMBIO,
 } = mantenimientoRoutes;
-const { MOVIMIENTOCUENTABANCARIA, REPORTECUENTABANCARIA } = tesoreriaRoutes;
 const { TODASLASCOMPRAS, CUENTASPORPAGAR, ENTRADAARTICULOS } = comprasRoutes;
 const {
   DOCUMENTOVENTA,
@@ -44,7 +42,7 @@ const {
   NOTAPEDIDO,
   SALIDAPRODUCCION,
 } = ventasRoute;
-const { MOVIMIENTOBANCARIO } = finanzasRoutes;
+const { MOVIMIENTOCUENTABANCARIA } = finanzasRoutes;
 const createSubMenu = (items: ISubMenuElement[]) => items;
 //#endregion
 
@@ -119,26 +117,11 @@ export function navbarMenu(): IMenuElement[] {
     {
       id: "tesoreria",
       text: "Tesorería",
-      icon: <FaCoins className="w-full h-full" />,
-      subMenus: createSubMenu([
-        {
-          text: "Movimiento Cuenta Bancaria",
-          path: `${TESORERIA}/${MOVIMIENTOCUENTABANCARIA}`,
-        },
-        {
-          text: "Reporte Cuenta Bancaria",
-          path: `${TESORERIA}/${REPORTECUENTABANCARIA}`,
-        },
-      ]), // Sin submenús definidos
-    },
-    {
-      id: "finanzas",
-      text: "Finanzas",
       icon: <BiSolidCoin className="w-full h-full" />,
       subMenus: createSubMenu([
         {
-          text: "Finanzas",
-          path: `${FINANZAS}/${MOVIMIENTOBANCARIO}`,
+          text: "Movimiento Bancario",
+          path: `${FINANZAS}/${MOVIMIENTOCUENTABANCARIA}`,
         },
       ]),
     },

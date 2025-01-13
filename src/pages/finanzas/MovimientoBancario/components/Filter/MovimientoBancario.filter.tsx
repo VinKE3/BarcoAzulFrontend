@@ -22,7 +22,9 @@ interface IProps {
 const MovimientoBancarioFilter: React.FC<IProps> = ({ tablas }) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { table, modal, mensajes } = globalContext;
+  const { table, modal, mensajes, extra } = globalContext;
+  const { simplificado } = extra;
+  const { fechaFin, fechaInicio } = simplificado;
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
@@ -58,8 +60,8 @@ const MovimientoBancarioFilter: React.FC<IProps> = ({ tablas }) => {
       const params = new URLSearchParams({
         concepto: search.concepto,
         cuentaCorrienteId: search.cuentaCorrienteId,
-        fechaInicio: search.fechaInicio,
-        fechaFin: search.fechaFin,
+        fechaInicio: fechaInicio,
+        fechaFin: fechaFin,
       });
       const {
         data,
@@ -79,21 +81,19 @@ const MovimientoBancarioFilter: React.FC<IProps> = ({ tablas }) => {
       <span className="filter-base-text">Filtrar por</span>
       <BasicKeyHandler selector="articulo-filter">
         <div className="input-base-row">
-          <div className="input-base-container-33 articulo-filter">
-            <div className="input-base-container-75">
-              <label htmlFor="conceptoFilter" className="label-base">
-                Concepto
-              </label>
-              <input
-                id="conceptoFilter"
-                name="concepto"
-                placeholder="Descripción"
-                value={filter.concepto}
-                onChange={handleData}
-                autoComplete="off"
-                className="input-base"
-              />
-            </div>
+          <div className="input-base-container-50 articulo-filter">
+            <label htmlFor="conceptoFilter" className="label-base">
+              Concepto
+            </label>
+            <input
+              id="conceptoFilter"
+              name="concepto"
+              placeholder="Descripción"
+              value={filter.concepto}
+              onChange={handleData}
+              autoComplete="off"
+              className="input-base"
+            />
           </div>
           <div className="input-base-container-50">
             <label htmlFor="cuentaCorrienteId" className="label-base">
@@ -121,7 +121,7 @@ const MovimientoBancarioFilter: React.FC<IProps> = ({ tablas }) => {
               type="date"
               id="fechaInicio"
               name="fechaInicio"
-              value={filter.fechaInicio}
+              value={fechaInicio}
               onChange={handleData}
               className="input-base"
             />
@@ -134,7 +134,7 @@ const MovimientoBancarioFilter: React.FC<IProps> = ({ tablas }) => {
               type="date"
               id="fechaFin"
               name="fechaFin"
-              value={filter.fechaFin}
+              value={fechaFin}
               onChange={handleData}
               className="input-base"
             />

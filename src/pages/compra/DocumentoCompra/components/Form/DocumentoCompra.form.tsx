@@ -24,6 +24,7 @@ import {
   handleSetInputs,
   roundNumber,
   handleTipoCambio,
+  getId,
 } from "../../../../../util";
 import { DocumentoCompraCabecera, DocumentoCompraDetalle } from "./components";
 
@@ -92,6 +93,9 @@ const DocumentoCompraForm: React.FC = () => {
   // useEffect(() => {
   //   data.detalles && handleTotales(data.detalles);
   // }, [data.detalles]);
+  useEffect(() => {
+    primer.tipo === "registrar" && handleLoad();
+  }, [primer.tipo]);
 
   useEffect(() => {
     retorno && retorno.origen === "proveedorFind" && handleProveedor(retorno);
@@ -207,6 +211,15 @@ const DocumentoCompraForm: React.FC = () => {
   //     total: roundNumber(total),
   //   }));
   // };
+
+  const handleListarPendientes = async (proveedorId: string): Promise<void> => {
+    const listarPendientes: IDocumentoCompra = await getId(
+      globalContext,
+      proveedorId,
+      "Mantenimiento/Articulo",
+      true
+    );
+  };
 
   const handleNumero = (): void => {
     let num = data.numero;
