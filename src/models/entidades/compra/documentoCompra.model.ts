@@ -39,6 +39,8 @@ export interface IDocumentoCompra {
   montoIGV: number;
   totalNeto: number;
   total: number;
+  saldo: number;
+  abonado: number;
   incluyeIGV: boolean;
   afectarStock: boolean;
   afectarPrecio: boolean;
@@ -76,6 +78,8 @@ export const defaultDocumentoCompra: IDocumentoCompra = {
   montoIGV: 0,
   totalNeto: 0,
   total: 0,
+  saldo: 0,
+  abonado: 0,
   incluyeIGV: false,
   afectarStock: true,
   afectarPrecio: false,

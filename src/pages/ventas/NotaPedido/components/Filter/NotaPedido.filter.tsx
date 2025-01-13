@@ -20,7 +20,9 @@ import {
 const NotaPedidoFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { api, table, modal, mensajes } = globalContext;
+  const { api, table, modal, mensajes, extra } = globalContext;
+  const { simplificado } = extra;
+  const { fechaFin, fechaInicio } = simplificado;
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
@@ -58,8 +60,8 @@ const NotaPedidoFilter: React.FC = () => {
     try {
       const params = new URLSearchParams({
         clienteNombre: search.clienteNombre,
-        fechaInicio: search.fechaInicio,
-        fechaFin: search.fechaFin,
+        fechaInicio: fechaInicio,
+        fechaFin: fechaFin,
       });
       const { data, total }: { data: INotaPedidoTable[]; total: number } =
         await getListar(globalContext, params);
@@ -98,7 +100,7 @@ const NotaPedidoFilter: React.FC = () => {
               type="date"
               id="fechaInicio"
               name="fechaInicio"
-              value={filter.fechaInicio}
+              value={fechaInicio}
               onChange={handleData}
               className="input-base"
             />
@@ -112,7 +114,7 @@ const NotaPedidoFilter: React.FC = () => {
               type="date"
               id="fechaFin"
               name="fechaFin"
-              value={filter.fechaFin}
+              value={fechaFin}
               onChange={handleData}
               className="input-base"
             />

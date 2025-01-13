@@ -1,24 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeEvent, useState, useEffect } from "react";
-import { TbDeviceIpadSearch } from "react-icons/tb";
-import { useGlobalContext } from "../../../../../../../hooks";
-import { CheckBox } from "../../../../../../../components";
-import {
-  ICombo,
-  IMoneda,
-  IDocumentoCompra,
-  IDocumentoCompraTablas,
-  ITiposPago,
-  defaultDocumentoCompraTablas,
-  IDocumentoCompraPorcentajes,
-  IMotivosNota,
-  IDocumentoCompraCuentaCorriente,
-  IPorcentajes,
-  IDocumentoCompraPendiente,
-} from "../../../../../../../models";
-import { handleHelpModal, get, getId } from "../../../../../../../util";
+import { ChangeEvent, useEffect, useState } from "react";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { TbDeviceIpadSearch } from "react-icons/tb";
+import { CheckBox } from "../../../../../../../components";
+import { useGlobalContext } from "../../../../../../../hooks";
+import {
+  defaultDocumentoCompraTablas,
+  ICombo,
+  IDocumentoCompra,
+  IDocumentoCompraCuentaCorriente,
+  IDocumentoCompraPendiente,
+  IDocumentoCompraTablas,
+  IMoneda,
+  IMotivosNota,
+  IPorcentajes,
+  ITiposPago,
+} from "../../../../../../../models";
+import { handleHelpModal } from "../../../../../../../util";
 
 interface IProps {
   data: IDocumentoCompra;
@@ -692,6 +691,38 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
               />
             </div>
           )}
+        </div>
+        <div className="input-base-row">
+          <div className="input-base-container-25">
+            <label htmlFor="abonado" className="label-base">
+              Abonado
+            </label>
+            <input
+              id="abonado"
+              name="abonado"
+              value={data.abonado}
+              placeholder="Dirección"
+              onChange={handleData}
+              autoFocus
+              disabled
+              className="input-base"
+            />
+          </div>
+          <div className="input-base-container-25">
+            <label htmlFor="saldo" className="label-base">
+              Saldo
+            </label>
+            <input
+              id="saldo"
+              name="saldo"
+              value={data.saldo}
+              placeholder="Saldo"
+              onChange={handleData}
+              autoFocus
+              disabled
+              className="input-base"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -373,7 +373,7 @@ const DocumentoCompraDetalle: React.FC<IProps> = ({
   };
   //#endregion
   return (
-    <div className="form-base-container documento-compra-form">
+    <div className="form-base-container documento-compra-detalle-form">
       {mensaje.length > 0 && <Messages />}
       <div className="filter-base">
         <span className="filter-base-text">Detalles</span>
@@ -592,7 +592,7 @@ const DocumentoCompraDetalle: React.FC<IProps> = ({
         pagination={false}
         selectable={false}
         border={true}
-        tableClassName="documento-venta-detalle-table"
+        tableClassName="documento-compra-detalle-table"
       />
       <div className="form-base-detalle">
         {footerItems.map((item, index) => (

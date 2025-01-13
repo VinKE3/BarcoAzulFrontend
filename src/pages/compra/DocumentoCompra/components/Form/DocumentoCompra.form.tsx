@@ -188,6 +188,7 @@ const DocumentoCompraForm: React.FC = () => {
       subTotal: roundNumber(subTotal),
       totalNeto: roundNumber(totalNeto),
       total: roundNumber(total),
+      abonado: roundNumber(total),
     }));
   };
 
