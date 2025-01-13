@@ -16,3 +16,4 @@ export * from "./venta/guiaRemision";
 export * from "./venta";
 export * from "./venta/notaCredito";
 export * from "./venta/pedido";
+export * from "./venta/notaPedido";

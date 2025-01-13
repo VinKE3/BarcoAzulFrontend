@@ -1,4 +1,4 @@
-export { default as DocumentoVenta } from "./DocumentoVenta";
+export { default as NotaPedido } from "./NotaPedido";
 export * from "./components/Column";
 export * from "./components/Filter";
 export * from "./components/Form/components/Cabecera";

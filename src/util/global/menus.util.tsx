@@ -38,7 +38,7 @@ const {
 const { MOVIMIENTOCUENTABANCARIA, REPORTECUENTABANCARIA } = tesoreriaRoutes;
 const { TODASLASCOMPRAS, CUENTASPORPAGAR, ENTRADAARTICULOS } = comprasRoutes;
 const {
-  TODASLASVENTAS,
+  DOCUMENTOVENTA,
   GUIASREMISION,
   CUENTASPORCOBRAR,
   NOTAPEDIDO,
@@ -172,7 +172,7 @@ export function navbarMenu(): IMenuElement[] {
         },
         {
           text: "Todas las Ventas",
-          path: `${VENTAS}/${TODASLASVENTAS}`,
+          path: `${VENTAS}/${DOCUMENTOVENTA}`,
         },
         {
           text: "Guías de remisión",

@@ -1,0 +1,55 @@
+.guia-remision-table {
+  th {
+    @apply text-center;
+    &:first-child {
+      @apply min-w-[70px];
+    }
+    &:nth-child(2) {
+      @apply min-w-[70px];
+    }
+    &:nth-child(3) {
+      @apply min-w-[100px];
+      @apply text-left;
+    }
+    &:nth-child(4) {
+      @apply min-w-[120px];
+    }
+    &:nth-child(5) {
+      @apply min-w-[30px];
+    }
+    &:nth-child(6) {
+      @apply min-w-[80px];
+    }
+    &:nth-child(7) {
+      @apply min-w-[110px];
+    }
+    &:nth-child(8) {
+      @apply min-w-[135px];
+    }
+    &:last-child {
+      @apply w-[90px] min-w-[90px];
+    }
+  }
+}
+
+.guia-remision-detalle-table {
+  th {
+    @apply text-center uppercase;
+
+    &:first-child {
+      @apply min-w-[25px];
+    }
+    &:nth-child(2) {
+      @apply w-full min-w-[280px] text-left;
+    }
+    &:nth-child(3) {
+      @apply min-w-[80px];
+    }
+    &:nth-child(4) {
+      @apply min-w-[80px];
+    }
+    &:last-child {
+      @apply w-[90px] min-w-[90px];
+    }
+  }
+}

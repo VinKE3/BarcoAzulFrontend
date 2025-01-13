@@ -88,12 +88,12 @@ export const defaultDocumentoVentaTablas: IDocumentoVentaTablas = {
 };
 
 export interface IDocumentoVentaFilter extends IDocumentoFilter {
-  vendedorId: string;
+  clienteNombre: string;
 }
 
 export const defaultDocumentoVentaFilter: IDocumentoVentaFilter = {
   ...defaultDocumentoFilter,
-  vendedorId: "",
+  clienteNombre: "",
 };
 
 export interface IDocumentoVentaFilterTablas {
@@ -106,15 +106,18 @@ export const defaultDocumentoVentaFilterTablas: IDocumentoVentaFilterTablas = {
 
 export interface IDocumentoVentaTable {
   id: string;
-  tipoDocumentoDescripcion: string;
-  numeroDocumento: string;
-  numerosPedido: string;
-  clienteNombre: string;
-  clienteNumeroDocumentoIdentidad: string;
-  documentoReferencia: string;
   fechaEmision: string;
-  horaEmision: string;
-  isActualizado: boolean;
-  isAnulado: boolean;
+  numeroDocumento: string;
+  clienteNombre: string;
+  clienteNumero: string;
+  guiaRemision: string;
+  notaPedido: string;
+  monedaId: string;
   total: number;
+  isCancelado: boolean;
+  afectarStock: boolean;
+  isAnulado: boolean;
+  isBloqueado: boolean;
+  personal: string;
+  estadoSUNAT: string;
 }

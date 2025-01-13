@@ -41,14 +41,9 @@ export const defaultDetalle: IDetalle = {
   precioCompra: 0,
 };
 
-export interface IDetalleVenta extends IDetalle {
-  precioCompra: number;
-  precioOriginal: number;
-}
+export interface IDetalleVenta extends IDetalle {}
 export const defaultDetalleVenta: IDetalleVenta = {
   ...defaultDetalle,
-  precioCompra: 0,
-  precioOriginal: 0,
 };
 
 export interface IDetalleCompra extends IDetalle {}

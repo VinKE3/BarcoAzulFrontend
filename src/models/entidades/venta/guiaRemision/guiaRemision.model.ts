@@ -1,5 +1,12 @@
 import { format } from "date-fns";
-import { defaultDocumentoFilter, ICombo, IDocumentoFilter, ISerie } from "../../../global";
+import {
+  defaultDetalle,
+  defaultDocumentoFilter,
+  ICombo,
+  IDetalle,
+  IDocumentoFilter,
+  ISerie,
+} from "../../../global";
 import { CrudType } from "../../../types";
 import { defaultPuntoVenta, IPuntoVenta } from "../../empresa";
 import { IGuiaRemisionTransportista } from "./guiaRemisionTransportista.model";
@@ -100,36 +107,13 @@ export const defaultGuiaRemision: IGuiaRemision = {
   detalles: [],
 };
 
-export interface IGuiaRemisionDetalle {
-  tipo: CrudType;
-
-  detalleId: number;
-
-  articuloId: string;
-  descripcion: string;
-
-  cantidad: number;
-  pastilla: string;
-
-  loteId: string;
-  loteNumero: string;
-  loteFechaVencimiento: string;
+export interface IGuiaRemisionDetalle extends IDetalle {
+  totalPeso: string;
 }
 
 export const defaultGuiaRemisionDetalle: IGuiaRemisionDetalle = {
-  tipo: "registrar",
-
-  detalleId: 0,
-
-  articuloId: "",
-  descripcion: "",
-
-  cantidad: 0,
-  pastilla: "",
-
-  loteId: "",
-  loteNumero: "",
-  loteFechaVencimiento: "",
+  ...defaultDetalle,
+  totalPeso: "",
 };
 
 export interface IGuiaRemisionTablas {
@@ -152,21 +136,28 @@ export const defaultGuiaRemisionTablas: IGuiaRemisionTablas = {
   tiposDocumentoReferencia: [],
 };
 
-export interface IGuiaRemisionFilter extends IDocumentoFilter {}
+export interface IGuiaRemisionFilter extends IDocumentoFilter {
+  clienteNombre: string;
+  serie: string;
+  tipoGuia: string;
+}
 
 export const defaultGuiaRemisionFilter: IGuiaRemisionFilter = {
   ...defaultDocumentoFilter,
+  clienteNombre: "",
+  serie: "",
+  tipoGuia: "",
 };
 
 export interface IGuiaRemisionTable {
-  clienteNombre: string;
-  estadoSUNAT: string;
-  fechaEmision: string;
-  horaEmision: string;
   id: string;
-  isAnulado: boolean;
+  fechaEmision: string;
   numeroDocumento: string;
-  numeroDocumentoRelacionado: string;
-  pesoTotal: number;
-  ruc: string;
+  clienteNombre: string;
+  clienteNumero: string;
+  placa: string;
+  isAnulado: boolean;
+  isBloqueado: boolean;
+  afectarStock: boolean;
+  estadoSUNAT: string;
 }
