@@ -2,20 +2,15 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useDebounce, useGlobalContext } from "../../../../hooks";
 import {
   IArticuloFind,
-  IArticuloFindAdicional,
   IArticuloFindFilter,
   IArticuloFindModal,
   IArticuloFindTable,
-  IStockFindTable,
-  defaultArticuloFindAdicional,
   defaultArticuloFindFilter,
 } from "../../../../models";
 import {
   get,
   handleFocus,
-  handleInitialData,
   handleInputType,
-  handleResetMensajeError,
   handleSetErrorMensaje,
   handleSetRetorno,
 } from "../../../../util";
@@ -28,8 +23,7 @@ const ArticuloFindModal: React.FC<IArticuloFindModal> = ({ inputFocus }) => {
   //#region useState
   const menu: string = "Mantenimiento/Articulo/Listar";
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { modal, form, extra } = globalContext;
-  const { retorno } = form;
+  const { extra } = globalContext;
   const { row } = globalContext.table;
   const { inputs } = extra.element;
 
@@ -42,12 +36,6 @@ const ArticuloFindModal: React.FC<IArticuloFindModal> = ({ inputFocus }) => {
   //#endregion
 
   //#region useEffect
-  // useEffect(() => {
-  //   retorno &&
-  //     retorno.origen === "articuloAlternativoFind" &&
-  //     tableKeyDown(retorno);
-  // }, [retorno]);
-
   useEffect(() => {
     handleListarDataVenta();
   }, [search]);

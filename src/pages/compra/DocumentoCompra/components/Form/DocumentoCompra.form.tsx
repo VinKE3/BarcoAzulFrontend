@@ -14,33 +14,45 @@ import { useFocus, useGlobalContext } from "../../../../../hooks";
 import {
   IDocumentoCompra,
   IDocumentoCompraDetalle,
+  IDocumentoCompraVarios,
+  defaultDocumentoCompraVarios,
   IProveedorFind,
   defaultDocumentoCompra,
+  IDocumentoCompraPendiente,
 } from "../../../../../models";
 import {
   handleBackPage,
   handleInputType,
   handleResetContext,
   handleSetInputs,
+  handleSetRetorno,
   roundNumber,
   handleTipoCambio,
+  get,
   getId,
 } from "../../../../../util";
 import { DocumentoCompraCabecera, DocumentoCompraDetalle } from "./components";
 
 const DocumentoCompraForm: React.FC = () => {
   //#region useState
+  const documentosPendientesListar: string =
+    "Compra/DocumentoCompra/ListarPendientes";
   const navigate = useNavigate();
   const backPage: string = `/${privateRoutes.COMPRAS}/${comprasRoutes.TODASLASCOMPRAS}`;
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { modal, form, mensajes } = globalContext;
   const { primer, segundo } = modal;
   const { retorno } = form;
-  // const { simplificado } = extra;
   const mensaje = mensajes.filter((x) => x.origen === "form" && x.tipo >= 0);
   const [data, setData] = useState<IDocumentoCompra>(
     form.data || defaultDocumentoCompra
   );
+  const [adicional, setAdicional] = useState<IDocumentoCompraVarios>(
+    defaultDocumentoCompraVarios
+  );
+  const [documentosCompraPendientes, setDocumentosCompraPendientes] = useState<
+    IDocumentoCompraPendiente[]
+  >([]);
   const inputs = useFocus(
     "tipoDocumentoId",
     "proveedorId",
@@ -90,9 +102,10 @@ const DocumentoCompraForm: React.FC = () => {
     handleSetInputs(setGlobalContext, inputs);
   }, [inputs]);
 
-  // useEffect(() => {
-  //   data.detalles && handleTotales(data.detalles);
-  // }, [data.detalles]);
+  useEffect(() => {
+    data.detalles && handleTotales(data.detalles);
+  }, [data.detalles]);
+
   useEffect(() => {
     primer.tipo === "registrar" && handleLoad();
   }, [primer.tipo]);
@@ -100,8 +113,6 @@ const DocumentoCompraForm: React.FC = () => {
   useEffect(() => {
     retorno && retorno.origen === "proveedorFind" && handleProveedor(retorno);
   }, [retorno]);
-
-  useEffect(() => {}, [segundo]);
 
   //#endregion
 
@@ -136,6 +147,7 @@ const DocumentoCompraForm: React.FC = () => {
     if (precioVenta === 0) return 0;
     return precioVenta;
   };
+
   const handleData = ({
     target,
   }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -155,70 +167,40 @@ const DocumentoCompraForm: React.FC = () => {
     }));
   };
 
-  // const handleTotales = (detalles: IDocumentoCompraDetalle[]): void => {
-  //   const { porcentajeIGV } = data;
-  //   const incluyeIGV: boolean = true; // Fijado temporalmente como true
+  const handleTotales = (detalles: IDocumentoCompraDetalle[]): void => {
+    const { porcentajeIGV, incluyeIGV } = data;
+    console.log(porcentajeIGV, "porcentajeIGV");
+    console.log(incluyeIGV, "incluyeIGV");
 
-  //   // Inicializar acumuladores
-  //   let totalOperaciones = {
-  //     gravadas: 0,
-  //     exoneradas: 0,
-  //     inafectas: 0,
-  //   };
+    const importeTotal = detalles.reduce((total, x) => total + x.importe, 0);
 
-  //   // Calcular totales agrupados por tipo de afectación
-  //   // detalles.forEach((x) => {
-  //   //   switch (x.tipoAfectacionIGVId) {
-  //   //     case "10":
-  //   //       totalOperaciones.gravadas += x.importe;
-  //   //       break;
-  //   //     case "20":
-  //   //       totalOperaciones.exoneradas += x.importe;
-  //   //       break;
-  //   //     case "30":
-  //   //       totalOperaciones.inafectas += x.importe;
-  //   //       break;
-  //   //     default:
-  //   //       break;
-  //   //   }
-  //   // });
+    let subTotal = incluyeIGV
+      ? importeTotal / (1 + porcentajeIGV / 100)
+      : importeTotal;
+    let montoIGV = incluyeIGV
+      ? importeTotal - subTotal
+      : importeTotal * (porcentajeIGV / 100);
+    let totalNeto = incluyeIGV ? importeTotal : subTotal + montoIGV;
+    const total = subTotal + montoIGV;
+    setData((x) => ({
+      ...x,
+      montoIGV: roundNumber(montoIGV),
+      subTotal: roundNumber(subTotal),
+      totalNeto: roundNumber(totalNeto),
+      total: roundNumber(total),
+    }));
+  };
 
-  //   // Calcular totales e IGV
-  //   let { gravadas } = totalOperaciones;
-  //   let montoIGV = 0;
+  const handleAdicional = ({
+    target,
+  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+    const { name, type, value: rawValue } = target;
+    const value =
+      type === "checkbox" ? (target as HTMLInputElement).checked : rawValue;
+    setAdicional((x) => ({ ...x, [name]: value }));
 
-  //   if (incluyeIGV) {
-  //     gravadas /= 1 + porcentajeIGV / 100;
-  //     montoIGV = totalOperaciones.gravadas - gravadas;
-  //   } else {
-  //     montoIGV = gravadas * (porcentajeIGV / 100);
-  //     gravadas += montoIGV;
-  //   }
-
-  //   const total =
-  //     totalOperaciones.exoneradas +
-  //     totalOperaciones.inafectas +
-  //     gravadas +
-  //     montoIGV;
-
-  //   // Actualizar datos redondeados
-  //   setData((x) => ({
-  //     ...x,
-  //     totalOperacionesGravadas: roundNumber(gravadas),
-  //     totalOperacionesExoneradas: roundNumber(totalOperaciones.exoneradas),
-  //     totalOperacionesInafectas: roundNumber(totalOperaciones.inafectas),
-  //     montoIGV: roundNumber(montoIGV),
-  //     total: roundNumber(total),
-  //   }));
-  // };
-
-  const handleListarPendientes = async (proveedorId: string): Promise<void> => {
-    const listarPendientes: IDocumentoCompra = await getId(
-      globalContext,
-      proveedorId,
-      "Mantenimiento/Articulo",
-      true
-    );
+    const retorno = { origen: name, [name]: value };
+    handleSetRetorno(setGlobalContext, retorno);
   };
 
   const handleNumero = (): void => {
@@ -244,6 +226,51 @@ const DocumentoCompraForm: React.FC = () => {
     return;
   };
 
+  const getPendientes = async (): Promise<void> => {
+    const urlParams = new URLSearchParams({
+      proveedorId: String(data.proveedorId),
+    });
+    const response = await get({
+      globalContext,
+      menu: documentosPendientesListar,
+      urlParams,
+    });
+    setDocumentosCompraPendientes(response.data);
+  };
+
+  const handlePendiente = async (): Promise<void> => {
+    await getPendientes();
+    const pendienteId = data.documentoReferenciaId;
+    const pendienteCompleto = await getId(
+      globalContext,
+      String(pendienteId),
+      "Compra/DocumentoCompra"
+    );
+    const { detalles } = pendienteCompleto;
+    const newDetalle = detalles.map((x: any) => ({
+      ...x,
+    }));
+    setData((x) => ({
+      ...x,
+      documentoReferenciaId: pendienteId,
+      detalles: newDetalle,
+    }));
+  };
+
+  useEffect(() => {
+    if (data.proveedorId && data.proveedorId.trim().length > 0) {
+      getPendientes();
+    }
+  }, [data.proveedorId]);
+
+  useEffect(() => {
+    if (
+      data.documentoReferenciaId &&
+      data.documentoReferenciaId.trim().length > 0
+    ) {
+      handlePendiente();
+    }
+  }, [data.documentoReferenciaId]);
   //#endregion
   return (
     <>
@@ -262,8 +289,14 @@ const DocumentoCompraForm: React.FC = () => {
               handleGetTipoCambio={handleGetTipoCambio}
               handleNumero={handleNumero}
               handleSerie={handleSerie}
+              documentosCompraPendientes={documentosCompraPendientes}
             />
-            {/* <DocumentoCompraDetalle dataGeneral={data} setDataGeneral={setData} /> */}
+            <DocumentoCompraDetalle
+              dataGeneral={data}
+              setDataGeneral={setData}
+              adicional={adicional}
+              handleAdicional={handleAdicional}
+            />
           </div>
 
           <ButtonFooter
@@ -276,6 +309,9 @@ const DocumentoCompraForm: React.FC = () => {
 
       {segundo.origen === "proveedorFind" && (
         <ProveedorFindModal inputFocus="tipoPagoId" />
+      )}
+      {segundo.origen === "articuloFind" && (
+        <ArticuloFindModal inputFocus="cantidad" />
       )}
     </>
   );

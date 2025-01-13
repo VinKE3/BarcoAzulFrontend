@@ -36,15 +36,13 @@ const EntradaArticulosForm: React.FC = () => {
   const navigate = useNavigate();
   const backPage: string = `/${privateRoutes.COMPRAS}/${comprasRoutes.ENTRADAARTICULOS}`;
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { modal, form, mensajes, extra } = globalContext;
+  const { modal, form, mensajes } = globalContext;
   const { primer, segundo } = modal;
-  const { simplificado } = extra;
   const { retorno } = form;
   const mensaje = mensajes.filter((x) => x.origen === "form" && x.tipo >= 0);
   const [data, setData] = useState<IEntradaArticulos>(
     form.data || defaultEntradaArticulos
   );
-  console.log(data, "data");
   const [adicional, setAdicional] = useState<IEntradaArticulosVarios>(
     defaultEntradaArticulosVarios
   );

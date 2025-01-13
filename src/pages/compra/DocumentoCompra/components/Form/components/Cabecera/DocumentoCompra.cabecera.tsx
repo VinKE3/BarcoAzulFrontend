@@ -17,11 +17,12 @@ import {
   IPorcentajes,
   IDocumentoCompraPendiente,
 } from "../../../../../../../models";
-import { handleHelpModal, get } from "../../../../../../../util";
+import { handleHelpModal, get, getId } from "../../../../../../../util";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 
 interface IProps {
   data: IDocumentoCompra;
+  documentosCompraPendientes: IDocumentoCompraPendiente[];
   handleData: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => Promise<void> | void;
@@ -35,10 +36,9 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
   handleGetTipoCambio,
   handleNumero,
   handleSerie,
+  documentosCompraPendientes,
 }) => {
   //#region useState
-  const documentosPendientesListar: string =
-    "Compra/DocumentoCompra/ListarPendientes";
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, modal, form, extra } = globalContext;
   const { primer } = modal;
@@ -59,11 +59,12 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
   const [filterMotivosVenta, setFilterMotivosVenta] = useState<IMotivosNota[]>(
     []
   );
-  const [documentosCompraPendientes, setDocumentosCompraPendientes] = useState<
-    IDocumentoCompraPendiente[]
-  >([]);
 
-  console.log(documentosCompraPendientes);
+  const [
+    documentoCompraPendienteCompleto,
+    setDocumentoCompraPendienteCompleto,
+  ] = useState<IDocumentoCompra | null>(null);
+
   //#endregion
 
   //#region useEffect
@@ -132,24 +133,6 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
   }, [data.tipoDocumentoId, motivosNota]);
 
   //#endregion
-
-  const getPendientes = async (): Promise<void> => {
-    const urlParams = new URLSearchParams({
-      proveedorId: String(data.proveedorId),
-    });
-    const response = await get({
-      globalContext,
-      menu: documentosPendientesListar,
-      urlParams,
-    });
-    setDocumentosCompraPendientes(response.data);
-  };
-
-  useEffect(() => {
-    if (data.proveedorId) {
-      getPendientes();
-    }
-  }, [data.proveedorId]);
 
   return (
     <div className="form-base-container documento-compra-form">
@@ -375,56 +358,6 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
               ))}
             </select>
           </div>
-          {(data.tipoPagoId === "CH" || data.tipoPagoId === "DE") && (
-            <>
-              <div className="input-base-container-33">
-                <label htmlFor="numeroOperacion" className="label-base">
-                  Número
-                </label>
-                <input
-                  id="numeroOperacion"
-                  name="numeroOperacion"
-                  value={data.numeroOperacion}
-                  placeholder="Número"
-                  onChange={handleData}
-                  autoFocus
-                  disabled={
-                    primer.tipo === "consultar" || data.detalles.length > 0
-                  }
-                  className="input-base"
-                />
-              </div>
-              <div className="input-base-container-33">
-                <label htmlFor="cuentaCorrienteId" className="label-base">
-                  Cta Cte
-                </label>
-                <select
-                  id="cuentaCorrienteId"
-                  name="cuentaCorrienteId"
-                  value={data.cuentaCorrienteId ?? ""}
-                  onChange={handleData}
-                  disabled={primer.tipo === "consultar"}
-                  className="input-base"
-                >
-                  <option key="default" value="">
-                    SELECCIONAR
-                  </option>
-                  {cuentasCorrientes.map(
-                    (x: IDocumentoCompraCuentaCorriente) => (
-                      <option
-                        key={x.cuentaCorrienteId}
-                        value={x.cuentaCorrienteId}
-                      >
-                        {x.numero}
-                      </option>
-                    )
-                  )}
-                </select>
-              </div>
-            </>
-          )}
-        </div>
-        <div className="input-base-row">
           <div className="input-base-container-33">
             <label htmlFor="monedaId" className="label-base">
               Moneda
@@ -487,6 +420,120 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
             </div>
           </div>
         </div>
+        <div className="input-base-row">
+          {(data.tipoPagoId === "CH" || data.tipoPagoId === "DE") && (
+            <>
+              <div className="input-base-container-50">
+                <label htmlFor="numeroOperacion" className="label-base">
+                  Número
+                </label>
+                <input
+                  id="numeroOperacion"
+                  name="numeroOperacion"
+                  value={data.numeroOperacion}
+                  placeholder="Número"
+                  onChange={handleData}
+                  autoFocus
+                  disabled={
+                    primer.tipo === "consultar" || data.detalles.length > 0
+                  }
+                  className="input-base"
+                />
+              </div>
+              <div className="input-base-container-50">
+                <label htmlFor="cuentaCorrienteId" className="label-base">
+                  Cta Cte
+                </label>
+                <select
+                  id="cuentaCorrienteId"
+                  name="cuentaCorrienteId"
+                  value={data.cuentaCorrienteId ?? ""}
+                  onChange={handleData}
+                  disabled={primer.tipo === "consultar"}
+                  className="input-base"
+                >
+                  <option key="default" value="">
+                    SELECCIONAR
+                  </option>
+                  {cuentasCorrientes.map(
+                    (x: IDocumentoCompraCuentaCorriente) => (
+                      <option
+                        key={x.cuentaCorrienteId}
+                        value={x.cuentaCorrienteId}
+                      >
+                        {x.numero}
+                      </option>
+                    )
+                  )}
+                </select>
+              </div>
+            </>
+          )}
+        </div>
+        {(data.tipoDocumentoId === "07" || data.tipoDocumentoId === "08") && (
+          <>
+            <div className="input-base-row">
+              <div className="input-base-container-50">
+                <label htmlFor="documentoReferenciaId" className="label-base">
+                  Documento
+                </label>
+                <select
+                  id="documentoReferenciaId"
+                  name="documentoReferenciaId"
+                  value={data.documentoReferenciaId ?? ""}
+                  onChange={handleData}
+                  disabled={primer.tipo === "consultar"}
+                  className="input-base"
+                >
+                  <option key="default" value="">
+                    SELECCIONAR
+                  </option>
+                  {documentosCompraPendientes.map(
+                    (x: IDocumentoCompraPendiente) => (
+                      <option key={x.id} value={x.id}>
+                        {x.numeroDocumento}
+                      </option>
+                    )
+                  )}
+                </select>
+              </div>
+              <div className="input-base-container-33">
+                <label htmlFor="motivoNotaId" className="label-base">
+                  Motivo
+                </label>
+                <select
+                  id="motivoNotaId"
+                  name="motivoNotaId"
+                  value={data.motivoNotaId ?? ""}
+                  onChange={handleData}
+                  disabled={primer.tipo === "consultar"}
+                  className="input-base"
+                >
+                  <option key="default" value="">
+                    SELECCIONAR
+                  </option>
+                  {filterMotivosVenta.map((x: IMotivosNota) => (
+                    <option key={x.id} value={x.id}>
+                      {x.descripcion}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="input-base-container-auto">
+                {element.responsive === "full" && (
+                  <span className="label-base-checkbox">-</span>
+                )}
+                <CheckBox
+                  id="abonar"
+                  value={data.abonar}
+                  handleData={handleData}
+                  disabled={primer.tipo === "consultar"}
+                  label="Abonar"
+                />
+              </div>
+            </div>
+          </>
+        )}
         <div className="input-base-container-100">
           <label htmlFor="guiaRemision" className="label-base">
             Guía Remisión
@@ -495,10 +542,10 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
             id="guiaRemision"
             name="guiaRemision"
             value={data.guiaRemision}
-            placeholder="Dirección"
+            placeholder="Guía Remisión"
             onChange={handleData}
             autoFocus
-            disabled={primer.tipo === "consultar" || data.detalles.length > 0}
+            disabled={primer.tipo === "consultar"}
             className="input-base"
           />
         </div>
@@ -510,10 +557,10 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
             id="observacion"
             name="observacion"
             value={data.observacion}
-            placeholder="Dirección"
+            placeholder="Observación"
             onChange={handleData}
             autoFocus
-            disabled={primer.tipo === "consultar" || data.detalles.length > 0}
+            disabled={primer.tipo === "consultar"}
             className="input-base"
           />
         </div>
@@ -573,7 +620,7 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
           </div>
         </div>
         <div className="input-base-row">
-          <div className="input-base-container-33">
+          <div className="input-base-container-25">
             <label htmlFor="total" className="label-base">
               Total
             </label>
@@ -588,7 +635,7 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
               className="input-base"
             />
           </div>
-          <div className="input-base-container-33">
+          <div className="input-base-container-25">
             <label htmlFor="totalNeto" className="label-base">
               Total Neto
             </label>
@@ -623,7 +670,9 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
               id="afectarStock"
               value={data.afectarStock}
               handleData={handleData}
-              disabled={primer.tipo === "consultar"}
+              disabled={
+                primer.tipo === "consultar" || data.afectarPrecio === true
+              }
               label="Afectar Stock"
             />
           </div>
@@ -636,77 +685,14 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
                 id="afectarPrecio"
                 value={data.afectarPrecio}
                 handleData={handleData}
-                disabled={primer.tipo === "consultar"}
+                disabled={
+                  primer.tipo === "consultar" || data.afectarStock === true
+                }
                 label="Afectar Precio"
               />
             </div>
           )}
         </div>
-        {(data.tipoDocumentoId === "07" || data.tipoDocumentoId === "08") && (
-          <>
-            <div className="input-base-row">
-              <div className="input-base-container-auto">
-                <label htmlFor="documentoReferenciaId" className="label-base">
-                  Documento
-                </label>
-                <select
-                  id="documentoReferenciaId"
-                  name="documentoReferenciaId"
-                  value={data.documentoReferenciaId ?? ""}
-                  onChange={handleData}
-                  disabled={primer.tipo === "consultar"}
-                  className="input-base"
-                >
-                  <option key="default" value="">
-                    SELECCIONAR
-                  </option>
-                  {documentosCompraPendientes.map(
-                    (x: IDocumentoCompraPendiente) => (
-                      <option key={x.id} value={x.numeroDocumento}>
-                        {x.numeroDocumento}
-                      </option>
-                    )
-                  )}
-                </select>
-              </div>
-
-              <div className="input-base-container-auto">
-                <label htmlFor="motivoNotaId" className="label-base">
-                  Motivo
-                </label>
-                <select
-                  id="motivoNotaId"
-                  name="motivoNotaId"
-                  value={data.motivoNotaId ?? ""}
-                  onChange={handleData}
-                  disabled={primer.tipo === "consultar"}
-                  className="input-base"
-                >
-                  <option key="default" value="">
-                    SELECCIONAR
-                  </option>
-                  {filterMotivosVenta.map((x: IMotivosNota) => (
-                    <option key={x.id} value={x.id}>
-                      {x.descripcion}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="input-base-container-auto">
-                {element.responsive === "full" && (
-                  <span className="label-base-checkbox">-</span>
-                )}
-                <CheckBox
-                  id="abonar"
-                  value={data.abonar}
-                  handleData={handleData}
-                  disabled={primer.tipo === "consultar"}
-                  label="Afectar Stock"
-                />
-              </div>
-            </div>
-          </>
-        )}
       </div>
     </div>
   );

@@ -60,7 +60,7 @@ export const defaultDocumentoCompra: IDocumentoCompra = {
   proveedorNumeroDocumentoIdentidad: "",
   proveedorDireccion: "",
   tipoCompraId: "",
-  monedaId: "",
+  monedaId: "S",
   tipoCambio: 0,
   tipoPagoId: "",
   numeroOperacion: "",
@@ -72,12 +72,12 @@ export const defaultDocumentoCompra: IDocumentoCompra = {
   guiaRemision: "",
   observacion: "",
   subTotal: 0,
-  porcentajeIGV: 0,
+  porcentajeIGV: 18,
   montoIGV: 0,
   totalNeto: 0,
   total: 0,
   incluyeIGV: false,
-  afectarStock: false,
+  afectarStock: true,
   afectarPrecio: false,
   detalles: [],
 };
@@ -130,6 +130,7 @@ export interface IDocumentoCompraCuentaCorriente {
 
 export interface IDocumentoCompraPendiente {
   id: string;
+  codigoPendiente: string;
   fechaContable: string;
   numeroDocumento: string;
   proveedorNombre: string;
@@ -171,3 +172,11 @@ export interface IDocumentoCompraTable {
   isBloqueado: boolean;
   afectarStock: boolean;
 }
+
+export interface IDocumentoCompraVarios {
+  articuloVarios: boolean;
+}
+
+export const defaultDocumentoCompraVarios: IDocumentoCompraVarios = {
+  articuloVarios: false,
+};
