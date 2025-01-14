@@ -51,3 +51,15 @@ export const defaultTipoDocumentoIdentidad: ITipoDocumentoIdentidad = {
   descripcion: "",
   abreviatura: "",
 };
+
+export interface ICuentaCorrienteBancaria {
+  id: string;
+  cuentaCorrienteId: string;
+  empresaId: string;
+  entidadBancariaNombre: string;
+  entidadBancariaTipo: string;
+  monedaId: string;
+  numero: string;
+  saldoFinal: number;
+  tipoCuentaDescripcion: string;
+}

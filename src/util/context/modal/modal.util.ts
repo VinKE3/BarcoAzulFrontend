@@ -238,6 +238,29 @@ export const handleSetRetornoSubModal = (
 };
 
 /**
+ * Actualiza una propiedad específica del objeto `tablas` en el contexto global.
+ * @param setGlobalContext La función para actualizar el contexto global.
+ * @param tablasProp La propiedad de `tablas` que se debe actualizar.
+ * @param data Los nuevos datos que se deben asignar a la propiedad especificada en `tablas`.
+ */
+export const handleUpdateTablas = (
+  setGlobalContext: React.Dispatch<React.SetStateAction<IGlobalContext>>,
+  tablasProp: string,
+  data: any
+): void => {
+  setGlobalContext((x) => ({
+    ...x,
+    form: {
+      ...x.form,
+      tablas: {
+        ...x.form.tablas,
+        [tablasProp]: data, // Actualiza solo la propiedad específica de tablas con los nuevos datos
+      },
+    },
+  }));
+};
+
+/**
  * Maneja la navegación de vuelta a una página específica, verificando el estado del modal y el formulario en el contexto global.
  * @param global El contexto global de la aplicación.
  * @param navigate La función de navegación para redirigir a otra página.

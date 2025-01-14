@@ -58,12 +58,6 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
   const [filterMotivosVenta, setFilterMotivosVenta] = useState<IMotivosNota[]>(
     []
   );
-
-  const [
-    documentoCompraPendienteCompleto,
-    setDocumentoCompraPendienteCompleto,
-  ] = useState<IDocumentoCompra | null>(null);
-
   //#endregion
 
   //#region useEffect

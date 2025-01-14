@@ -13,10 +13,15 @@ import {
   IPrecios,
   ITipoCambio,
   ITipoPago,
+  ITiposPago,
 } from "../../../models";
 import { getId } from "../../api";
 import { handleToast, roundNumber } from "../../global";
-import { handleClearMensajes, handleSetErrorMensaje, handleSetTextos } from "../mensajes.util";
+import {
+  handleClearMensajes,
+  handleSetErrorMensaje,
+  handleSetTextos,
+} from "../mensajes.util";
 
 /**
  * Enfoca un elemento HTML y desplaza la ventana de visualización hacia la parte superior.
@@ -108,16 +113,16 @@ export const handleTipoCambio = async (
  * @returns La nueva fecha calculada basada en el plazo del tipo de pago seleccionado, o la fecha actual si no se encuentra el tipo de pago o no tiene plazo definido.
  */
 export const handleSelectTipoPago = (
-  tiposPago: ITipoPago[],
+  tiposPago: ITiposPago[],
   fechaEmision: string,
   tipoPagoId: string
 ): string => {
   // Busca el tipo de pago en el array tiposPago
-  const tipoPago = tiposPago.find((x: ITipoPago) => x.id == tipoPagoId);
+  const tipoPago = tiposPago.find((x: ITiposPago) => x.id == tipoPagoId);
 
   // Si se encuentra el tipo de pago
   if (tipoPago) {
-    const { plazo } = tipoPago as ITipoPago;
+    const { plazo } = tipoPago as ITiposPago;
 
     // Si el tipo de pago tiene un plazo definido
     if (plazo) {
@@ -152,7 +157,9 @@ export const handleSelectTipoPago = (
  * @param personal objeto de tipo IPersonal o IPersonalTable a formatear
  * @returns cadena con el nombre completo del personal
  */
-export const handleSelectPersonal = (personal: IPersonal | IPersonalTable): string => {
+export const handleSelectPersonal = (
+  personal: IPersonal | IPersonalTable
+): string => {
   const { apellidoMaterno, apellidoPaterno, nombres } = personal;
   return `${apellidoPaterno} ${apellidoMaterno} ${nombres}`;
 };
@@ -320,8 +327,15 @@ export const handleConvertPrecios = (
   articulo: IArticuloCompleto,
   redondeo: number = 2
 ): IPrecios => {
-  const { descripcion, precioVenta1, precioVenta2, precioVenta3, precioVenta4, precioCompra, precioCompraDescuento } =
-    articulo;
+  const {
+    descripcion,
+    precioVenta1,
+    precioVenta2,
+    precioVenta3,
+    precioVenta4,
+    precioCompra,
+    precioCompraDescuento,
+  } = articulo;
 
   // Si la monedaId del parámetro es igual a la monedaId del artículo, retornar los precios originales
   if (monedaId === articulo.monedaId) {
@@ -358,7 +372,9 @@ export const handleConvertPrecios = (
 
   // Función auxiliar para convertir los precios
   const convertirPrecio = (precio: number) =>
-    monedaId === "D" ? roundNumber(precio / tipoCambio, redondeo) : roundNumber(precio * tipoCambio, redondeo);
+    monedaId === "D"
+      ? roundNumber(precio / tipoCambio, redondeo)
+      : roundNumber(precio * tipoCambio, redondeo);
 
   // Crear objeto de precios convertidos
   let precios: IPrecios = {
@@ -382,7 +398,10 @@ export const handleConvertPrecios = (
   }
 
   // Mostrar notificación de éxito
-  handleToast("info", `${descripcion} ha sido convertido al tipo de cambio actual.`);
+  handleToast(
+    "info",
+    `${descripcion} ha sido convertido al tipo de cambio actual.`
+  );
   return precios;
 };
 

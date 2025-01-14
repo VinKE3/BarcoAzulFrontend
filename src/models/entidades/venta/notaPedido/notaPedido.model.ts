@@ -6,13 +6,16 @@ import {
   IMoneda,
   IDocumentoFilter,
   defaultDocumentoFilter,
+  ICuentaCorrienteBancaria,
 } from "../../../global";
 import { IPorcentajesTable } from "../../empresa";
 import {
+  ICargo,
   IClienteContacto,
   IClienteDireccion,
   IPersonal,
 } from "../../mantenimiento";
+import { ITiposPago } from "../../compra";
 
 export interface INotaPedido {
   id: string;
@@ -54,6 +57,8 @@ export interface INotaPedido {
   montoRetencion: number;
   montoPercepcion: number;
   total: number;
+  abonado: number;
+  saldo: number;
   porcentajeIGV: number;
   porcentajeRetencion: number;
   porcentajePercepcion: number;
@@ -65,7 +70,7 @@ export interface INotaPedido {
 export const defaultNotaPedido: INotaPedido = {
   id: "",
   empresaId: "",
-  tipoDocumentoId: "",
+  tipoDocumentoId: "NP",
   serie: "",
   numero: "",
   fechaEmision: format(new Date(), "yyyy-MM-dd"),
@@ -88,7 +93,7 @@ export const defaultNotaPedido: INotaPedido = {
   contactoCargoDescripcion: null,
   contactoCelular: null,
   personalId: null,
-  monedaId: "",
+  monedaId: "S",
   tipoCambio: 0,
   tipoVentaId: null,
   tipoCobroId: null,
@@ -102,7 +107,9 @@ export const defaultNotaPedido: INotaPedido = {
   montoRetencion: 0,
   montoPercepcion: 0,
   total: 0,
-  porcentajeIGV: 0,
+  abonado: 0,
+  saldo: 0,
+  porcentajeIGV: 18,
   porcentajeRetencion: 0,
   porcentajePercepcion: 0,
   incluyeIGV: true,
@@ -116,30 +123,44 @@ export const defaultNotaPedidoDetalle: INotaPedidoDetalle = {
   ...defaultDetalle,
 };
 
+export interface INotaPedidoCuentaCorriente {
+  id: string;
+  empresaId: string;
+  cuentaCorrienteId: string;
+  numero: string;
+  entidadBancariaNombre: string;
+  entidadBancariaTipo: string;
+  tipoCuentaDescripcion: string;
+  monedaId: string;
+  saldoFinal: number;
+}
+
 export interface INotaPedidoTablas {
+  cuentasCorrientes: ICuentaCorrienteBancaria[];
   monedas: IMoneda[];
   porcentajesIGV: IPorcentajesTable[];
-  porcentajesPercepcion: IPorcentajesTable[];
-  porcentajesRetencion: IPorcentajesTable[];
   serie: string;
   tiposVenta: ICombo[];
+  tiposCobro: ITiposPago[];
   vendedores: IPersonal[];
   tiposDocumento: ICombo[]; // Añadido
   direcciones: IClienteDireccion[]; //Añadido
   contactos: IClienteContacto[]; //Añadido
+  contactoCargos: ICargo[]; //Añadido
 }
 
 export const defaultNotaPedidoTablas: INotaPedidoTablas = {
+  cuentasCorrientes: [],
   monedas: [],
   porcentajesIGV: [],
-  porcentajesRetencion: [],
-  porcentajesPercepcion: [],
   serie: "",
   tiposVenta: [],
+  tiposCobro: [],
   vendedores: [],
   tiposDocumento: [],
   direcciones: [],
   contactos: [],
+  contactoCargos: [],
 };
 
 export interface INotaPedidoFilter extends IDocumentoFilter {

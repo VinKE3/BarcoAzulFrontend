@@ -1,23 +1,27 @@
 import { ICombo, IMoneda } from "../../global";
 
 export interface ICuentaBancaria {
-  id: number;
-  entidadBancariaId: string;
+  id: string;
+  cuentaCorrienteId: string;
+  empresaId: string;
   entidadBancariaNombre: string;
-  numero: string;
-  tipoCuentaDescripcion: string;
+  entidadBancariaTipo: string;
   monedaId: string;
-  observacion: string | null;
+  numero: string;
+  saldoFinal: number;
+  tipoCuentaDescripcion: string;
 }
 
 export const defaultCuentaBancaria: ICuentaBancaria = {
-  id: 0,
-  entidadBancariaId: "",
+  id: "",
+  cuentaCorrienteId: "",
+  empresaId: "",
   entidadBancariaNombre: "",
-  numero: "",
-  tipoCuentaDescripcion: "",
+  entidadBancariaTipo: "",
   monedaId: "",
-  observacion: null,
+  numero: "",
+  saldoFinal: 0,
+  tipoCuentaDescripcion: "",
 };
 
 export interface ICuentaBancariaTablas {

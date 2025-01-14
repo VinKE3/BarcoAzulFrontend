@@ -17,7 +17,13 @@ import {
   resetPagination,
 } from "../../../../../util";
 
-const NotaPedidoFilter: React.FC = () => {
+interface INotaPedidoFilterProps {
+  handleGetSimplificado: (x: any) => Promise<void> | void;
+}
+
+const NotaPedidoFilter: React.FC<INotaPedidoFilterProps> = ({
+  handleGetSimplificado,
+}) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, table, modal, mensajes, extra } = globalContext;
@@ -26,9 +32,12 @@ const NotaPedidoFilter: React.FC = () => {
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
-  const [filter, setFilter] = useState<INotaPedidoFilter>(
-    defaultNotaPedidoFilter
-  );
+
+  const [filter, setFilter] = useState<INotaPedidoFilter>({
+    ...defaultNotaPedidoFilter,
+    fechaInicio: fechaInicio,
+    fechaFin: fechaFin,
+  });
   const search = useDebounce(filter);
   //#endregion
 
@@ -60,8 +69,8 @@ const NotaPedidoFilter: React.FC = () => {
     try {
       const params = new URLSearchParams({
         clienteNombre: search.clienteNombre,
-        fechaInicio: fechaInicio,
-        fechaFin: fechaFin,
+        fechaInicio: search.fechaInicio,
+        fechaFin: search.fechaFin,
       });
       const { data, total }: { data: INotaPedidoTable[]; total: number } =
         await getListar(globalContext, params);
@@ -73,8 +82,8 @@ const NotaPedidoFilter: React.FC = () => {
   };
   //#endregion
   return (
-    <BasicKeyHandler selector={"entrada-articulos-filter"}>
-      <div className="filter-base entrada-articulos-filter">
+    <BasicKeyHandler selector={"nota-pedido-filter"}>
+      <div className="filter-base nota-pedido-filter">
         <span className="filter-base-text">Filtrar por</span>
         <div className="input-base-row">
           <div className="input-base-container-33">
@@ -100,7 +109,7 @@ const NotaPedidoFilter: React.FC = () => {
               type="date"
               id="fechaInicio"
               name="fechaInicio"
-              value={fechaInicio}
+              value={filter.fechaInicio}
               onChange={handleData}
               className="input-base"
             />
@@ -114,7 +123,7 @@ const NotaPedidoFilter: React.FC = () => {
               type="date"
               id="fechaFin"
               name="fechaFin"
-              value={fechaFin}
+              value={filter.fechaFin}
               onChange={handleData}
               className="input-base"
             />

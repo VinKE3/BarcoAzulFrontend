@@ -17,10 +17,12 @@ import {
   defaultNotaPedido,
 } from "../../../models";
 import {
+  getSimplificado,
   handleInitialData,
   handlePrimaryModal,
   handleResetContext,
   handleResetMensajeError,
+  handleSetErrorMensaje,
   handleSetPermisoYMenu,
 } from "../../../util";
 
@@ -90,6 +92,26 @@ const NotaPedido: React.FC = () => {
         handleResetMensajeError(setGlobalContext, true, true, error);
       });
   };
+  const handleGetSimplificado = async (): Promise<void> => {
+    try {
+      const simplificado = await getSimplificado(globalContext);
+      setGlobalContext((x) => ({
+        ...x,
+        extra: {
+          ...x.extra,
+          simplificado: {
+            ...simplificado,
+          },
+        },
+      }));
+    } catch (error) {
+      handleSetErrorMensaje(setGlobalContext, error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetSimplificado();
+  }, []);
   //#endregion
   return (
     <div className="main-base">
@@ -112,7 +134,9 @@ const NotaPedido: React.FC = () => {
         {ready && visible && (
           <>
             {mensaje.length > 0 && <Messages mensajes={mensajes} />}
-            {visible && <NotaPedidoFilter />}
+            {visible && (
+              <NotaPedidoFilter handleGetSimplificado={handleGetSimplificado} />
+            )}
             {visible && (
               <Table
                 data={table.data}
