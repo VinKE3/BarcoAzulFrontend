@@ -13,10 +13,13 @@ import {
   IArticuloCompleto,
   IDocumentoCompra,
   IDocumentoCompraDetalle,
+  IDocumentoCompraTablas,
   IDocumentoCompraVarios,
+  IPorcentajesTable,
   IPrecioFind,
   defaultArticuloCompleto,
   defaultDocumentoCompraDetalle,
+  defaultDocumentoCompraTablas,
 } from "../../../../../../../models";
 import {
   getId,
@@ -37,6 +40,9 @@ import { useDocumentoCompraDetalleColumn } from "../../../Column";
 interface IProps {
   dataGeneral: IDocumentoCompra;
   setDataGeneral: React.Dispatch<React.SetStateAction<IDocumentoCompra>>;
+  handleDataGeneral: (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => Promise<void> | void;
   adicional: IDocumentoCompraVarios;
   handleAdicional: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -46,6 +52,7 @@ interface IProps {
 const DocumentoCompraDetalle: React.FC<IProps> = ({
   dataGeneral,
   setDataGeneral,
+  handleDataGeneral,
   adicional,
   handleAdicional,
 }) => {
@@ -53,11 +60,12 @@ const DocumentoCompraDetalle: React.FC<IProps> = ({
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { modal, form, mensajes, extra, api } = globalContext;
   const { primer, segundo } = modal;
-  const { retorno } = form;
+  const { retorno, tablas } = form;
   const { simplificado, element } = extra;
   const { inputs } = element;
   const mensaje = mensajes.filter((x) => x.origen === "detalle" && x.tipo >= 0);
-
+  const { porcentajesIGV }: IDocumentoCompraTablas =
+    tablas || defaultDocumentoCompraTablas;
   const [articuloCompleto, setArticuloCompleto] = useState<IArticuloCompleto>(
     defaultArticuloCompleto
   );
@@ -68,6 +76,23 @@ const DocumentoCompraDetalle: React.FC<IProps> = ({
   const columns = useDocumentoCompraDetalleColumn(primer.tipo);
 
   const footerItems = [
+    {
+      text: "SubTotal",
+      value: Number(dataGeneral.subTotal),
+      show: dataGeneral.tipoDocumentoId !== "03",
+    },
+    {
+      text: "Total Neto",
+      value: Number(dataGeneral.totalNeto),
+      show: dataGeneral.tipoDocumentoId !== "03",
+    },
+    {
+      text: "IGV %",
+      value: handleNumber(dataGeneral.montoIGV, true, true),
+      show: dataGeneral.tipoDocumentoId !== "03",
+    },
+    { text: "ABONADO", value: Number(dataGeneral.abonado), show: true },
+    { text: "SALDO", value: Number(dataGeneral.saldo), show: true },
     { text: "TOTAL", value: Number(dataGeneral.total), show: true },
   ];
   //#endregion
@@ -600,6 +625,30 @@ const DocumentoCompraDetalle: React.FC<IProps> = ({
             {item.show !== false && (
               <>
                 <p className="form-base-detalle-row-text">{item.text}</p>
+                {item.text === "IGV %" && (
+                  <div
+                    key={`igv-${index}`}
+                    className="!py-[1px] input-base-container-auto"
+                  >
+                    <select
+                      id="porcentajeIGV"
+                      name="porcentajeIGV"
+                      value={dataGeneral.porcentajeIGV}
+                      onChange={handleDataGeneral}
+                      disabled={primer.tipo === "consultar"}
+                      className="form-base-detalle-row-input"
+                    >
+                      <option key="default" value="">
+                        -
+                      </option>
+                      {porcentajesIGV.map((x: IPorcentajesTable) => (
+                        <option key={x.porcentaje} value={x.porcentaje}>
+                          {x.porcentaje}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <p className="form-base-detalle-row-number">
                   {handleNumber(item.value, true, true)}
                 </p>

@@ -391,6 +391,7 @@ const NotaPedidoForm: React.FC = () => {
       montoIGV: roundNumber(montoIGV),
       subTotal: roundNumber(subTotal),
       totalNeto: roundNumber(totalNeto),
+      abonado: roundNumber(total),
       total: roundNumber(total),
     }));
   };

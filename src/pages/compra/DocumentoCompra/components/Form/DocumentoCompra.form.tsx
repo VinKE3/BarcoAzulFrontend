@@ -107,6 +107,10 @@ const DocumentoCompraForm: React.FC = () => {
   }, [data.detalles]);
 
   useEffect(() => {
+    data.detalles && handleTotales(data.detalles);
+  }, [data.incluyeIGV, data.porcentajeIGV]);
+
+  useEffect(() => {
     primer.tipo === "registrar" && handleLoad();
   }, [primer.tipo]);
 
@@ -297,6 +301,7 @@ const DocumentoCompraForm: React.FC = () => {
               setDataGeneral={setData}
               adicional={adicional}
               handleAdicional={handleAdicional}
+              handleDataGeneral={handleData}
             />
           </div>
 

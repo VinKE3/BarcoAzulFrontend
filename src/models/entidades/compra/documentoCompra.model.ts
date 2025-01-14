@@ -7,6 +7,7 @@ import {
   defaultDetalle,
 } from "../../global";
 import { format } from "date-fns";
+import { IPorcentajesTable } from "../empresa";
 
 export interface IDocumentoCompra {
   id: string;
@@ -146,7 +147,7 @@ export interface IDocumentoCompraTablas {
   tiposCompra: ICombo[];
   tiposPago: ITiposPago[];
   monedas: IMoneda[];
-  porcentajesIGV: IDocumentoCompraPorcentajes[];
+  porcentajesIGV: IPorcentajesTable[];
   porcentajesPercepcion: IDocumentoCompraPorcentajes[];
   motivosNota: IMotivosNota[];
   cuentasCorrientes: IDocumentoCompraCuentaCorriente[];
