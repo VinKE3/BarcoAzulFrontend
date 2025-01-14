@@ -8,6 +8,7 @@ import { CheckBox } from "../../../../../../../components";
 import {
   ICombo,
   IMoneda,
+  IClienteDireccion,
   INotaPedido,
   INotaPedidoTablas,
   ITiposPago,
@@ -48,6 +49,7 @@ const NotaPedidoCabecera: React.FC<IProps> = ({
   const {
     tiposDocumento,
     vendedores,
+    direcciones,
     tiposVenta,
     tiposCobro,
     cuentasCorrientes,
@@ -57,8 +59,6 @@ const NotaPedidoCabecera: React.FC<IProps> = ({
   }: INotaPedidoTablas = form.tablas || defaultNotaPedidoTablas;
   const { element } = extra;
   const { inputs } = element;
-
-  console.log(data, "data");
 
   //#region Funciones
   const handleOpenModal = async (origen: string): Promise<void> => {
@@ -260,19 +260,26 @@ const NotaPedidoCabecera: React.FC<IProps> = ({
             />
           </div>
           <div className="input-base-container-100">
-            <label htmlFor="clienteDireccion" className="label-base">
+            <label htmlFor="clienteDireccionId" className="label-base">
               Dirección
             </label>
-            <input
-              id="clienteDireccion"
-              name="clienteDireccion"
-              placeholder="Dirección"
-              value={data.clienteDireccion ?? ""}
+            <select
+              id="clienteDireccionId"
+              name="clienteDireccionId"
+              value={data.clienteDireccionId ?? ""}
               onChange={handleData}
-              autoComplete="off"
               disabled={primer.tipo === "consultar"}
               className="input-base"
-            />
+            >
+              <option key="default" value="">
+                SELECCIONAR
+              </option>
+              {direcciones?.map((x: IClienteDireccion) => (
+                <option key={x.id} value={x.id}>
+                  {x.direccion}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="input-base-row">

@@ -418,6 +418,7 @@ const NotaPedidoForm: React.FC = () => {
               setDataGeneral={setData}
               adicional={adicional}
               handleAdicional={handleAdicional}
+              handleDataGeneral={handleData}
             />
           </div>
 

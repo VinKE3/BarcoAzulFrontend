@@ -14,10 +14,12 @@ import {
   INotaPedido,
   INotaPedidoDetalle,
   INotaPedidoAdicional,
-  defaultNotaPedidoAdicional,
   IPrecioFind,
   defaultArticuloCompleto,
   defaultNotaPedidoDetalle,
+  INotaPedidoTablas,
+  defaultNotaPedidoTablas,
+  IPorcentajesTable,
 } from "../../../../../../../models";
 import {
   getId,
@@ -38,6 +40,9 @@ import { useNotaPedidoDetalleColumn } from "../../../Column";
 interface IProps {
   dataGeneral: INotaPedido;
   setDataGeneral: React.Dispatch<React.SetStateAction<INotaPedido>>;
+  handleDataGeneral: (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => Promise<void> | void;
   adicional: INotaPedidoAdicional;
   handleAdicional: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -48,17 +53,19 @@ const NotaPedidoDetalle: React.FC<IProps> = ({
   dataGeneral,
   setDataGeneral,
   adicional,
+  handleDataGeneral,
   handleAdicional,
 }) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { modal, form, mensajes, extra, api } = globalContext;
   const { primer, segundo } = modal;
-  const { retorno } = form;
+  const { retorno, tablas } = form;
   const { simplificado, element } = extra;
   const { inputs } = element;
   const mensaje = mensajes.filter((x) => x.origen === "detalle" && x.tipo >= 0);
-
+  const { porcentajesIGV }: INotaPedidoTablas =
+    tablas || defaultNotaPedidoTablas;
   const [articuloCompleto, setArticuloCompleto] = useState<IArticuloCompleto>(
     defaultArticuloCompleto
   );
@@ -69,6 +76,23 @@ const NotaPedidoDetalle: React.FC<IProps> = ({
   const columns = useNotaPedidoDetalleColumn(primer.tipo);
 
   const footerItems = [
+    {
+      text: "SubTotal",
+      value: Number(dataGeneral.subTotal),
+      show: dataGeneral.tipoDocumentoId !== "03",
+    },
+    {
+      text: "Total Neto",
+      value: Number(dataGeneral.totalNeto),
+      show: dataGeneral.tipoDocumentoId !== "03",
+    },
+    {
+      text: "IGV %",
+      value: handleNumber(dataGeneral.montoIGV, true, true),
+      show: dataGeneral.tipoDocumentoId !== "03",
+    },
+    { text: "ABONADO", value: Number(dataGeneral.abonado), show: true },
+    { text: "SALDO", value: Number(dataGeneral.saldo), show: true },
     { text: "TOTAL", value: Number(dataGeneral.total), show: true },
   ];
   //#endregion
@@ -601,6 +625,30 @@ const NotaPedidoDetalle: React.FC<IProps> = ({
             {item.show !== false && (
               <>
                 <p className="form-base-detalle-row-text">{item.text}</p>
+                {item.text === "IGV %" && (
+                  <div
+                    key={`igv-${index}`}
+                    className="!py-[1px] input-base-container-auto"
+                  >
+                    <select
+                      id="porcentajeIGV"
+                      name="porcentajeIGV"
+                      value={dataGeneral.porcentajeIGV}
+                      onChange={handleDataGeneral}
+                      disabled={primer.tipo === "consultar"}
+                      className="form-base-detalle-row-input"
+                    >
+                      <option key="default" value="">
+                        -
+                      </option>
+                      {porcentajesIGV.map((x: IPorcentajesTable) => (
+                        <option key={x.porcentaje} value={x.porcentaje}>
+                          {x.porcentaje}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <p className="form-base-detalle-row-number">
                   {handleNumber(item.value, true, true)}
                 </p>
