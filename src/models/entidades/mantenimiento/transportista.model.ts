@@ -16,7 +16,7 @@ export interface ITransportista {
   distritoId: string | null;
   licenciaConducir: string | null;
   telefono: string | null;
-  numeroRegistro: string | null;
+  NumeroRegistroMTC: string | null;
 }
 
 export const defaultTransportista: ITransportista = {
@@ -34,7 +34,7 @@ export const defaultTransportista: ITransportista = {
   distritoId: null,
   licenciaConducir: null,
   telefono: null,
-  numeroRegistro: null,
+  NumeroRegistroMTC: null,
 };
 
 export interface ITiposDocumentoIdentidad {

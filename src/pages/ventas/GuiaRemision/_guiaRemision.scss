@@ -53,3 +53,42 @@
     }
   }
 }
+
+.transportista-guia-table {
+  th {
+    @apply text-center;
+    &:first-child {
+      @apply w-[60px] min-w-[60px];
+    }
+    &:nth-child(2) {
+      @apply min-w-[80px];
+    }
+    &:nth-child(3) {
+      @apply w-full min-w-[120px] text-left;
+    }
+    &:nth-child(4),
+    &:nth-child(5) {
+      @apply min-w-[100px];
+    }
+    &:last-child {
+      @apply w-[60px] min-w-[60px];
+    }
+  }
+}
+
+.vehiculo-guia-table {
+  th {
+    @apply text-center;
+    &:first-child {
+      @apply w-[60px] min-w-[60px];
+    }
+    &:nth-child(2),
+    &:nth-child(3) {
+      @apply w-full min-w-[120px] text-left;
+    }
+
+    &:last-child {
+      @apply w-[60px] min-w-[60px];
+    }
+  }
+}

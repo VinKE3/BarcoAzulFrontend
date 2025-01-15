@@ -440,14 +440,14 @@ const TransportistaModal: React.FC = () => {
                   />
                 </div>
                 <div className="input-base-container-50">
-                  <label htmlFor="numeroRegistro" className="label-base">
+                  <label htmlFor="NumeroRegistroMTC" className="label-base">
                     N° Registro
                   </label>
                   <input
-                    id="numeroRegistro"
-                    name="numeroRegistro"
+                    id="NumeroRegistroMTC"
+                    name="NumeroRegistroMTC"
                     placeholder="N° Registro"
-                    value={data.numeroRegistro ?? ""}
+                    value={data.NumeroRegistroMTC ?? ""}
                     onChange={handleData}
                     autoComplete="off"
                     disabled={primer.tipo === "consultar"}
