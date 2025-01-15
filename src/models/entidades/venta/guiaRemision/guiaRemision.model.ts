@@ -17,7 +17,7 @@ export interface IGuiaRemision {
 
   tipoDocumentoId: string;
   serie: string;
-  numero: string | null;
+  numero: string;
 
   fechaEmision: string;
   horaEmision: string | null;
