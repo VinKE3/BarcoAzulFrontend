@@ -93,7 +93,7 @@ const DocumentoVenta: React.FC = () => {
   return (
     <div className="main-base">
       <div className="main-header">
-        <h4 className="main-header-title">Notas de Pedido</h4>
+        <h4 className="main-header-title">Documento de Ventas</h4>
         {ready && visible && (
           <ButtonGroup
             isTablas={true}

@@ -17,13 +17,7 @@ import {
   resetPagination,
 } from "../../../../../util";
 
-interface INotaPedidoFilterProps {
-  handleGetSimplificado: (x: any) => Promise<void> | void;
-}
-
-const NotaPedidoFilter: React.FC<INotaPedidoFilterProps> = ({
-  handleGetSimplificado,
-}) => {
+const NotaPedidoFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, table, modal, mensajes, extra } = globalContext;
@@ -93,7 +87,7 @@ const NotaPedidoFilter: React.FC<INotaPedidoFilterProps> = ({
             <input
               id="clienteNombreFilter"
               name="clienteNombre"
-              placeholder="Observación"
+              placeholder="Cliente"
               value={filter.clienteNombre}
               onChange={handleData}
               autoComplete="off"

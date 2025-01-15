@@ -173,9 +173,6 @@ const DocumentoCompraForm: React.FC = () => {
 
   const handleTotales = (detalles: IDocumentoCompraDetalle[]): void => {
     const { porcentajeIGV, incluyeIGV } = data;
-    console.log(porcentajeIGV, "porcentajeIGV");
-    console.log(incluyeIGV, "incluyeIGV");
-
     const importeTotal = detalles.reduce((total, x) => total + x.importe, 0);
 
     let subTotal = incluyeIGV

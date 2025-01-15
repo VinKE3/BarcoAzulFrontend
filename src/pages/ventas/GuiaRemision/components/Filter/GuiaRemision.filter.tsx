@@ -6,11 +6,14 @@ import { BasicKeyHandler } from "../../../../../components";
 import { useDebounce, useGlobalContext } from "../../../../../hooks";
 import {
   IGuiaRemisionFilter,
+  IGuiaRemisionTablas,
   IGuiaRemisionTable,
   defaultGuiaRemisionFilter,
+  defaultGuiaRemisionTablas,
 } from "../../../../../models";
 import {
   getListar,
+  getTablas,
   handleInputType,
   handleSetErrorMensaje,
   handleSetRefrescar,
@@ -20,17 +23,38 @@ import {
 const GuiaRemisionFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { api, table, modal, mensajes } = globalContext;
+  const { api, table, modal, mensajes, extra } = globalContext;
+  const [tablas, setTablas] = useState<IGuiaRemisionTablas>(
+    defaultGuiaRemisionTablas
+  );
+  const { simplificado } = extra;
+  const { fechaFin, fechaInicio } = simplificado;
+  const { series } = tablas;
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
-  const [filter, setFilter] = useState<IGuiaRemisionFilter>(
-    defaultGuiaRemisionFilter
-  );
+  const [filter, setFilter] = useState<IGuiaRemisionFilter>({
+    ...defaultGuiaRemisionFilter,
+    fechaInicio: fechaInicio,
+    fechaFin: fechaFin,
+  });
   const search = useDebounce(filter);
   //#endregion
 
   //#region useEffect
+
+  useEffect(() => {
+    const handleTablas = async (): Promise<void> => {
+      const result: IGuiaRemisionTablas = await getTablas(
+        globalContext,
+        api.menu,
+        false
+      );
+      setTablas(result);
+    };
+
+    handleTablas();
+  }, []);
   useEffect(() => {
     handleListar();
   }, [search, pagina]);
@@ -79,13 +103,31 @@ const GuiaRemisionFilter: React.FC = () => {
         <span className="filter-base-text">Filtrar por</span>
         <div className="input-base-row">
           <div className="input-base-container-33">
+            <label htmlFor="serie" className="label-base">
+              Serie
+            </label>
+            <select
+              id="serie"
+              name="serie"
+              value={filter.serie}
+              onChange={handleData}
+              className="input-base"
+            >
+              {series.map((x) => (
+                <option key={x.serie} value={x.serie}>
+                  {x.serie}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="input-base-container-33">
             <label htmlFor="clienteNombreFilter" className="label-base">
               Cliente
             </label>
             <input
               id="clienteNombreFilter"
               name="clienteNombre"
-              placeholder="Observación"
+              placeholder="Cliente"
               value={filter.clienteNombre}
               onChange={handleData}
               autoComplete="off"

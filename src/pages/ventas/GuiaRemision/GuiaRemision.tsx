@@ -95,7 +95,7 @@ const GuiaRemision: React.FC = () => {
   return (
     <div className="main-base">
       <div className="main-header">
-        <h4 className="main-header-title">Notas de Pedido</h4>
+        <h4 className="main-header-title">Guías de Remisión</h4>
         {ready && visible && (
           <ButtonGroup
             isTablas={true}

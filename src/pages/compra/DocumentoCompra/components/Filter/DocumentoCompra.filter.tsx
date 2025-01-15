@@ -22,9 +22,11 @@ const DocumentoCompraFilter: React.FC = () => {
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
-  const [filter, setFilter] = useState<IDocumentoCompraFilter>(
-    defaultDocumentoCompraFilter
-  );
+  const [filter, setFilter] = useState<IDocumentoCompraFilter>({
+    ...defaultDocumentoCompraFilter,
+    fechaInicio: fechaInicio,
+    fechaFin: fechaFin,
+  });
   const search = useDebounce(filter);
   //#endregion
 
@@ -50,8 +52,8 @@ const DocumentoCompraFilter: React.FC = () => {
     try {
       const params = new URLSearchParams({
         proveedorNombre: search.proveedorNombre,
-        fechaInicio: fechaInicio,
-        fechaFin: fechaFin,
+        fechaInicio: search.fechaInicio,
+        fechaFin: search.fechaFin,
       });
       const { data, total }: { data: IDocumentoCompraTable[]; total: number } =
         await getListar(globalContext, params);
@@ -89,7 +91,7 @@ const DocumentoCompraFilter: React.FC = () => {
               type="date"
               id="fechaInicio"
               name="fechaInicio"
-              value={fechaInicio}
+              value={filter.fechaInicio}
               onChange={handleData}
               className="input-base"
             />
@@ -102,7 +104,7 @@ const DocumentoCompraFilter: React.FC = () => {
               type="date"
               id="fechaFin"
               name="fechaFin"
-              value={fechaFin}
+              value={filter.fechaFin}
               onChange={handleData}
               className="input-base"
             />

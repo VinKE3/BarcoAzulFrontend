@@ -47,7 +47,6 @@ const ActionBar: React.FC<IActionBar> = ({
         isTablas,
         isPermitido,
       };
-      console.log(retorno, "retorno");
       setGlobalContext((x) => ({
         ...x,
         form: { ...x.form, retorno },

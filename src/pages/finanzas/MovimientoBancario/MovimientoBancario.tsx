@@ -125,9 +125,6 @@ const MovimientoBancario: React.FC = () => {
             {primer.tipo === "eliminar" && (
               <DeleteModal propText={"descripcion"} />
             )}
-            {/* {form.data && primer.tipo && api.menu === menu && (
-              <DocumentoCompraModal />
-            )} */}
           </>
         )}
       </div>

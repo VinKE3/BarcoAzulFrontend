@@ -134,9 +134,7 @@ const NotaPedido: React.FC = () => {
         {ready && visible && (
           <>
             {mensaje.length > 0 && <Messages mensajes={mensajes} />}
-            {visible && (
-              <NotaPedidoFilter handleGetSimplificado={handleGetSimplificado} />
-            )}
+            {visible && <NotaPedidoFilter />}
             {visible && (
               <Table
                 data={table.data}

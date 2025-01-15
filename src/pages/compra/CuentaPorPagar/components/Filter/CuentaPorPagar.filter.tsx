@@ -19,13 +19,16 @@ const CuentaPorPagarFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { table, modal, mensajes, extra } = globalContext;
-  const { element } = extra;
+  const { element, simplificado } = extra;
+  const { fechaFin, fechaInicio } = simplificado;
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
-  const [filter, setFilter] = useState<ICuentaPorPagarFilter>(
-    defaultCuentaPorPagarFilter
-  );
+  const [filter, setFilter] = useState<ICuentaPorPagarFilter>({
+    ...defaultCuentaPorPagarFilter,
+    fechaInicio: fechaInicio,
+    fechaFin: fechaFin,
+  });
   const search = useDebounce(filter);
   //#endregion
 

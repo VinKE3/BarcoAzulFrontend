@@ -17,13 +17,17 @@ import {
 const SalidaArticulosFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { api, table, modal, mensajes } = globalContext;
+  const { api, table, modal, mensajes, extra } = globalContext;
+  const { simplificado } = extra;
+  const { fechaFin, fechaInicio } = simplificado;
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
-  const [filter, setFilter] = useState<ISalidaArticulosFilter>(
-    defaultSalidaArticulosFilter
-  );
+  const [filter, setFilter] = useState<ISalidaArticulosFilter>({
+    ...defaultSalidaArticulosFilter,
+    fechaInicio: fechaInicio,
+    fechaFin: fechaFin,
+  });
   const search = useDebounce(filter);
   //#endregion
 

@@ -33,7 +33,7 @@ const useCuentaPorCobrarColumn = (): Column<ICuentaPorCobrarTable>[] => {
         },
       },
       {
-        Header: "Proveedor",
+        Header: "Cliente",
         accessor: "clienteNombre",
         Cell: ({ value }: { value: string }) => {
           return <p className="table-base-body-td-center">{value}</p>;

@@ -46,7 +46,6 @@ const SalidaArticulosForm: React.FC = () => {
   const [data, setData] = useState<ISalidaArticulos>(
     form.data || defaultSalidaArticulos
   );
-  console.log(data, "data");
   const [adicional, setAdicional] = useState<IEntradaArticulosVarios>(
     defaultEntradaArticulosVarios
   );

@@ -96,7 +96,7 @@ const SalidaArticulos: React.FC = () => {
   return (
     <div className="main-base">
       <div className="main-header">
-        <h4 className="main-header-title">Slida de Artículos</h4>
+        <h4 className="main-header-title">Salida ALmacén</h4>
         {ready && visible && (
           <ButtonGroup
             isTablas={true}

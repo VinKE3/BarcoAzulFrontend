@@ -18,13 +18,16 @@ const CuentaPorCobrarFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { table, modal, mensajes, extra } = globalContext;
-  const { element } = extra;
+  const { element, simplificado } = extra;
+  const { fechaFin, fechaInicio } = simplificado;
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
-  const [filter, setFilter] = useState<ICuentaPorCobrarFilter>(
-    defaultCuentaPorCobrarFilter
-  );
+  const [filter, setFilter] = useState<ICuentaPorCobrarFilter>({
+    ...defaultCuentaPorCobrarFilter,
+    fechaInicio: fechaInicio,
+    fechaFin: fechaFin,
+  });
   const search = useDebounce(filter);
   //#endregion
 
@@ -73,12 +76,12 @@ const CuentaPorCobrarFilter: React.FC = () => {
         <div className="input-base-row">
           <div className="input-base-container-33">
             <label htmlFor="clienteNombreFilter" className="label-base">
-              Proveedor Nombre
+              Cliente Nombre
             </label>
             <input
               id="clienteNombreFilter"
               name="clienteNombre"
-              placeholder="Proveedor Nombre"
+              placeholder="Cliente Nombre"
               value={filter.clienteNombre}
               onChange={handleData}
               autoComplete="off"
