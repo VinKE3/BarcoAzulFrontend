@@ -38,7 +38,6 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, modal, form, extra } = globalContext;
-  const { retorno } = form;
   const { primer } = modal;
   const {
     tiposDocumento,
@@ -52,57 +51,9 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
   }: IDocumentoCompraTablas = form.tablas || defaultDocumentoCompraTablas;
   const { element } = extra;
   const { inputs } = element;
-
-  const [filteredTiposPago, setFilteredTiposPago] = useState(tiposPago);
   const [filterMotivosVenta, setFilterMotivosVenta] = useState<IMotivosNota[]>(
     []
   );
-  //#endregion
-
-  //#region useEffect
-
-  const simulateChangeEvent = (
-    name: string,
-    value: string
-  ): React.ChangeEvent<HTMLSelectElement> => {
-    return {
-      target: { name, value } as EventTarget & HTMLSelectElement,
-    } as React.ChangeEvent<HTMLSelectElement>;
-  };
-
-  const handleTipoCompraChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const selectedTipoCompraId = event.target.value;
-
-    handleData(event);
-
-    const pagosFiltrados = tiposPago.filter(
-      (pago) => pago.tipoVentaCompraId === selectedTipoCompraId
-    );
-    setFilteredTiposPago(pagosFiltrados);
-
-    handleData(simulateChangeEvent("tipoPagoId", ""));
-  };
-
-  const handleTipoPagoChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const selectedTipoPagoId = event.target.value;
-
-    handleData(event);
-
-    const tipoPagoSeleccionado = tiposPago.find(
-      (pago) => pago.id === selectedTipoPagoId
-    );
-    const plazo = tipoPagoSeleccionado?.plazo || 0;
-
-    const fechaActual = new Date();
-    fechaActual.setDate(fechaActual.getDate() + plazo);
-    const nuevaFechaVencimiento = fechaActual.toISOString().split("T")[0];
-
-    handleData(simulateChangeEvent("fechaVencimiento", nuevaFechaVencimiento));
-  };
   //#endregion
 
   //#region Funciones
@@ -313,7 +264,7 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
               id="tipoCompraId"
               name="tipoCompraId"
               value={data.tipoCompraId ?? ""}
-              onChange={handleTipoCompraChange}
+              onChange={handleData}
               disabled={primer.tipo === "consultar"}
               className="input-base"
             >
@@ -336,18 +287,22 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
               id="tipoPagoId"
               name="tipoPagoId"
               value={data.tipoPagoId ?? ""}
-              onChange={handleTipoPagoChange}
+              onChange={handleData}
               disabled={primer.tipo === "consultar" || data.tipoCompraId === ""}
               className="input-base"
             >
               <option key="default" value="">
                 SELECCIONAR
               </option>
-              {filteredTiposPago.map((x: ITiposPago) => (
-                <option key={x.id} value={x.id}>
-                  {x.descripcion}
-                </option>
-              ))}
+              {tiposPago
+                .filter(
+                  (x: ITiposPago) => x.tipoVentaCompraId === data.tipoCompraId
+                )
+                .map((x: ITiposPago) => (
+                  <option key={x.id} value={x.id}>
+                    {x.descripcion}
+                  </option>
+                ))}
             </select>
           </div>
           <div className="input-base-container-33">

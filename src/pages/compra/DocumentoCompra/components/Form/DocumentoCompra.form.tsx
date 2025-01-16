@@ -28,6 +28,7 @@ import {
   handleBackPage,
   handleInputType,
   handleResetContext,
+  handleSelectTipoPago,
   handleSetErrorMensaje,
   handleSetInputs,
   handleSetRetorno,
@@ -48,7 +49,7 @@ const DocumentoCompraForm: React.FC = () => {
   const { modal, form, mensajes, api } = globalContext;
   const { primer, segundo } = modal;
   const { retorno } = form;
-  const { documentosPendientes }: IDocumentoCompraTablas =
+  const { documentosPendientes, tiposPago }: IDocumentoCompraTablas =
     form.tablas || defaultDocumentoCompraTablas;
   const mensaje = mensajes.filter((x) => x.origen === "form" && x.tipo >= 0);
   const [data, setData] = useState<IDocumentoCompra>(
@@ -138,7 +139,6 @@ const DocumentoCompraForm: React.FC = () => {
       handleGetDocumentoPendiente(data.proveedorId);
   };
 
-  console.log("data", data);
   const handleGetTipoCambio = async (
     retorno: boolean = false,
     showError: boolean = true
@@ -167,7 +167,36 @@ const DocumentoCompraForm: React.FC = () => {
   }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name } = target;
     const value = handleInputType(target);
-    setData((x) => ({ ...x, [name]: value }));
+    setData((x) => {
+      const newData = { ...x, [name]: value };
+
+      switch (name) {
+        case "fechaEmision":
+          handleToast(
+            "info",
+            "Si la fecha de emisión ha sido cambiada, no olvide consultar el tipo de cambio."
+          );
+          break;
+
+        case "tipoCompraId":
+          newData.tipoPagoId = "";
+          newData.fechaVencimiento = x.fechaEmision;
+          break;
+
+        case "tipoPagoId":
+          const vencimiento = handleSelectTipoPago(
+            tiposPago,
+            newData.fechaEmision,
+            value as string
+          );
+          newData.fechaVencimiento = vencimiento;
+          break;
+
+        default:
+          break;
+      }
+      return newData;
+    });
   };
 
   const handleProveedor = async (proveedor: IProveedorFind): Promise<void> => {

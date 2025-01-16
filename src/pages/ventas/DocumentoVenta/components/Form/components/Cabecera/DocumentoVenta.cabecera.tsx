@@ -27,19 +27,18 @@ import {
 } from "../../../../../../../util";
 interface IProps {
   data: IDocumentoVenta;
+  setData: React.Dispatch<React.SetStateAction<IDocumentoVenta>>;
   handleData: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => Promise<void> | void;
   handleGetTipoCambio: (retorno: boolean) => Promise<number>;
   handleNumero: (x: any) => Promise<void> | void;
-  handleSerie: (x: any) => Promise<void> | void;
 }
 const DocumentoVentaCabecera: React.FC<IProps> = ({
   data,
   handleData,
   handleGetTipoCambio,
   handleNumero,
-  handleSerie,
 }) => {
   return <div>DocumentoVentaCabecera</div>;
 };

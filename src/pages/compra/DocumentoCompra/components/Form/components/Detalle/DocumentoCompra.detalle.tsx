@@ -324,17 +324,6 @@ const DocumentoCompraDetalle: React.FC<IProps> = ({
       ...handleValPrecio(data.precioUnitario),
     ];
 
-    // if (data.precioCompra > data.precioUnitario) {
-    //   textos.push(
-    //     `El precio de venta ${roundNumber(
-    //       data.precioUnitario,
-    //       4
-    //     )} está por debajo del precio de compra ${roundNumber(
-    //       data.precioCompra
-    //     )}.`
-    //   );
-    // }
-
     if (!data.importe || data.importe <= 0) {
       textos.push("El importe debe ser mayor que 0");
     }
@@ -620,7 +609,7 @@ const DocumentoCompraDetalle: React.FC<IProps> = ({
         tableClassName="documento-compra-detalle-table"
       />
       <div className="form-base-detalle">
-        {footerItems.map((item, index) => (
+        {footerItems?.map((item, index) => (
           <div key={index} className="form-base-detalle-row">
             {item.show !== false && (
               <>
@@ -641,7 +630,7 @@ const DocumentoCompraDetalle: React.FC<IProps> = ({
                       <option key="default" value="">
                         -
                       </option>
-                      {porcentajesIGV.map((x: IPorcentajesTable) => (
+                      {porcentajesIGV?.map((x: IPorcentajesTable) => (
                         <option key={x.porcentaje} value={x.porcentaje}>
                           {x.porcentaje}
                         </option>
