@@ -51,6 +51,17 @@ const useDocumentoVentaDetalleColumn = (
         },
       },
       {
+        Header: "Monto IGV",
+        accessor: "montoIGV",
+        Cell: ({ value }: { value: number }) => {
+          return (
+            <p className="table-base-body-td-right">
+              {handleNumber(value, true, true)}
+            </p>
+          );
+        },
+      },
+      {
         Header: "Importe",
         accessor: "importe",
         Cell: ({ value }: { value: number }) => {

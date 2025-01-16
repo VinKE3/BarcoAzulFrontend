@@ -1,29 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeEvent, useState, useEffect } from "react";
-import { TbDeviceIpadSearch } from "react-icons/tb";
+import { ChangeEvent } from "react";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
-import { useGlobalContext } from "../../../../../../../hooks";
+import { TbDeviceIpadSearch } from "react-icons/tb";
 import { CheckBox } from "../../../../../../../components";
+import { useGlobalContext } from "../../../../../../../hooks";
 import {
-  ICombo,
-  IMoneda,
+  defaultNotaPedidoTablas,
   IClienteDireccion,
+  ICombo,
+  ICuentaCorrienteBancaria,
+  IMoneda,
   INotaPedido,
   INotaPedidoTablas,
-  ITiposPago,
-  IPorcentajes,
   IPersonal,
+  IPorcentajes,
+  ITiposPago,
   ITipoVenta,
-  defaultNotaPedidoTablas,
-  ICuentaCorrienteBancaria,
 } from "../../../../../../../models";
 import {
+  handleClearMensajes,
   handleHelpModal,
-  helpModalMap,
   handleSelectCuentaBancaria,
   handleSelectPersonal,
-  handleClearMensajes,
+  helpModalMap,
 } from "../../../../../../../util";
 
 interface IProps {

@@ -8,19 +8,30 @@ import {
   ITransportistaFindTable,
   defaultTransportistaFindFilter,
 } from "../../../../models";
-import { getListar, handleFocus, handleInputType, handleSetErrorMensaje, handleSetRetorno } from "../../../../util";
+import {
+  getListar,
+  handleFocus,
+  handleInputType,
+  handleSetErrorMensaje,
+  handleSetRetorno,
+} from "../../../../util";
 import { TableKeyHandler } from "../../../Keys";
 import { ModalHelp } from "../../../Modal";
 
 //Componente que retorna los datos de una fila seleccionada
-const TransportistaFindModal: React.FC<ITransportistaFindModal> = ({ modalidad, inputFocus }) => {
+const TransportistaFindModal: React.FC<ITransportistaFindModal> = ({
+  modalidad,
+  inputFocus,
+}) => {
   //#region useState
-  const menu: string = "Mantenimiento/Transportista";
+  const menu: string = "Mantenimiento/Conductor";
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { extra } = globalContext;
   const { inputs } = extra.element;
 
-  const [filter, setFilter] = useState<ITransportistaFindFilter>(defaultTransportistaFindFilter);
+  const [filter, setFilter] = useState<ITransportistaFindFilter>(
+    defaultTransportistaFindFilter
+  );
   const search = useDebounce(filter);
   const [data, setData] = useState<ITransportistaFindTable[]>([]);
   const columns = useTransportistaFindmodalColumn();
@@ -46,7 +57,11 @@ const TransportistaFindModal: React.FC<ITransportistaFindModal> = ({ modalidad, 
         numeroDocumentoIdentidad: search.numeroDocumentoIdentidad,
         nombre: search.nombre,
       });
-      const { data }: { data: ITransportistaFindTable[] } = await getListar(globalContext, params, menu);
+      const { data }: { data: ITransportistaFindTable[] } = await getListar(
+        globalContext,
+        params,
+        menu
+      );
       setData(data);
     } catch (error) {
       handleSetErrorMensaje(setGlobalContext, error, "help");
@@ -68,14 +83,19 @@ const TransportistaFindModal: React.FC<ITransportistaFindModal> = ({ modalidad, 
         data={data}
         columns={columns}
         handleKeyDown={tableKeyDown}
-        title={`Consultar ${modalidad === "01" ? "Transportistas" : "Conductores"}`}
+        title={`Consultar ${
+          modalidad === "01" ? "Transportistas" : "Conductores"
+        }`}
         inputFocus={inputFocus}
         classNameModal="transportista-find-modal"
         classNameTable="transportista-find-modal-table"
       >
         <div className="input-base-row">
           <div className="input-base-container-50">
-            <label htmlFor="numeroDocumentoIdentidadFilter" className="label-base">
+            <label
+              htmlFor="numeroDocumentoIdentidadFilter"
+              className="label-base"
+            >
               Documento
             </label>
             <input

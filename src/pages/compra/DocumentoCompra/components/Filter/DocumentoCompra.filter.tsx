@@ -16,7 +16,7 @@ import {
 const DocumentoCompraFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { table, modal, mensajes, extra } = globalContext;
+  const { api, table, modal, mensajes, extra } = globalContext;
   const { simplificado } = extra;
   const { fechaFin, fechaInicio } = simplificado;
   const { primer } = modal;
@@ -38,6 +38,10 @@ const DocumentoCompraFilter: React.FC = () => {
   useEffect(() => {
     primer.id === null && mensaje.length > 0 && handleListar();
   }, [modal, mensajes]);
+
+  useEffect(() => {
+    api.refrescar && handleListar();
+  }, [api.refrescar]);
   //#endregion
 
   //#region Funciones

@@ -151,6 +151,7 @@ export interface IDocumentoCompraTablas {
   porcentajesPercepcion: IDocumentoCompraPorcentajes[];
   motivosNota: IMotivosNota[];
   cuentasCorrientes: IDocumentoCompraCuentaCorriente[];
+  documentosPendientes: IDocumentoCompraPendiente[];
 }
 
 export const defaultDocumentoCompraTablas: IDocumentoCompraTablas = {
@@ -162,6 +163,7 @@ export const defaultDocumentoCompraTablas: IDocumentoCompraTablas = {
   porcentajesPercepcion: [],
   motivosNota: [],
   cuentasCorrientes: [],
+  documentosPendientes: [],
 };
 
 export interface IDocumentoCompraTable {

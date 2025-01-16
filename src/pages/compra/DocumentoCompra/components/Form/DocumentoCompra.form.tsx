@@ -10,26 +10,31 @@ import {
   Messages,
   ProveedorFindModal,
 } from "../../../../../components";
+import { ConfirmModal } from "../../../../../components/Helpers/Modal/Confirm";
 import { useFocus, useGlobalContext } from "../../../../../hooks";
 import {
   IDocumentoCompra,
   IDocumentoCompraDetalle,
+  IDocumentoCompraTablas,
   IDocumentoCompraVarios,
-  defaultDocumentoCompraVarios,
   IProveedorFind,
   defaultDocumentoCompra,
-  IDocumentoCompraPendiente,
+  defaultDocumentoCompraTablas,
+  defaultDocumentoCompraVarios,
 } from "../../../../../models";
 import {
+  get,
+  getId,
   handleBackPage,
   handleInputType,
   handleResetContext,
+  handleSetErrorMensaje,
   handleSetInputs,
   handleSetRetorno,
-  roundNumber,
   handleTipoCambio,
-  get,
-  getId,
+  handleToast,
+  handleUpdateTablas,
+  roundNumber,
 } from "../../../../../util";
 import { DocumentoCompraCabecera, DocumentoCompraDetalle } from "./components";
 
@@ -40,9 +45,11 @@ const DocumentoCompraForm: React.FC = () => {
   const navigate = useNavigate();
   const backPage: string = `/${privateRoutes.COMPRAS}/${comprasRoutes.TODASLASCOMPRAS}`;
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { modal, form, mensajes } = globalContext;
+  const { modal, form, mensajes, api } = globalContext;
   const { primer, segundo } = modal;
   const { retorno } = form;
+  const { documentosPendientes }: IDocumentoCompraTablas =
+    form.tablas || defaultDocumentoCompraTablas;
   const mensaje = mensajes.filter((x) => x.origen === "form" && x.tipo >= 0);
   const [data, setData] = useState<IDocumentoCompra>(
     form.data || defaultDocumentoCompra
@@ -50,9 +57,6 @@ const DocumentoCompraForm: React.FC = () => {
   const [adicional, setAdicional] = useState<IDocumentoCompraVarios>(
     defaultDocumentoCompraVarios
   );
-  const [documentosCompraPendientes, setDocumentosCompraPendientes] = useState<
-    IDocumentoCompraPendiente[]
-  >([]);
   const inputs = useFocus(
     "tipoDocumentoId",
     "proveedorId",
@@ -111,11 +115,14 @@ const DocumentoCompraForm: React.FC = () => {
   }, [data.incluyeIGV, data.porcentajeIGV]);
 
   useEffect(() => {
-    primer.tipo === "registrar" && handleLoad();
+    handleLoad();
   }, [primer.tipo]);
 
   useEffect(() => {
     retorno && retorno.origen === "proveedorFind" && handleProveedor(retorno);
+    retorno &&
+      retorno.origen === "documentoPendienteHelp" &&
+      handleGetDocumentoPendienteDetalle(retorno);
   }, [retorno]);
 
   //#endregion
@@ -127,8 +134,11 @@ const DocumentoCompraForm: React.FC = () => {
       const tipoCambio: number = await handleGetTipoCambio(true, false);
       setData((x) => ({ ...x, tipoCambio }));
     }
+    (data.tipoDocumentoId === "07" || data.tipoDocumentoId === "08") &&
+      handleGetDocumentoPendiente(data.proveedorId);
   };
 
+  console.log("data", data);
   const handleGetTipoCambio = async (
     retorno: boolean = false,
     showError: boolean = true
@@ -160,7 +170,7 @@ const DocumentoCompraForm: React.FC = () => {
     setData((x) => ({ ...x, [name]: value }));
   };
 
-  const handleProveedor = (proveedor: IProveedorFind): void => {
+  const handleProveedor = async (proveedor: IProveedorFind): Promise<void> => {
     const { id, numeroDocumentoIdentidad, nombre, direccion } = proveedor;
     setData((x) => ({
       ...x,
@@ -169,6 +179,7 @@ const DocumentoCompraForm: React.FC = () => {
       proveedorNombre: nombre,
       proveedorDireccion: direccion,
     }));
+    await handleGetDocumentoPendiente(id);
   };
 
   const handleTotales = (detalles: IDocumentoCompraDetalle[]): void => {
@@ -228,57 +239,62 @@ const DocumentoCompraForm: React.FC = () => {
     return;
   };
 
-  const getPendientes = async (): Promise<void> => {
-    const urlParams = new URLSearchParams({
-      proveedorId: String(data.proveedorId),
-    });
-    const response = await get({
-      globalContext,
-      menu: documentosPendientesListar,
-      urlParams,
-    });
-    setDocumentosCompraPendientes(response.data);
+  const handleGetDocumentoPendiente = async (
+    proveedorId: string
+  ): Promise<void> => {
+    try {
+      const urlParams = new URLSearchParams({ proveedorId });
+      const response =
+        proveedorId !== ""
+          ? await get({
+              globalContext,
+              menu: documentosPendientesListar,
+              urlParams,
+            })
+          : [];
+      handleUpdateTablas(
+        setGlobalContext,
+        "documentosPendientes",
+        response.data
+      );
+    } catch (error) {
+      handleSetErrorMensaje(setGlobalContext, error, "form");
+    }
   };
 
-  const handlePendiente = async (): Promise<void> => {
-    await getPendientes();
-    const pendienteId = data.documentoReferenciaId;
-    const pendienteCompleto = await getId(
-      globalContext,
-      String(pendienteId),
-      "Compra/DocumentoCompra"
+  const handleGetDocumentoPendienteDetalle = async (
+    estado: boolean
+  ): Promise<void> => {
+    if (!estado) return;
+    const documentoPendiente = documentosPendientes.find(
+      (x) => x.codigoPendiente === data.documentoReferenciaId
     );
-    const { detalles } = pendienteCompleto;
-    const newDetalle = detalles.map((x: any) => ({
-      ...x,
-    }));
-    setData((x) => ({
-      ...x,
-      documentoReferenciaId: pendienteId,
-      detalles: newDetalle,
-    }));
+    // Si no se encuentra el documento pendiente, salimos de la función
+    if (!documentoPendiente) return;
+    try {
+      const response: IDocumentoCompra = await getId(
+        globalContext,
+        documentoPendiente.id,
+        api.menu
+      );
+
+      if (documentoPendiente) {
+        setData((x) => ({
+          ...x,
+          detalles: response.detalles,
+        }));
+        handleToast("info", "Detalle del documento obtenido correctamente.");
+      }
+    } catch (error) {
+      handleSetErrorMensaje(setGlobalContext, error, "form");
+    }
   };
-
-  useEffect(() => {
-    if (data.proveedorId && data.proveedorId.trim().length > 0) {
-      getPendientes();
-    }
-  }, [data.proveedorId]);
-
-  useEffect(() => {
-    if (
-      data.documentoReferenciaId &&
-      data.documentoReferenciaId.trim().length > 0
-    ) {
-      handlePendiente();
-    }
-  }, [data.documentoReferenciaId]);
   //#endregion
   return (
     <>
       <div className="main-base">
         <div className="main-header">
-          <h4 className="main-header-sub-title">{`${modal.primer.tipo} orden compra`}</h4>
+          <h4 className="main-header-sub-title">{`${modal.primer.tipo} documento compra`}</h4>
         </div>
 
         {mensaje.length > 0 && <Messages />}
@@ -291,7 +307,6 @@ const DocumentoCompraForm: React.FC = () => {
               handleGetTipoCambio={handleGetTipoCambio}
               handleNumero={handleNumero}
               handleSerie={handleSerie}
-              documentosCompraPendientes={documentosCompraPendientes}
             />
             <DocumentoCompraDetalle
               dataGeneral={data}
@@ -315,6 +330,12 @@ const DocumentoCompraForm: React.FC = () => {
       )}
       {segundo.origen === "articuloFind" && (
         <ArticuloFindModal inputFocus="cantidad" />
+      )}
+      {segundo.origen === "documentoPendienteHelp" && (
+        <ConfirmModal
+          origen="documentoPendienteHelp"
+          title="¿Desea copiar los detalles del documento?"
+        />
       )}
     </>
   );

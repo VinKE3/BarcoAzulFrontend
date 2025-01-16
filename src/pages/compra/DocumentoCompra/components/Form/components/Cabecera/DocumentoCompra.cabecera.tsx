@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, useEffect, useState } from "react";
-import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { FaMoneyBillTransfer, FaPaste } from "react-icons/fa6";
 import { TbDeviceIpadSearch } from "react-icons/tb";
 import { CheckBox } from "../../../../../../../components";
 import { useGlobalContext } from "../../../../../../../hooks";
@@ -17,11 +17,10 @@ import {
   IPorcentajes,
   ITiposPago,
 } from "../../../../../../../models";
-import { handleHelpModal } from "../../../../../../../util";
+import { handleHelpModal, handleOpenModal } from "../../../../../../../util";
 
 interface IProps {
   data: IDocumentoCompra;
-  documentosCompraPendientes: IDocumentoCompraPendiente[];
   handleData: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => Promise<void> | void;
@@ -35,11 +34,11 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
   handleGetTipoCambio,
   handleNumero,
   handleSerie,
-  documentosCompraPendientes,
 }) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, modal, form, extra } = globalContext;
+  const { retorno } = form;
   const { primer } = modal;
   const {
     tiposDocumento,
@@ -47,7 +46,7 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
     tiposPago,
     monedas,
     porcentajesIGV,
-    porcentajesPercepcion,
+    documentosPendientes,
     motivosNota,
     cuentasCorrientes,
   }: IDocumentoCompraTablas = form.tablas || defaultDocumentoCompraTablas;
@@ -470,25 +469,50 @@ const DocumentoCompraCabecera: React.FC<IProps> = ({
                 <label htmlFor="documentoReferenciaId" className="label-base">
                   Documento
                 </label>
-                <select
-                  id="documentoReferenciaId"
-                  name="documentoReferenciaId"
-                  value={data.documentoReferenciaId ?? ""}
-                  onChange={handleData}
-                  disabled={primer.tipo === "consultar"}
-                  className="input-base"
-                >
-                  <option key="default" value="">
-                    SELECCIONAR
-                  </option>
-                  {documentosCompraPendientes.map(
-                    (x: IDocumentoCompraPendiente) => (
-                      <option key={x.id} value={x.id}>
-                        {x.numeroDocumento}
-                      </option>
-                    )
-                  )}
-                </select>
+                <div className="input-base-container-button">
+                  <select
+                    id="documentoReferenciaId"
+                    name="documentoReferenciaId"
+                    value={data.documentoReferenciaId ?? ""}
+                    onChange={handleData}
+                    disabled={primer.tipo === "consultar"}
+                    className="input-base-button"
+                  >
+                    <option key="default" value="">
+                      SELECCIONAR
+                    </option>
+                    {documentosPendientes?.map(
+                      (x: IDocumentoCompraPendiente) => (
+                        <option key={x.id} value={x.codigoPendiente}>
+                          {x.numeroDocumento}
+                        </option>
+                      )
+                    )}
+                  </select>
+                  {primer.tipo !== "consultar" &&
+                    data.documentoReferenciaId && (
+                      <button
+                        id="buttonDocumentoPendienteHelp"
+                        name="buttonDocumentoPendienteHelp"
+                        title="Presione [ALT + V] para copiar detalle."
+                        accessKey="v"
+                        onClick={() =>
+                          handleOpenModal(
+                            setGlobalContext,
+                            "buttonDocumentoPendienteHelp"
+                          )
+                        }
+                        onKeyDown={handleKeyDown}
+                        className="button-base-anidado button-base-bg-primary"
+                      >
+                        <FaPaste
+                          strokeWidth={2}
+                          size="2rem"
+                          className="button-base-icon"
+                        />
+                      </button>
+                    )}
+                </div>
               </div>
               <div className="input-base-container-33">
                 <label htmlFor="motivoNotaId" className="label-base">

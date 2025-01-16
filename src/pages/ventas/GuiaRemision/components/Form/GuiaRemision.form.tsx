@@ -45,17 +45,16 @@ import {
 import { VehiculoGuiaModal } from "./components/Modal";
 import { TransportistaGuiaModal } from "./components/Modal/Transportista";
 import { GuiaRemisionCabecera, GuiaRemisionDetalle } from "./components";
-interface IProps {
-  isPreGuia?: boolean;
-}
 
 const GuiaRemisionForm: React.FC = () => {
   //#region useState
   const navigate = useNavigate();
+  const menuReferencia = "Venta/GuiaRemision/ListarDocumentosReferencia";
+  const menu = "Venta/GuiaRemision";
   const backPage: string = `/${privateRoutes.VENTAS}/${ventasRoute.GUIASREMISION}`;
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { modal, form, mensajes, extra } = globalContext;
-  const { primer, segundo } = modal;
+  const { primer, segundo, tercer } = modal;
   const { retorno } = form;
   const {}: IGuiaRemisionTablas = form.tablas || defaultGuiaRemisionTablas;
   const { simplificado } = extra;
@@ -177,7 +176,92 @@ const GuiaRemisionForm: React.FC = () => {
     handleSetRetorno(setGlobalContext, retorno);
   };
 
-  return <div>GuiaRemisionForm</div>;
+  const handleTransportista = (
+    transportistas: IGuiaRemisionTransportista[]
+  ): void => {
+    setData((x) => ({ ...x, transportistas: transportistas }));
+  };
+
+  const handleVehiculos = (vehiculos: IGuiaRemisionVehiculo[]): void => {
+    setData((x) => ({ ...x, vehiculos: vehiculos }));
+  };
+
+  return (
+    <>
+      <div className="main-base">
+        <div className="main-header">
+          <h4 className="main-header-sub-title">{`${modal.primer.tipo} guía de remisión`}</h4>
+        </div>
+
+        {mensaje.length > 0 && <Messages />}
+
+        <BasicKeyHandler selector={"guia-remision-form"}>
+          <div className="form-base">
+            <GuiaRemisionCabecera data={data} handleData={handleData} />
+            <GuiaRemisionDetalle
+              dataGeneral={data}
+              setDataGeneral={setData}
+              adicional={adicional}
+              handleAdicional={handleAdicional}
+              handleDataGeneral={handleData}
+            />
+          </div>
+
+          <ButtonFooter
+            data={data}
+            backPage={backPage}
+            menu={menu}
+            inputFocus="clienteId"
+          />
+        </BasicKeyHandler>
+      </div>
+
+      {segundo.origen === "transportistaHelp" &&
+        data.modalidadTransporteId !== "" && (
+          <TransportistaGuiaModal
+            dataTransportista={data.transportistas}
+            modalidad={data.modalidadTransporteId}
+            handleTransportistas={handleTransportista}
+          />
+        )}
+
+      {tercer.origen === "transportistaFind" &&
+        data.modalidadTransporteId !== "" && (
+          <TransportistaFindModal
+            modalidad={data.modalidadTransporteId}
+            inputFocus={
+              data.modalidadTransporteId === "01"
+                ? "observacion"
+                : "buttonVehiculoHelp"
+            }
+          />
+        )}
+
+      {segundo.origen === "vehiculoHelp" &&
+        data.modalidadTransporteId === "02" && (
+          <VehiculoGuiaModal
+            dataVehiculo={data.vehiculos}
+            handleVehiculos={handleVehiculos}
+          />
+        )}
+
+      {segundo.origen === "clienteFind" && (
+        <ClienteFindModal inputFocus="clienteNombre" />
+      )}
+
+      {segundo.origen === "referenciaFind" && (
+        <ReferenciaFindModal
+          tipoDocumentoId={data.tipoDocumentoReferencia as string}
+          menu={menuReferencia}
+          inputFocus="clienteDireccion"
+        />
+      )}
+
+      {segundo.origen === "articuloFind" && (
+        <ArticuloFindModal inputFocus="cantidad" />
+      )}
+    </>
+  );
 };
 
 export default GuiaRemisionForm;

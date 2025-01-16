@@ -602,7 +602,7 @@ const ArticuloModal: React.FC = () => {
                     value={data.precioIncluyeIGV}
                     handleData={handleData}
                     disabled={primer.tipo === "consultar"}
-                    label="IGV Compra"
+                    label="IGV"
                   />
                 </div>
                 <div className="input-base-container-auto">

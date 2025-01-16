@@ -45,7 +45,7 @@ const TransportistaGuiaModal: React.FC<IProp> = ({
   handleTransportistas,
 }) => {
   //#region useState
-  const menu = "Mantenimiento/Transportista";
+  const menu = "Mantenimiento/Conductor";
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, modal, form } = globalContext;
   const { segundo } = modal;
@@ -135,7 +135,7 @@ const TransportistaGuiaModal: React.FC<IProp> = ({
     const transportistaCompleto: ITransportista = await getId(
       globalContext,
       find.id,
-      "Mantenimiento/Transportista"
+      "Mantenimiento/Conductor"
     );
 
     const {

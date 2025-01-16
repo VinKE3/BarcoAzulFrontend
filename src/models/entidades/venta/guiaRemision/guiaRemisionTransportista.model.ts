@@ -4,7 +4,7 @@ export interface IGuiaRemisionTransportista {
   tipoModal: ModalCrudType;
 
   item: number;
-  tipo: string | null;
+  tipoConductor: string | null;
 
   transportistaId: string;
   tipoDocumentoIdentidadId: string;
@@ -24,7 +24,7 @@ export const defaultGuiaRemisionTransportista: IGuiaRemisionTransportista = {
   tipoModal: "registrar",
 
   item: 0,
-  tipo: null,
+  tipoConductor: null,
 
   transportistaId: "",
   tipoDocumentoIdentidadId: "",

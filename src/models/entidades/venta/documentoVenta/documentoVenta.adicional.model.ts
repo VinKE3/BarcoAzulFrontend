@@ -1,7 +1,7 @@
-import { defaultTipoAfectacionIGVAdicional, ITipoAfectacionIGVAdicional } from "../../../global";
+export interface IDocumentoVentaAdicional {
+  articuloVarios: boolean;
+}
 
-export interface IDocumentoVentaDetalleAdicional extends ITipoAfectacionIGVAdicional {}
-
-export const defaultDocumentoVentaDetalleAdicional: IDocumentoVentaDetalleAdicional = {
-  ...defaultTipoAfectacionIGVAdicional,
+export const defaultDocumentoVentaAdicional: IDocumentoVentaAdicional = {
+  articuloVarios: false,
 };

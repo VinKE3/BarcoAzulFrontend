@@ -18,3 +18,5 @@ export * from "./stockFindModal.model";
 export * from "./totalFindModal.model";
 export * from "./transportistaFindModal.model";
 export * from "./vendedorHelpModal.model";
+export * from "./notaPedidoFindModal.model";
+export * from "./confirmHelpModal.model";

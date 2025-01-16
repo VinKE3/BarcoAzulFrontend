@@ -8,7 +8,6 @@ import {
   IMoneda,
   ISerie,
 } from "../../../global";
-import { CrudType } from "../../../types";
 import { defaultPuntoVenta, IPuntoVenta } from "../../empresa";
 import { IGuiaRemisionTransportista } from "./guiaRemisionTransportista.model";
 import { IGuiaRemisionVehiculo } from "./guiaRemisionVehiculo.model";
