@@ -7,18 +7,21 @@ import {
   ButtonFooter,
   ClienteFindModal,
   Messages,
+  ReferenciaFindModal,
+  TransportistaFindModal,
 } from "../../../../../components";
 import { useFocus, useGlobalContext } from "../../../../../hooks";
 import {
-  IClienteCompleto,
-  IClienteContacto,
-  IClienteDireccion,
+  ICliente,
   IClienteFind,
+  IDocumentoVenta,
   IGuiaRemision,
+  IGuiaRemisionTablas,
+  IGuiaRemisionTransportista,
+  IGuiaRemisionVehiculo,
   IGuiaRemisionAdicional,
   IGuiaRemisionDetalle,
-  IGuiaRemisionTablas,
-  defaultClienteCompleto,
+  defaultCliente,
   defaultGuiaRemision,
   defaultGuiaRemisionAdicional,
   defaultGuiaRemisionTablas,
@@ -39,7 +42,12 @@ import {
   handleUpdateTablas,
   roundNumber,
 } from "../../../../../util";
+import { VehiculoGuiaModal } from "./components/Modal";
+import { TransportistaGuiaModal } from "./components/Modal/Transportista";
 import { GuiaRemisionCabecera, GuiaRemisionDetalle } from "./components";
+interface IProps {
+  isPreGuia?: boolean;
+}
 
 const GuiaRemisionForm: React.FC = () => {
   //#region useState
@@ -167,28 +175,6 @@ const GuiaRemisionForm: React.FC = () => {
 
     const retorno = { origen: name, [name]: value };
     handleSetRetorno(setGlobalContext, retorno);
-  };
-  const handleNumero = (): void => {
-    let num = data.numero;
-    if (num.length < 10) {
-      num = ("0000000000" + num).slice(-10);
-    }
-    setData((x) => ({
-      ...x,
-      numero: num,
-    }));
-    return;
-  };
-  const handleSerie = (): void => {
-    let serie = data.serie;
-    if (serie.length < 4) {
-      serie = ("0000" + serie).slice(-4);
-    }
-    setData((x) => ({
-      ...x,
-      serie: serie,
-    }));
-    return;
   };
 
   return <div>GuiaRemisionForm</div>;

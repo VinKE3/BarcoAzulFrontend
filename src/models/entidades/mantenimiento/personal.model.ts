@@ -18,6 +18,7 @@ export interface IPersonal {
   estadoCivilId: string | null;
   correoElectronico: string | null;
   cargoId: number | null;
+  cargoDescripcion: string | null;
   observacion: string | null;
   entidadBancariaId: number | null;
   tipoCuentaBancariaId: string | null;
@@ -43,6 +44,7 @@ export const defaultPersonal: IPersonal = {
   estadoCivilId: null,
   correoElectronico: null,
   cargoId: null,
+  cargoDescripcion: null,
   observacion: null,
   entidadBancariaId: null,
   tipoCuentaBancariaId: null,
