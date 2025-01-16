@@ -21,7 +21,7 @@ import {
   IUsuarioConfiguracion,
 } from "../../mantenimiento";
 import { IPorcentajesTable } from "../../empresa";
-import { ITiposPago } from "../../compra";
+import { IMotivosNota, ITiposPago } from "../../compra";
 
 export interface IDocumentoVenta {
   id: string;
@@ -147,29 +147,42 @@ export const defaultDocumentoVentaDetalle: IDocumentoVentaDetalle = {
   ...defaultDetalleVenta,
   unidadMedida: "",
 };
+export interface IDocumentoVentaPendiente {
+  id: string;
+  codigoPendiente: string;
+  fechaContable: string;
+  numeroDocumento: string;
+  proveedorNombre: string;
+  monedaId: string;
+  total: number;
+}
 
 export interface IDocumentoVentaTablas {
   cuentasCorrientes: ICuentaCorrienteBancaria[];
   monedas: IMoneda[];
   porcentajesIGV: IPorcentajesTable[];
-  serie: string;
+  series: ISerie[];
   tiposVenta: ICombo[];
   tiposCobro: ITiposPago[];
   vendedores: IPersonal[];
   tiposDocumento: ICombo[]; // Añadido
   direcciones: IClienteDireccion[]; //Añadido
+  motivosNota: IMotivosNota[];
+  documentosPendientes: IDocumentoVentaPendiente[];
 }
 
 export const defaultDocumentoVentaTablas: IDocumentoVentaTablas = {
   cuentasCorrientes: [],
   monedas: [],
   porcentajesIGV: [],
-  serie: "",
+  series: [],
   tiposVenta: [],
   tiposCobro: [],
   vendedores: [],
   tiposDocumento: [],
   direcciones: [],
+  motivosNota: [],
+  documentosPendientes: [],
 };
 
 export interface IDocumentoVentaFilter extends IDocumentoFilter {
