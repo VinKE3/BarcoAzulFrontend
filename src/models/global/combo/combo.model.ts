@@ -46,6 +46,12 @@ export interface ITipoDocumentoIdentidad {
   abreviatura: string;
 }
 
+export interface ITipoDocumento {
+  id: string;
+  numeroDocumento: string;
+  fechaEmision: string;
+}
+
 export const defaultTipoDocumentoIdentidad: ITipoDocumentoIdentidad = {
   id: "",
   descripcion: "",

@@ -117,10 +117,13 @@ export const defaultNotaPedido: INotaPedido = {
   numeroOperacion: null,
 };
 
-export interface INotaPedidoDetalle extends IDetalle {}
+export interface INotaPedidoDetalle extends IDetalle {
+  unidadMedida: string;
+}
 
 export const defaultNotaPedidoDetalle: INotaPedidoDetalle = {
   ...defaultDetalle,
+  unidadMedida: "",
 };
 
 export interface INotaPedidoCuentaCorriente {

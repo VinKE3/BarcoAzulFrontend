@@ -9,8 +9,8 @@ import {
   ButtonFooter,
   Messages,
   ProveedorFindModal,
+  ConfirmModal,
 } from "../../../../../components";
-import { ConfirmModal } from "../../../../../components/Helpers/Modal/Confirm";
 import { useFocus, useGlobalContext } from "../../../../../hooks";
 import {
   IDocumentoCompra,

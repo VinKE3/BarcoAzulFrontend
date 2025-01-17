@@ -70,6 +70,7 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
   const [filterMotivosVenta, setFilterMotivosVenta] = useState<IMotivosNota[]>(
     []
   );
+  console.log(documentosPendientes, "documentosPendientes");
 
   //#region Funciones
   const handleClearCotizacion = (): void => {
@@ -510,7 +511,7 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
                     </option>
                     {documentosPendientes?.map(
                       (x: IDocumentoVentaPendiente) => (
-                        <option key={x.id} value={x.codigoPendiente}>
+                        <option key={x.id} value={x.id}>
                           {x.numeroDocumento}
                         </option>
                       )

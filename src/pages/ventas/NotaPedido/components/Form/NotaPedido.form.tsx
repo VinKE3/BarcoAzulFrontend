@@ -18,7 +18,6 @@ import {
   INotaPedidoAdicional,
   INotaPedidoDetalle,
   INotaPedidoTablas,
-  defaultClienteCompleto,
   defaultNotaPedido,
   defaultNotaPedidoAdicional,
   defaultNotaPedidoTablas,
