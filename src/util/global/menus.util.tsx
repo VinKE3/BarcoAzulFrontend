@@ -42,7 +42,7 @@ const {
   NOTAPEDIDO,
   SALIDAPRODUCCION,
 } = ventasRoute;
-const { MOVIMIENTOCUENTABANCARIA } = finanzasRoutes;
+const { MOVIMIENTOBANCARIO, MOVIMIENTOBANCARIO_FORMULARIO } = finanzasRoutes;
 const createSubMenu = (items: ISubMenuElement[]) => items;
 //#endregion
 
@@ -121,7 +121,7 @@ export function navbarMenu(): IMenuElement[] {
       subMenus: createSubMenu([
         {
           text: "Movimiento Bancario",
-          path: `${FINANZAS}/${MOVIMIENTOCUENTABANCARIA}`,
+          path: `${FINANZAS}/${MOVIMIENTOBANCARIO}`,
         },
       ]),
     },

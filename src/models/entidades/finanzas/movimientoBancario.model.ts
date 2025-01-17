@@ -1,5 +1,10 @@
 import { IDocumentoCompraCuentaCorriente } from "..";
-import { ICombo, IDocumentoFilter, defaultDocumentoFilter } from "../..";
+import {
+  ICombo,
+  ICuentaCorrienteBancaria,
+  IDocumentoFilter,
+  defaultDocumentoFilter,
+} from "../..";
 import { CrudType } from "../../types";
 import { format } from "date-fns";
 export interface IMovimientoBancario {
@@ -8,15 +13,15 @@ export interface IMovimientoBancario {
   cuentaCorrienteId: string;
   fechaEmision: string;
   tipoCambio: number;
-  tipoMovimientoId: string;
-  tipoOperacionId: string;
-  numeroOperacion: string;
+  tipoMovimientoId: string | null;
+  tipoOperacionId: string | null;
+  numeroOperacion: string | null;
   isCierreCaja: true;
-  tipoBeneficiarioId: string;
-  clienteProveedorId: string;
-  clienteProveedorNombre: string;
-  concepto: string;
-  documentoReferencia: string;
+  tipoBeneficiarioId: string | null;
+  clienteProveedorId: string | null;
+  clienteProveedorNombre: string | null;
+  concepto: string | null;
+  documentoReferencia: string | null;
   tieneDetraccion: true;
   porcentajeITF: number;
   montoITF: number;
@@ -24,8 +29,8 @@ export interface IMovimientoBancario {
   monto: number;
   total: number;
   tieneCuentaDestino: true;
-  cuentaDestinoId: string;
-  monedaId: string;
+  cuentaDestinoId: string | null;
+  monedaId: string | null;
   detalles: IMovimientoBancarioDetalle[];
 }
 
@@ -35,15 +40,15 @@ export const defaultMovimientoBancario: IMovimientoBancario = {
   cuentaCorrienteId: "",
   fechaEmision: format(new Date(), "yyyy-MM-dd"),
   tipoCambio: 0,
-  tipoMovimientoId: "",
-  tipoOperacionId: "",
-  numeroOperacion: "",
+  tipoMovimientoId: null,
+  tipoOperacionId: null,
+  numeroOperacion: null,
   isCierreCaja: true,
-  tipoBeneficiarioId: "",
-  clienteProveedorId: "",
-  clienteProveedorNombre: "",
-  concepto: "",
-  documentoReferencia: "",
+  tipoBeneficiarioId: null,
+  clienteProveedorId: null,
+  clienteProveedorNombre: null,
+  concepto: null,
+  documentoReferencia: null,
   tieneDetraccion: true,
   porcentajeITF: 0,
   montoITF: 0,
@@ -51,8 +56,8 @@ export const defaultMovimientoBancario: IMovimientoBancario = {
   monto: 0,
   total: 0,
   tieneCuentaDestino: true,
-  cuentaDestinoId: "",
-  monedaId: "",
+  cuentaDestinoId: null,
+  monedaId: null,
   detalles: [],
 };
 
@@ -79,15 +84,17 @@ export const defaultMovimientoBancarioDetalle: IMovimientoBancarioDetalle = {
 };
 
 export interface IMovimientoBancarioTablas {
-  cuentasCorrientes: IDocumentoCompraCuentaCorriente[];
+  cuentasCorrientes: ICuentaCorrienteBancaria[];
   tiposMovimiento: ICombo[];
   tiposOperacion: ICombo[];
+  tiposRazonSocial: ICombo[];
 }
 
 export const defaultMovimientoBancarioTablas: IMovimientoBancarioTablas = {
   cuentasCorrientes: [],
   tiposMovimiento: [],
   tiposOperacion: [],
+  tiposRazonSocial: [],
 };
 
 export interface IMovimientoBancarioFilter extends IDocumentoFilter {

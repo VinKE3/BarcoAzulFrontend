@@ -22,6 +22,7 @@ import {
 } from "../../mantenimiento";
 import { IPorcentajesTable } from "../../empresa";
 import { IMotivosNota, ITiposPago } from "../../compra";
+import { IDocumentoVentaCuota } from "./documentoVentaCuota.model";
 
 export interface IDocumentoVenta {
   id: string;
@@ -31,6 +32,7 @@ export interface IDocumentoVenta {
   numero: string;
   fechaEmision: string;
   fechaVencimiento: string;
+  fechaReferencia: string;
   cotizacion: string | null;
   cotizacionId: string | null;
   clienteId: string;
@@ -57,6 +59,7 @@ export interface IDocumentoVenta {
   guiaRemision: string | null;
   numeroPedido: string | null;
   observacion: string | null;
+  orden: string | null;
   isAnticipo: boolean;
   isOperacionGratuita: boolean;
   incluyeIGV: boolean;
@@ -78,17 +81,19 @@ export interface IDocumentoVenta {
   porcentajeDetraccion: number;
   factorImpuestoBolsa: number;
   detalles: IDocumentoVentaDetalle[];
+  cuotas: IDocumentoVentaCuota[];
   numeroDocumento: string | null;
 }
 
 export const defaultDocumentoVenta: IDocumentoVenta = {
   id: "",
   empresaId: "",
-  tipoDocumentoId: "",
-  serie: "",
+  tipoDocumentoId: "FT",
+  serie: "F001",
   numero: "",
   fechaEmision: format(new Date(), "yyyy-MM-dd"),
   fechaVencimiento: format(new Date(), "yyyy-MM-dd"),
+  fechaReferencia: format(new Date(), "yyyy-MM-dd"),
   cotizacion: null,
   cotizacionId: null,
   clienteId: "",
@@ -100,7 +105,7 @@ export const defaultDocumentoVenta: IDocumentoVenta = {
   personalId: null,
   letra: null,
   letraId: null,
-  monedaId: "",
+  monedaId: "S",
   tipoCambio: 0,
   tipoVentaId: null,
   tipoCobroId: null,
@@ -115,6 +120,7 @@ export const defaultDocumentoVenta: IDocumentoVenta = {
   guiaRemision: null,
   numeroPedido: null,
   observacion: null,
+  orden: null,
   isAnticipo: false,
   isOperacionGratuita: false,
   incluyeIGV: true,
@@ -131,11 +137,12 @@ export const defaultDocumentoVenta: IDocumentoVenta = {
   total: 0,
   abonado: 0,
   saldo: 0,
-  porcentajeIGV: 0,
+  porcentajeIGV: 18,
   porcentajeRetencion: 0,
   porcentajeDetraccion: 0,
   factorImpuestoBolsa: 0,
   detalles: [],
+  cuotas: [],
   numeroDocumento: null,
 };
 

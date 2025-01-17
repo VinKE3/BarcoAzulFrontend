@@ -81,8 +81,7 @@ const DocumentoVenta: React.FC = () => {
           data,
           tablas,
         }: { data: IDocumentoVenta; tablas: IDocumentoVentaTablas } = response;
-        const { series } = tablas;
-        data.serie = series.length > 0 ? series[0]?.serie : "";
+
         handlePrimaryModal(setGlobalContext, data, tablas);
       })
       .catch((error) => {

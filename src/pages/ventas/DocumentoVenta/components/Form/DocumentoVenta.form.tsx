@@ -25,6 +25,7 @@ import {
   defaultDocumentoVenta,
   defaultDocumentoVentaAdicional,
   defaultDocumentoVentaTablas,
+  IDocumentoVentaCuota,
 } from "../../../../../models";
 import {
   get,
@@ -42,6 +43,8 @@ import {
   roundNumber,
 } from "../../../../../util";
 import { DocumentoVentaCabecera, DocumentoVentaDetalle } from "./components";
+import { NotaPedidoFindModal } from "../../../../../components/Helpers/Find/NotaPedido";
+import { CuotaHelpModal } from "../../../../../components/Helpers/Modal/Cuota";
 
 const DocumentoVentaForm: React.FC = () => {
   //#region useState
@@ -121,6 +124,7 @@ const DocumentoVentaForm: React.FC = () => {
 
   useEffect(() => {
     retorno && retorno.origen === "clienteFind" && handleCliente(retorno);
+    retorno && retorno.origen === "notaPedidoFind" && handleNotaPedido(retorno);
     retorno &&
       retorno.origen === "documentoPendienteHelp" &&
       handleGetDocumentoPendienteDetalle(retorno);
@@ -177,6 +181,19 @@ const DocumentoVentaForm: React.FC = () => {
       const newData = { ...x, [name]: value };
 
       switch (name) {
+        case "tipoDocumentoId":
+          newData.serie = "";
+          newData.documentoReferenciaId = null;
+          newData.numeroPedido = "";
+          newData.motivoNotaId = null;
+          newData.motivoNotaDescripcion = null;
+          newData.motivoSustento = null;
+          newData.fechaDocumentoReferencia = null;
+          newData.incluyeIGV =
+            (value as string) === "03" || newData.isOperacionGratuita
+              ? false
+              : true;
+          break;
         case "fechaEmision":
           handleToast(
             "info",
@@ -198,6 +215,7 @@ const DocumentoVentaForm: React.FC = () => {
         case "tipoVentaId":
           newData.tipoCobroId = "";
           newData.fechaVencimiento = x.fechaEmision;
+          newData.cuotas = [];
           break;
 
         case "tipoCobroId":
@@ -285,8 +303,10 @@ const DocumentoVentaForm: React.FC = () => {
 
       setData((x) => ({
         ...x,
+        fechaVencimiento,
         clienteTipoDocumentoIdentidadId,
         clienteNumeroDocumentoIdentidad,
+        clienteId,
         clienteNombre,
         clienteDireccionId,
         clienteDireccion,
@@ -304,6 +324,9 @@ const DocumentoVentaForm: React.FC = () => {
     } catch (error) {
       handleSetErrorMensaje(setGlobalContext, error, "form");
     }
+  };
+  const handleCuota = (cuotas: IDocumentoVentaCuota[]): void => {
+    setData((x) => ({ ...x, cuotas }));
   };
   const handleNumero = (): void => {
     let num = data.numero;
@@ -402,9 +425,28 @@ const DocumentoVentaForm: React.FC = () => {
     }
   };
   const handleTotales = (detalles: IDocumentoVentaDetalle[]): void => {
-    const { porcentajeIGV, incluyeIGV } = data;
+    const { porcentajeIGV, incluyeIGV, isOperacionGratuita, monedaId } = data;
     const importeTotal = detalles.reduce((total, x) => total + x.importe, 0);
-
+    if (isOperacionGratuita) {
+      setData((x) => ({
+        ...x,
+        incluyeIGV: false,
+        porcentajeIGV: 0,
+        porcentajeDetraccion: 0,
+        porcentajeRetencion: 0,
+        montoImpuestoBolsa: 0,
+        montoRetencion: 0,
+        montoDetraccion: 0,
+        montoIGV: 0,
+        subTotal: 0,
+        totalOperacionesGratuitas: roundNumber(importeTotal),
+        totalNeto: 0,
+        total: 0,
+        saldo: 0,
+        abonado: 0,
+      }));
+      return;
+    }
     let subTotal = incluyeIGV
       ? importeTotal / (1 + porcentajeIGV / 100)
       : importeTotal;
@@ -418,8 +460,10 @@ const DocumentoVentaForm: React.FC = () => {
       montoIGV: roundNumber(montoIGV),
       subTotal: roundNumber(subTotal),
       totalNeto: roundNumber(totalNeto),
+      totalOperacionesGratuitas: 0,
       total: roundNumber(total),
       abonado: roundNumber(total),
+      saldo: 0,
     }));
   };
   const handleGetDocumentoPendiente = async (
@@ -510,6 +554,16 @@ const DocumentoVentaForm: React.FC = () => {
       )}
       {segundo.origen === "articuloFind" && (
         <ArticuloFindModal inputFocus="cantidad" />
+      )}
+      {segundo.origen === "notaPedidoFind" && (
+        <NotaPedidoFindModal inputFocus="clienteId" />
+      )}
+      {segundo.origen === "cuotaHelp" && (
+        <CuotaHelpModal
+          dataGeneral={data}
+          tablas={form.tablas}
+          handleCuota={handleCuota}
+        />
       )}
       {segundo.origen === "documentoPendienteHelp" && (
         <ConfirmModal

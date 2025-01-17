@@ -32,6 +32,8 @@ import {
   handleToast,
   handleOpenModal,
 } from "../../../../../../../util";
+import { BsFillCalculatorFill, BsFillEraserFill } from "react-icons/bs";
+import { PiFileDoc } from "react-icons/pi";
 interface IProps {
   data: IDocumentoVenta;
   setData: React.Dispatch<React.SetStateAction<IDocumentoVenta>>;
@@ -70,14 +72,19 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
   const [filterMotivosVenta, setFilterMotivosVenta] = useState<IMotivosNota[]>(
     []
   );
-  console.log(documentosPendientes, "documentosPendientes");
 
   //#region Funciones
-  const handleClearCotizacion = (): void => {
+
+  const handleClearNotaPedido = (): void => {
     setData(defaultDocumentoVenta);
     handleFocus(inputs["tipoDocumentoId"]);
-    handleToast("warning", "Cotización borrada, vuelva a ingresar datos.");
+    handleToast("warning", "Nota de pedido borrada, vuelva a ingresar datos.");
   };
+
+  const handleClearCuota = (): void => {
+    setData((x) => ({ ...x, cuotas: [] }));
+  };
+
   const handleOpenModal2 = async (origen: string): Promise<void> => {
     if (origen in helpModalMap) {
       await handleClearMensajes(setGlobalContext);
@@ -103,6 +110,7 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
       setFilterMotivosVenta([]);
     }
   }, [data.tipoDocumentoId, motivosNota]);
+
   return (
     <div className="form-base-container nota-pedido-form">
       <div className="modal-base-content">
@@ -134,6 +142,7 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
               onChange={handleData}
               disabled={primer.tipo === "consultar"}
               className="input-base"
+              autoFocus
             >
               <option key="default" value="">
                 SELECCIONAR
@@ -188,7 +197,7 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
               onBlur={handleNumero}
               autoComplete="off"
               maxLength={10}
-              disabled={primer.tipo !== "registrar"}
+              disabled={true}
               className="input-base"
             />
           </div>
@@ -204,7 +213,6 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
               name="fechaEmision"
               value={data.fechaEmision}
               onChange={handleData}
-              autoFocus
               disabled={primer.tipo === "consultar" || data.detalles.length > 0}
               className="input-base"
             />
@@ -219,12 +227,64 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
               name="fechaVencimiento"
               value={data.fechaVencimiento}
               onChange={handleData}
-              autoFocus
               disabled={primer.tipo === "consultar" || data.detalles.length > 0}
               className="input-base"
             />
           </div>
         </div>
+
+        <div className="input-base-row">
+          <div className="input-base-container-100">
+            <label htmlFor="notaPedido" className="label-base">
+              Nota de Pedido
+            </label>
+            <div className="input-base-container-button">
+              <input
+                id="notaPedido"
+                name="notaPedido"
+                placeholder="Adjuntar Nota de Pedido..."
+                value={data.numeroPedido ?? ""}
+                disabled
+                className={
+                  primer.tipo !== "registrar"
+                    ? "input-base"
+                    : "input-base-button"
+                }
+              />
+              {primer.tipo === "registrar" && (
+                <>
+                  <button
+                    id="buttonClearNotaPedido"
+                    name="buttonClearNotaPedido"
+                    title="Presione [ALT + A] para borrar nota de pedido."
+                    accessKey="a"
+                    onClick={handleClearNotaPedido}
+                    disabled={data.numeroPedido === null}
+                    className="button-base-anidado-plano button-base-bg-red"
+                  >
+                    <BsFillEraserFill
+                      size="2rem"
+                      className="button-base-icon"
+                    />
+                  </button>
+                  <button
+                    id="buttonNotaPedidoFind"
+                    name="buttonNotaPedidoFind"
+                    title="Presione [ALT + S] para adjuntar nota de pedido."
+                    accessKey="s"
+                    onClick={() =>
+                      handleOpenModal(setGlobalContext, "buttonNotaPedidoFind")
+                    }
+                    className="button-base-anidado button-base-bg-primary"
+                  >
+                    <PiFileDoc size="2rem" className="button-base-icon" />
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
         <div className="input-base-row">
           <div className="input-base-container-33">
             <label
@@ -380,6 +440,107 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
                 ))}
             </select>
           </div>
+          {(data.tipoCobroId === "CH" || data.tipoCobroId === "DE") && (
+            <>
+              <div className="input-base-container-40">
+                <label htmlFor="cuentaCorrienteId" className="label-base">
+                  Cta Cte
+                </label>
+                <select
+                  id="cuentaCorrienteId"
+                  name="cuentaCorrienteId"
+                  value={data.cuentaCorrienteId ?? ""}
+                  onChange={handleData}
+                  disabled={primer.tipo === "consultar"}
+                  className="input-base"
+                >
+                  <option key="default" value="">
+                    SELECCIONAR
+                  </option>
+                  {cuentasCorrientes.map((x: ICuentaCorrienteBancaria) => (
+                    <option
+                      key={x.cuentaCorrienteId}
+                      value={x.cuentaCorrienteId}
+                    >
+                      {handleSelectCuentaBancaria(x)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="input-base-container-20">
+                <label htmlFor="numeroOperacion" className="label-base">
+                  Número
+                </label>
+                <input
+                  id="numeroOperacion"
+                  name="numeroOperacion"
+                  value={data.numeroOperacion ?? ""}
+                  placeholder="Número"
+                  onChange={handleData}
+                  disabled={
+                    primer.tipo === "consultar" || data.detalles.length > 0
+                  }
+                  className="input-base"
+                />
+              </div>
+            </>
+          )}
+          {data.tipoCobroId === "CU" && (
+            <div className="input-base-container-40">
+              <label htmlFor="cuotas" className="label-base">
+                Cuotas
+              </label>
+              <div className="input-base-container-button">
+                <input
+                  id="cuotas"
+                  name="cuotas"
+                  placeholder="Adjuntar Cuotas..."
+                  value={data.cuotas.length}
+                  disabled
+                  className={
+                    primer.tipo !== "registrar" || data.detalles.length === 0
+                      ? "input-base"
+                      : "input-base-button"
+                  }
+                />
+                {primer.tipo !== "consultar" && data.detalles.length > 0 && (
+                  <>
+                    <button
+                      id="buttonClearCuota"
+                      name="buttonClearCuota"
+                      title="Presione [ALT + Q] para borrar cuotas."
+                      accessKey="q"
+                      onClick={handleClearCuota}
+                      disabled={data.cuotas.length === 0}
+                      className="button-base-anidado-plano button-base-bg-red"
+                    >
+                      <BsFillEraserFill
+                        size="2rem"
+                        className="button-base-icon"
+                      />
+                    </button>
+                    <button
+                      id="buttonCuotaHelp"
+                      name="buttonCuotaHelp"
+                      title="Presione [ALT + W] para generar cuotas."
+                      accessKey="w"
+                      onClick={() =>
+                        handleOpenModal(setGlobalContext, "buttonCuotaHelp")
+                      }
+                      className="button-base-anidado button-base-bg-primary"
+                    >
+                      <BsFillCalculatorFill
+                        size="2rem"
+                        className="button-base-icon"
+                      />
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="input-base-row">
           <div className="input-base-container-33">
             <label htmlFor="monedaId" className="label-base">
               Moneda
@@ -442,58 +603,11 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
             </div>
           </div>
         </div>
-        <div className="input-base-row">
-          {(data.tipoCobroId === "CH" || data.tipoCobroId === "DE") && (
-            <>
-              <div className="input-base-container-50">
-                <label htmlFor="numeroOperacion" className="label-base">
-                  Número
-                </label>
-                <input
-                  id="numeroOperacion"
-                  name="numeroOperacion"
-                  value={data.numeroOperacion ?? ""}
-                  placeholder="Número"
-                  onChange={handleData}
-                  autoFocus
-                  disabled={
-                    primer.tipo === "consultar" || data.detalles.length > 0
-                  }
-                  className="input-base"
-                />
-              </div>
-              <div className="input-base-container-50">
-                <label htmlFor="cuentaCorrienteId" className="label-base">
-                  Cta Cte
-                </label>
-                <select
-                  id="cuentaCorrienteId"
-                  name="cuentaCorrienteId"
-                  value={data.cuentaCorrienteId ?? ""}
-                  onChange={handleData}
-                  disabled={primer.tipo === "consultar"}
-                  className="input-base"
-                >
-                  <option key="default" value="">
-                    SELECCIONAR
-                  </option>
-                  {cuentasCorrientes.map((x: ICuentaCorrienteBancaria) => (
-                    <option
-                      key={x.cuentaCorrienteId}
-                      value={x.cuentaCorrienteId}
-                    >
-                      {handleSelectCuentaBancaria(x)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </>
-          )}
-        </div>
+
         {(data.tipoDocumentoId === "07" || data.tipoDocumentoId === "08") && (
           <>
             <div className="input-base-row">
-              <div className="input-base-container-50">
+              <div className="input-base-container-33">
                 <label htmlFor="documentoReferenciaId" className="label-base">
                   Documento
                 </label>
@@ -542,6 +656,18 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
                     )}
                 </div>
               </div>
+              <div className="input-base-container-auto">
+                {element.responsive === "full" && (
+                  <span className="label-base-checkbox">-</span>
+                )}
+                <CheckBox
+                  id="abonar"
+                  value={data.abonar}
+                  handleData={handleData}
+                  disabled={primer.tipo === "consultar"}
+                  label="Abonar"
+                />
+              </div>
               <div className="input-base-container-33">
                 <label htmlFor="motivoNotaId" className="label-base">
                   Motivo
@@ -564,52 +690,84 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
                   ))}
                 </select>
               </div>
-              <div className="input-base-container-auto">
-                {element.responsive === "full" && (
-                  <span className="label-base-checkbox">-</span>
-                )}
-                <CheckBox
-                  id="abonar"
-                  value={data.abonar}
-                  handleData={handleData}
+              <div className="input-base-container-33">
+                <label htmlFor="fechaReferencia" className="label-base">
+                  F. Referencia
+                </label>
+                <input
+                  type="date"
+                  id="fechaReferencia"
+                  name="fechaReferencia"
+                  value={data.fechaReferencia}
+                  onChange={handleData}
+                  disabled={
+                    primer.tipo === "consultar" || data.detalles.length > 0
+                  }
+                  className="input-base"
+                />
+              </div>
+              <div className="input-base-container-33">
+                <label htmlFor="motivoSustento" className="label-base">
+                  Motivo Sustento
+                </label>
+                <input
+                  id="motivoSustento"
+                  name="motivoSustento"
+                  value={data.motivoSustento ?? ""}
+                  placeholder="Motivo Sustento"
+                  onChange={handleData}
                   disabled={primer.tipo === "consultar"}
-                  label="Abonar"
+                  className="input-base"
                 />
               </div>
             </div>
           </>
         )}
-        <div className="input-base-row">
-          <div className="input-base-container-50">
-            <label htmlFor="guiaRemision" className="label-base">
-              Guía Remisión
-            </label>
-            <input
-              id="guiaRemision"
-              name="guiaRemision"
-              value={data.guiaRemision ?? ""}
-              placeholder="Guía Remisión"
-              onChange={handleData}
-              autoFocus
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            />
+        {data.tipoDocumentoId !== "07" && data.tipoDocumentoId !== "08" && (
+          <div className="input-base-row">
+            <div className="input-base-container-50">
+              <label htmlFor="guiaRemision" className="label-base">
+                Guía Remisión
+              </label>
+              <input
+                id="guiaRemision"
+                name="guiaRemision"
+                value={data.guiaRemision ?? ""}
+                placeholder="Guía Remisión"
+                onChange={handleData}
+                disabled={primer.tipo === "consultar"}
+                className="input-base"
+              />
+            </div>
+            <div className="input-base-container-50">
+              <label htmlFor="numeroPedido" className="label-base">
+                Nota Pedido
+              </label>
+              <input
+                id="numeroPedido"
+                name="numeroPedido"
+                value={data.numeroPedido ?? ""}
+                placeholder="Nota Pedido"
+                onChange={handleData}
+                disabled={primer.tipo === "consultar"}
+                className="input-base"
+              />
+            </div>
           </div>
-          <div className="input-base-container-50">
-            <label htmlFor="numeroOperacion" className="label-base">
-              Nota Pedido
-            </label>
-            <input
-              id="numeroOperacion"
-              name="numeroOperacion"
-              value={data.numeroOperacion ?? ""}
-              placeholder="Nota Pedido"
-              onChange={handleData}
-              autoFocus
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            />
-          </div>
+        )}
+        <div className="input-base-container-100">
+          <label htmlFor="orden" className="label-base">
+            Orden de Compra
+          </label>
+          <input
+            id="orden"
+            name="orden"
+            value={data.orden ?? ""}
+            placeholder="Orden"
+            onChange={handleData}
+            disabled={primer.tipo === "consultar"}
+            className="input-base"
+          />
         </div>
         <div className="input-base-container-100">
           <label htmlFor="observacion" className="label-base">
@@ -621,97 +779,11 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
             value={data.observacion ?? ""}
             placeholder="Observación"
             onChange={handleData}
-            autoFocus
             disabled={primer.tipo === "consultar"}
             className="input-base"
           />
         </div>
         <div className="input-base-row">
-          <div className="input-base-container-33">
-            <label htmlFor="subTotal" className="label-base">
-              SubTotal
-            </label>
-            <input
-              id="subTotal"
-              name="subTotal"
-              value={data.subTotal}
-              placeholder="Dirección"
-              onChange={handleData}
-              autoFocus
-              disabled
-              className="input-base"
-            />
-          </div>
-          <div className="input-base-container-33">
-            <label htmlFor="porcentajeIGV" className="label-base">
-              IGV
-            </label>
-            <select
-              ref={inputs["porcentajeIGV"]}
-              id="porcentajeIGV"
-              name="porcentajeIGV"
-              value={data.porcentajeIGV ?? ""}
-              onChange={handleData}
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            >
-              <option key="default" value="">
-                SELECCIONAR
-              </option>
-              {porcentajesIGV.map((x: IPorcentajes) => (
-                <option key={x.porcentaje} value={x.porcentaje}>
-                  {x.porcentaje}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="input-base-container-33">
-            <label htmlFor="montoIGV" className="label-base">
-              Monto IGV
-            </label>
-            <input
-              id="montoIGV"
-              name="montoIGV"
-              value={data.montoIGV}
-              placeholder="Monto IGV"
-              onChange={handleData}
-              autoFocus
-              disabled
-              className="input-base"
-            />
-          </div>
-        </div>
-        <div className="input-base-row">
-          <div className="input-base-container-25">
-            <label htmlFor="total" className="label-base">
-              Total
-            </label>
-            <input
-              id="total"
-              name="total"
-              value={data.total}
-              placeholder="Dirección"
-              onChange={handleData}
-              autoFocus
-              disabled
-              className="input-base"
-            />
-          </div>
-          <div className="input-base-container-25">
-            <label htmlFor="totalNeto" className="label-base">
-              Total Neto
-            </label>
-            <input
-              id="totalNeto"
-              name="totalNeto"
-              value={data.totalNeto}
-              placeholder="Total Neto"
-              onChange={handleData}
-              autoFocus
-              disabled
-              className="input-base"
-            />
-          </div>
           <div className="input-base-container-auto">
             {element.responsive === "full" && (
               <span className="label-base-checkbox">-</span>
@@ -720,40 +792,41 @@ const DocumentoVentaCabecera: React.FC<IProps> = ({
               id="incluyeIGV"
               value={data.incluyeIGV}
               handleData={handleData}
-              disabled
-              label="IGV"
+              disabled={
+                primer.tipo === "consultar" ||
+                data.tipoDocumentoId === "03" ||
+                data.isOperacionGratuita
+              }
+              label="Incluye IGV"
             />
           </div>
-        </div>
-        <div className="input-base-row">
-          <div className="input-base-container-25">
-            <label htmlFor="abonado" className="label-base">
-              Abonado
-            </label>
-            <input
-              id="abonado"
-              name="abonado"
-              value={data.abonado}
-              placeholder="Dirección"
-              onChange={handleData}
-              autoFocus
-              disabled
-              className="input-base"
+          <div className="input-base-container-auto">
+            {element.responsive === "full" && (
+              <span className="label-base-checkbox">-</span>
+            )}
+            <CheckBox
+              id="afectarStock"
+              value={data.afectarStock}
+              handleData={handleData}
+              disabled={
+                primer.tipo === "consultar" ||
+                data.tipoDocumentoId === "07" ||
+                data.tipoDocumentoId === "08" ||
+                data.detalles.length > 0
+              }
+              label="Afectar Stock"
             />
           </div>
-          <div className="input-base-container-25">
-            <label htmlFor="saldo" className="label-base">
-              Saldo
-            </label>
-            <input
-              id="saldo"
-              name="saldo"
-              value={data.saldo}
-              placeholder="Saldo"
-              onChange={handleData}
-              autoFocus
-              disabled
-              className="input-base"
+          <div className="input-base-container-auto">
+            {element.responsive === "full" && (
+              <span className="label-base-checkbox">-</span>
+            )}
+            <CheckBox
+              id="isOperacionGratuita"
+              value={data.isOperacionGratuita}
+              handleData={handleData}
+              disabled={primer.tipo === "consultar"}
+              label="Operación Gratuita"
             />
           </div>
         </div>

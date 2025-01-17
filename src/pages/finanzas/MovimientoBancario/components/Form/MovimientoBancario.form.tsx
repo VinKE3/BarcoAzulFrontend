@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const MovimientoBancarioForm = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <div>MOVIEMIENTO</div>;
+};
 
-export default MovimientoBancarioForm
+export default MovimientoBancarioForm;

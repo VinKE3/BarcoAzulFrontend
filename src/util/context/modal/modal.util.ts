@@ -363,6 +363,8 @@ export const helpModalMap: Record<string, string> = {
   buttonDeliveryHelp: "deliveryHelp",
   buttonTransportistaHelp: "transportistaHelp",
   buttonVehiculoHelp: "vehiculoHelp",
+  buttonCuotaHelp: "cuotaHelp",
 
   buttonDocumentoPendienteHelp: "documentoPendienteHelp",
+  buttonNotaPedidoFind: "notaPedidoFind",
 };

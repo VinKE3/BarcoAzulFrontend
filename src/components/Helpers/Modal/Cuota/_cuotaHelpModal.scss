@@ -1,0 +1,15 @@
+.cuota-help-modal-table {
+  th {
+    text-align: center;
+    &:first-child {
+      min-width: 30px;
+    }
+
+    &:nth-child(2) {
+      min-width: 80px;
+    }
+    &:nth-child(3) {
+      min-width: 80px;
+    }
+  }
+}

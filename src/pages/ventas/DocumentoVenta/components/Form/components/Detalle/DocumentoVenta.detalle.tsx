@@ -77,6 +77,11 @@ const DocumentoVentaDetalle: React.FC<IProps> = ({
   const columns = useDocumentoVentaDetalleColumn(primer.tipo);
   const footerItems = [
     {
+      text: "O.Gratuitas",
+      value: Number(dataGeneral.totalOperacionesGratuitas),
+      show: true,
+    },
+    {
       text: "SubTotal",
       value: Number(dataGeneral.subTotal),
       show: dataGeneral.tipoDocumentoId !== "03",
@@ -635,7 +640,7 @@ const DocumentoVentaDetalle: React.FC<IProps> = ({
                       name="porcentajeIGV"
                       value={dataGeneral.porcentajeIGV}
                       onChange={handleDataGeneral}
-                      disabled={primer.tipo === "consultar"}
+                      disabled
                       className="form-base-detalle-row-input"
                     >
                       <option key="default" value="">

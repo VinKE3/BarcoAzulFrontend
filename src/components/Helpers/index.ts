@@ -12,6 +12,7 @@ export * from "./Find/Stock";
 export * from "./Find/Total";
 export * from "./Find/Transportista";
 export * from "./Find";
+export * from "./Modal/Cuota";
 export * from "./Modal/Delete";
 export * from "./Modal/Delivery";
 export * from "./Modal/Password";

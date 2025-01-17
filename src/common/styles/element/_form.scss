@@ -30,6 +30,10 @@
         @apply form-base-detalle-row-item;
         @apply font-semibold;
       }
+      &-monto {
+        @apply form-base-detalle-row-item;
+        @apply min-w-[90px] pr-1.5;
+      }
       &-number {
         @apply form-base-detalle-row-item;
         @apply m:w-auto min-w-[90px];

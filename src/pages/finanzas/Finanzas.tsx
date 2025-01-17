@@ -1,7 +1,7 @@
 import { Navigate, Route } from "react-router-dom";
 import { finanzasRoutes } from "../../common";
 import { RoutesWithNotFound } from "../../util";
-import { MovimientoBancario } from "./MovimientoBancario";
+import { MovientoBancarioForm, MovimientoBancario } from "./MovimientoBancario";
 
 const Finanzas = () => {
   return (
@@ -9,16 +9,16 @@ const Finanzas = () => {
       <>
         <Route
           path="/"
-          element={<Navigate to={finanzasRoutes.MOVIMIENTOCUENTABANCARIA} />}
+          element={<Navigate to={finanzasRoutes.MOVIMIENTOBANCARIO} />}
         />
         <Route
-          path={finanzasRoutes.MOVIMIENTOCUENTABANCARIA}
+          path={finanzasRoutes.MOVIMIENTOBANCARIO}
           element={<MovimientoBancario />}
         />
-        {/* <Route
-          path={finanzasRoutes.TODASLASCOMPRAS_FORMULARIO}
-          element={<DocumentoCompraForm />}
-        /> */}
+        <Route
+          path={finanzasRoutes.MOVIMIENTOBANCARIO_FORMULARIO}
+          element={<MovientoBancarioForm />}
+        />
       </>
     </RoutesWithNotFound>
   );

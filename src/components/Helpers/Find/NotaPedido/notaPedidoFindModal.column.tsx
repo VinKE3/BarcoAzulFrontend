@@ -15,7 +15,7 @@ const useNotaPedidoFindModalColumn = (
         Cell: ({ row }: { row: { original: INotaPedidoFindTable } }) => (
           <div className="helper-select-container">
             <SelectButton
-              retorno={{ origen: "cotizacionFind", ...row.original }}
+              retorno={{ origen: "notaPedidoFind", ...row.original }}
               inputFocus={inputFocus}
             />
           </div>

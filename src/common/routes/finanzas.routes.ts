@@ -1,5 +1,6 @@
 export const finanzasRoutes = {
-  MOVIMIENTOCUENTABANCARIA: "movimientoCuentaBancaria",
+  MOVIMIENTOBANCARIO: "movimientoBancario",
+  MOVIMIENTOBANCARIO_FORMULARIO: "movimientoBancario/form",
   TODASLASCOMPRAS_FORMULARIO: "todasLasComprasFormulario",
   REPORTECUENTABANCARIA: "reporteCuentaBancaria",
 };

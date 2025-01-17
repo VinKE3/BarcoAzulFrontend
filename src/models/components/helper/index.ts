@@ -4,6 +4,7 @@ export * from "./articuloFindModal.model";
 export * from "./clienteFindModal.model";
 export * from "./cobroHelpModal.model";
 export * from "./conceptoFindModal.model";
+export * from "./cuotaHelpModal.model";
 export * from "./deleteHelpModal.model";
 export * from "./deliveryHelpModal.model";
 export * from "./loteFindModal.model";
