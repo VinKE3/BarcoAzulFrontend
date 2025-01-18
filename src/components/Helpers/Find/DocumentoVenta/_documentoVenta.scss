@@ -1,0 +1,22 @@
+.documento-venta-find-modal-table {
+  th {
+    text-align: center;
+    &:first-child {
+      min-width: 60px;
+      width: 60px;
+    }
+    &:nth-child(2) {
+      min-width: 125px;
+    }
+    &:nth-child(3) {
+      min-width: 70px;
+    }
+    &:nth-child(4) {
+      min-width: 130px;
+      text-align: left;
+    }
+    &:nth-child(5) {
+      min-width: 90px;
+    }
+  }
+}

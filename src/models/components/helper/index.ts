@@ -7,6 +7,7 @@ export * from "./conceptoFindModal.model";
 export * from "./cuotaHelpModal.model";
 export * from "./deleteHelpModal.model";
 export * from "./deliveryHelpModal.model";
+export * from "./documentoVentaFindModal.model";
 export * from "./loteFindModal.model";
 export * from "./medicoFindModal.model";
 export * from "./ordenCompraFindModal.model";
