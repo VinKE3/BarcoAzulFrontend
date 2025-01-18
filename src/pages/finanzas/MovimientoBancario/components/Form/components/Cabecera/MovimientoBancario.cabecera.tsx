@@ -81,24 +81,33 @@ const MovimientoBancarioCabecera = ({
     <div className="form-base-container nota-pedido-form">
       <div className="modal-base-content">
         <div className="input-base-row">
-          <div className="input-base-container-20">
-            <label htmlFor="id" className="label-base">
-              Documento N°
+          <div className="input-base-container-100">
+            <label htmlFor="cuentaCorrienteId" className="label-base">
+              Cta Cte
             </label>
-            <input
-              id="id"
-              name="id"
-              placeholder="Documento N°"
-              value={data.id ?? ""}
-              disabled
+            <select
+              id="cuentaCorrienteId"
+              name="cuentaCorrienteId"
+              value={data.cuentaCorrienteId ?? ""}
+              onChange={handleData}
+              disabled={primer.tipo === "consultar"}
               className="input-base"
-            />
+            >
+              <option key="default" value="">
+                SELECCIONAR
+              </option>
+              {cuentasCorrientes.map((x: ICuentaCorrienteBancaria) => (
+                <option key={x.cuentaCorrienteId} value={x.cuentaCorrienteId}>
+                  {handleSelectCuentaBancaria(x)}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="input-base-row">
           <div className="input-base-container-33">
             <label htmlFor="fechaEmision" className="label-base">
-              F. Emisión
+              Fecha
             </label>
             <input
               type="date"
@@ -109,6 +118,139 @@ const MovimientoBancarioCabecera = ({
               disabled={primer.tipo === "consultar" || data.detalles.length > 0}
               className="input-base"
             />
+          </div>
+          <div className="input-base-container-33">
+            <label htmlFor="tipoCambio" className="label-base">
+              Tipo de Cambio
+            </label>
+            <div className="input-base-container-button">
+              <input
+                type="number"
+                inputMode="numeric"
+                ref={inputs["tipoCambio"]}
+                id="tipoCambio"
+                name="tipoCambio"
+                value={data.tipoCambio}
+                disabled
+                className={
+                  primer.tipo !== "consultar" && !api.loading
+                    ? "input-base-button"
+                    : "input-base"
+                }
+              />
+              {primer.tipo !== "consultar" && !api.loading && (
+                <button
+                  id="buttonConsultarTipoCambio"
+                  name="buttonConsultarTipoCambio"
+                  title="Presione [ALT + Z] para consultar a SUNAT."
+                  accessKey="z"
+                  onClick={() => handleGetTipoCambio(false)}
+                  onKeyDown={handleKeyDown}
+                  disabled={data.detalles.length > 0}
+                  className="button-base-anidado button-base-bg-primary"
+                >
+                  <FaMoneyBillTransfer
+                    strokeWidth={2}
+                    size="2rem"
+                    className="button-base-icon"
+                  />
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="input-base-container-33">
+            <label htmlFor="tipoMovimientoId" className="label-base">
+              Movimiento
+            </label>
+            <select
+              id="tipoMovimientoId"
+              name="tipoMovimientoId"
+              value={data.tipoMovimientoId ?? ""}
+              onChange={handleData}
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            >
+              <option key="default" value="">
+                SELECCIONAR
+              </option>
+              {tiposMovimiento.map((x: ICombo) => (
+                <option key={x.id} value={x.id}>
+                  {x.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="input-base-container-33">
+            <label htmlFor="tipoOperacionId" className="label-base">
+              Operación
+            </label>
+            <select
+              id="tipoOperacionId"
+              name="tipoOperacionId"
+              value={data.tipoOperacionId ?? ""}
+              onChange={handleData}
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            >
+              <option key="default" value="">
+                SELECCIONAR
+              </option>
+              {tiposOperacion.map((x: ICombo) => (
+                <option key={x.id} value={x.id}>
+                  {x.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="input-base-row">
+          <div className="input-base-container-50">
+            <label htmlFor="numeroOperacion" className="label-base">
+              Número
+            </label>
+            <input
+              id="numeroOperacion"
+              name="numeroOperacion"
+              value={data.numeroOperacion ?? ""}
+              placeholder="Número"
+              onChange={handleData}
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            />
+          </div>
+          <div className="input-base-container-auto">
+            {element.responsive === "full" && (
+              <span className="label-base-checkbox">-</span>
+            )}
+            <CheckBox
+              id="tieneCuentaDestino"
+              value={data.tieneCuentaDestino}
+              handleData={handleData}
+              disabled={primer.tipo === "consultar"}
+              label="Destino"
+            />
+          </div>
+          <div className="input-base-container-100">
+            <label htmlFor="cuentaDestinoId" className="label-base">
+              Cta Cte
+            </label>
+            <select
+              id="cuentaDestinoId"
+              name="cuentaDestinoId"
+              value={data.cuentaDestinoId ?? ""}
+              onChange={handleData}
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            >
+              <option key="default" value="">
+                SELECCIONAR
+              </option>
+              {cuentasCorrientes.map((x: ICuentaCorrienteBancaria) => (
+                <option key={x.cuentaCorrienteId} value={x.cuentaCorrienteId}>
+                  {handleSelectCuentaBancaria(x)}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="input-base-row">
@@ -167,109 +309,6 @@ const MovimientoBancarioCabecera = ({
             />
           </div>
         </div>
-        <div className="input-base-row">
-          <div className="input-base-container-33">
-            <label htmlFor="tipoMovimientoId" className="label-base">
-              Movimiento
-            </label>
-            <select
-              id="tipoMovimientoId"
-              name="tipoMovimientoId"
-              value={data.tipoMovimientoId ?? ""}
-              onChange={handleData}
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            >
-              <option key="default" value="">
-                SELECCIONAR
-              </option>
-              {tiposMovimiento.map((x: ICombo) => (
-                <option key={x.id} value={x.id}>
-                  {x.descripcion}
-                </option>
-              ))}
-            </select>
-          </div>
-          <>
-            <div className="input-base-container-40">
-              <label htmlFor="cuentaCorrienteId" className="label-base">
-                Cta Cte
-              </label>
-              <select
-                id="cuentaCorrienteId"
-                name="cuentaCorrienteId"
-                value={data.cuentaCorrienteId ?? ""}
-                onChange={handleData}
-                disabled={primer.tipo === "consultar"}
-                className="input-base"
-              >
-                <option key="default" value="">
-                  SELECCIONAR
-                </option>
-                {cuentasCorrientes.map((x: ICuentaCorrienteBancaria) => (
-                  <option key={x.cuentaCorrienteId} value={x.cuentaCorrienteId}>
-                    {handleSelectCuentaBancaria(x)}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="input-base-container-20">
-              <label htmlFor="numeroOperacion" className="label-base">
-                Número
-              </label>
-              <input
-                id="numeroOperacion"
-                name="numeroOperacion"
-                value={data.numeroOperacion ?? ""}
-                placeholder="Número"
-                onChange={handleData}
-                disabled={primer.tipo === "consultar"}
-                className="input-base"
-              />
-            </div>
-          </>
-        </div>
-        <div className="input-base-row">
-          <div className="input-base-container-33">
-            <label htmlFor="tipoCambio" className="label-base">
-              Tipo de Cambio
-            </label>
-            <div className="input-base-container-button">
-              <input
-                type="number"
-                inputMode="numeric"
-                ref={inputs["tipoCambio"]}
-                id="tipoCambio"
-                name="tipoCambio"
-                value={data.tipoCambio}
-                disabled
-                className={
-                  primer.tipo !== "consultar" && !api.loading
-                    ? "input-base-button"
-                    : "input-base"
-                }
-              />
-              {primer.tipo !== "consultar" && !api.loading && (
-                <button
-                  id="buttonConsultarTipoCambio"
-                  name="buttonConsultarTipoCambio"
-                  title="Presione [ALT + Z] para consultar a SUNAT."
-                  accessKey="z"
-                  onClick={() => handleGetTipoCambio(false)}
-                  onKeyDown={handleKeyDown}
-                  disabled={data.detalles.length > 0}
-                  className="button-base-anidado button-base-bg-primary"
-                >
-                  <FaMoneyBillTransfer
-                    strokeWidth={2}
-                    size="2rem"
-                    className="button-base-icon"
-                  />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
         <div className="input-base-container-100">
           <label htmlFor="concepto" className="label-base">
             Concepto
@@ -284,7 +323,7 @@ const MovimientoBancarioCabecera = ({
             className="input-base"
           />
         </div>
-        <div className="input-base-row">
+        {/* <div className="input-base-row">
           <div className="input-base-container-auto">
             {element.responsive === "full" && (
               <span className="label-base-checkbox">-</span>
@@ -321,7 +360,7 @@ const MovimientoBancarioCabecera = ({
               label="Operación Gratuita"
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
