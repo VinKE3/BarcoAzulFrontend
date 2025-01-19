@@ -11,7 +11,7 @@ import {
 import { defaultPuntoVenta, IPuntoVenta } from "../../empresa";
 import { IGuiaRemisionTransportista } from "./guiaRemisionTransportista.model";
 import { IGuiaRemisionVehiculo } from "./guiaRemisionVehiculo.model";
-import { IPersonal } from "../../mantenimiento";
+import { IClienteDireccion, IPersonal } from "../../mantenimiento";
 
 export interface IGuiaRemision {
   id: string;
@@ -19,6 +19,7 @@ export interface IGuiaRemision {
   tipoDocumentoId: string;
   serie: string;
   numero: string;
+  ordenPedido: string | null;
 
   fechaEmision: string;
   fechaTraslado: string;
@@ -29,9 +30,10 @@ export interface IGuiaRemision {
   fechaDocumentoReferencia: string | null;
 
   clienteId: string;
-  clienteNumeroDocumentoIdentidad: string;
   clienteNombre: string;
-
+  clienteNumeroDocumentoIdentidad: string | null;
+  clienteDireccionId: number;
+  clienteDireccion: string | null;
   direccionPartida: string;
   llegadaUbigeo: string | null; //? min 6 max 6
   llegadaCodigoEstablecimiento: string | null;
@@ -50,15 +52,16 @@ export interface IGuiaRemision {
   proveedorId: string | null;
 
   partidaDireccion: string;
-  clienteDireccion: string;
-  clienteDireccionId: number;
+
   partidaUbigeo: string | null;
   partidaCodigoEstablecimiento: string | null;
   puntoVentaDestinoId: string | null;
 
   documentoReferencia: string | null;
   numeroDocumento: string | null;
-
+  incluyeIGV: boolean;
+  afectarStock: boolean;
+  porcentajeIGV: number;
   transportistas: IGuiaRemisionTransportista[];
   vehiculos: IGuiaRemisionVehiculo[];
   detalles: IGuiaRemisionDetalle[];
@@ -69,6 +72,7 @@ export const defaultGuiaRemision: IGuiaRemision = {
   tipoDocumentoId: "09",
   serie: "",
   numero: "",
+  ordenPedido: null,
 
   fechaEmision: format(new Date(), "yyyy-MM-dd"),
   fechaTraslado: format(new Date(), "yyyy-MM-dd"),
@@ -103,23 +107,25 @@ export const defaultGuiaRemision: IGuiaRemision = {
   partidaUbigeo: "",
   partidaCodigoEstablecimiento: "",
   puntoVentaDestinoId: null,
-  clienteDireccion: "",
   clienteDireccionId: 0,
+  clienteDireccion: null,
   documentoReferencia: null,
   numeroDocumento: null,
-
+  incluyeIGV: true,
+  afectarStock: true,
+  porcentajeIGV: 18,
   transportistas: [],
   vehiculos: [],
   detalles: [],
 };
 
 export interface IGuiaRemisionDetalle extends IDetalle {
-  totalPeso: string;
+  totalPeso: number;
 }
 
 export const defaultGuiaRemisionDetalle: IGuiaRemisionDetalle = {
   ...defaultDetalle,
-  totalPeso: "",
+  totalPeso: 0,
 };
 
 export interface IMotivosTraslado {
@@ -145,6 +151,7 @@ export interface IGuiaRemisionTablas {
   vendedores: IPersonal[];
   tipos: ITiposSumaResta[];
   tiposDocumentoReferencia: ICombo[];
+  direcciones: IClienteDireccion[]; //Añadido
 }
 
 export const defaultGuiaRemisionTablas: IGuiaRemisionTablas = {
@@ -158,6 +165,7 @@ export const defaultGuiaRemisionTablas: IGuiaRemisionTablas = {
   tipos: [],
   tiposDocumento: [],
   tiposDocumentoReferencia: [],
+  direcciones: [],
 };
 
 export interface IGuiaRemisionFilter extends IDocumentoFilter {

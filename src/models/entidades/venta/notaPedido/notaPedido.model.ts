@@ -118,12 +118,14 @@ export const defaultNotaPedido: INotaPedido = {
 };
 
 export interface INotaPedidoDetalle extends IDetalle {
+  totalPeso: number;
   unidadMedida: string;
 }
 
 export const defaultNotaPedidoDetalle: INotaPedidoDetalle = {
   ...defaultDetalle,
   unidadMedida: "",
+  totalPeso: 0,
 };
 
 export interface INotaPedidoCuentaCorriente {

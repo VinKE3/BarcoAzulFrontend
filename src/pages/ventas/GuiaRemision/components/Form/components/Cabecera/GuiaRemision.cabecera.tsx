@@ -3,47 +3,64 @@ import { TbDeviceIpadSearch } from "react-icons/tb";
 import { CheckBox } from "../../../../../../../components";
 import { useGlobalContext } from "../../../../../../../hooks";
 import {
+  IClienteDireccion,
   ICombo,
   IGuiaRemision,
   IGuiaRemisionTablas,
   IPuntoVenta,
   ISerie,
+  defaultDocumentoVenta,
+  defaultGuiaRemision,
   defaultGuiaRemisionTablas,
 } from "../../../../../../../models";
 import {
   handleClearMensajes,
+  handleFocus,
   handleHelpModal,
+  handleToast,
   helpModalMap,
+  handleOpenModal,
 } from "../../../../../../../util";
+import { PiFileDoc } from "react-icons/pi";
+import { BsFillEraserFill } from "react-icons/bs";
 
 interface IProps {
   data: IGuiaRemision;
+  setData: React.Dispatch<React.SetStateAction<IGuiaRemision>>;
   handleData: (x: any) => Promise<void> | void;
 }
 
-const GuiaRemisionCabecera: React.FC<IProps> = ({ data, handleData }) => {
+const GuiaRemisionCabecera: React.FC<IProps> = ({
+  data,
+  setData,
+  handleData,
+}) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { modal, form, extra } = globalContext;
   const { primer } = modal;
   const { element } = extra;
-
   const {
-    tiposDocumento,
     series,
     tiposDocumentoReferencia,
     motivosTraslado,
     modalidadesTransporte,
-    puntoVenta,
-    vendedores,
-    monedas,
-    tipos,
-    puntosVentaDestino,
+    direcciones,
   }: IGuiaRemisionTablas = form.tablas || defaultGuiaRemisionTablas;
   const { inputs } = element;
 
   //#region Funciones
-  const handleOpenModal = async (origen: string): Promise<void> => {
+
+  const handleClearDocumentoVenta = (): void => {
+    setData(defaultGuiaRemision);
+    handleFocus(inputs["tipoDocumentoId"]);
+    handleToast(
+      "warning",
+      "Documento de venta borrada, vuelva a ingresar datos."
+    );
+  };
+
+  const handleOpenModal2 = async (origen: string): Promise<void> => {
     await handleClearMensajes(setGlobalContext);
 
     if (origen in helpModalMap) {
@@ -55,7 +72,7 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({ data, handleData }) => {
     if (e.key !== "Enter") return;
 
     e.stopPropagation();
-    handleOpenModal(e.currentTarget.id);
+    handleOpenModal2(e.currentTarget.id);
   };
   //#endregion
   return (
@@ -131,7 +148,60 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({ data, handleData }) => {
             />
           </div>
         </div>
-
+        <div className="input-base-row">
+          <div className="input-base-container-100">
+            <label htmlFor="ordenPedido" className="label-base">
+              Documento de Venta
+            </label>
+            <div className="input-base-container-button">
+              <input
+                id="ordenPedido"
+                name="ordenPedido"
+                placeholder="Adjuntar Documento de Venta..."
+                value={data.ordenPedido ?? ""}
+                disabled
+                className={
+                  primer.tipo !== "registrar"
+                    ? "input-base"
+                    : "input-base-button"
+                }
+              />
+              {primer.tipo === "registrar" && (
+                <>
+                  <button
+                    id="buttonClearDocumentoVenta"
+                    name="buttonClearDocumentoVenta"
+                    title="Presione [ALT + A] para borrar documento de venta."
+                    accessKey="a"
+                    onClick={handleClearDocumentoVenta}
+                    disabled={data.ordenPedido === null}
+                    className="button-base-anidado-plano button-base-bg-red"
+                  >
+                    <BsFillEraserFill
+                      size="2rem"
+                      className="button-base-icon"
+                    />
+                  </button>
+                  <button
+                    id="buttonDocumentoVentaFind"
+                    name="buttonDocumentoVentaFind"
+                    title="Presione [ALT + S] para adjuntar documento de venta."
+                    accessKey="s"
+                    onClick={() =>
+                      handleOpenModal(
+                        setGlobalContext,
+                        "buttonDocumentoVentaFind"
+                      )
+                    }
+                    className="button-base-anidado button-base-bg-primary"
+                  >
+                    <PiFileDoc size="2rem" className="button-base-icon" />
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
         <div className="input-base-row">
           <div className="input-base-container-100">
             <label htmlFor="direccionPartida" className="label-base">
@@ -145,69 +215,6 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({ data, handleData }) => {
               disabled
               className="input-base"
             />
-          </div>
-        </div>
-
-        <div className="input-base-row">
-          <div className="input-base-container-33">
-            <label htmlFor="tipoDocumentoReferencia" className="label-base">
-              Tipo Documento Afectación
-            </label>
-            <select
-              id="tipoDocumentoReferencia"
-              name="tipoDocumentoReferencia"
-              value={data.tipoDocumentoReferencia ?? ""}
-              onChange={handleData}
-              autoFocus={primer.tipo !== "registrar"}
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            >
-              <option key="default" value="">
-                SELECCIONAR
-              </option>
-              {tiposDocumentoReferencia?.map((x: ICombo) => (
-                <option key={x.id} value={x.id}>
-                  {x.descripcion}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="input-base-container-33">
-            <label htmlFor="documentoReferencia" className="label-base">
-              Documento Referencia
-            </label>
-            <div className="input-base-container-button">
-              <input
-                id="documentoReferencia"
-                name="documentoReferencia"
-                placeholder="Documento Referencia"
-                value={data.documentoReferencia ?? ""}
-                disabled
-                className={
-                  primer.tipo !== "consultar"
-                    ? "input-base-button"
-                    : "input-base"
-                }
-              />
-              {primer.tipo !== "consultar" && (
-                <button
-                  id="buttonReferenciaFind"
-                  name="buttonReferenciaFind"
-                  title="Presione [ALT + C] para adjuntar documento."
-                  accessKey="c"
-                  onClick={() => handleOpenModal("buttonReferenciaFind")}
-                  onKeyDown={handleKeyDown}
-                  disabled={data.tipoDocumentoReferencia === null}
-                  className="button-base-anidado button-base-bg-primary"
-                >
-                  <TbDeviceIpadSearch
-                    strokeWidth={2}
-                    size="2rem"
-                    className="button-base-icon"
-                  />
-                </button>
-              )}
-            </div>
           </div>
         </div>
 
@@ -287,7 +294,9 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({ data, handleData }) => {
                   name="buttonClienteFind"
                   title="Presione [ALT + C] para adjuntar cliente."
                   accessKey="c"
-                  onClick={() => handleOpenModal("buttonClienteFind")}
+                  onClick={() =>
+                    handleOpenModal(setGlobalContext, "buttonClienteFind")
+                  }
                   onKeyDown={handleKeyDown}
                   className="button-base-anidado button-base-bg-primary"
                 >
@@ -317,7 +326,6 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({ data, handleData }) => {
             />
           </div>
         </div>
-
         <div className="input-base-row">
           <div className="input-base-container-100">
             <label htmlFor="clienteDireccion" className="label-base">
@@ -348,7 +356,28 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({ data, handleData }) => {
             />
           </div>
         </div>
-
+        <div className="input-base-container-100">
+          <label htmlFor="clienteDireccionId" className="label-base">
+            Dirección Llegada
+          </label>
+          <select
+            id="clienteDireccionId"
+            name="clienteDireccionId"
+            value={data.clienteDireccionId ?? ""}
+            onChange={handleData}
+            disabled={primer.tipo === "consultar"}
+            className="input-base"
+          >
+            <option key="default" value="">
+              SELECCIONAR
+            </option>
+            {direcciones?.map((x: IClienteDireccion) => (
+              <option key={x.id} value={x.id}>
+                {x.direccion}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="input-base-row">
           <div className="input-base-container-33">
             <label htmlFor="modalidadTransporteId" className="label-base">
@@ -417,7 +446,12 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({ data, handleData }) => {
                         : "conductores"
                     }.`}
                     accessKey="w"
-                    onClick={() => handleOpenModal("buttonTransportistaHelp")}
+                    onClick={() =>
+                      handleOpenModal(
+                        setGlobalContext,
+                        "buttonTransportistaHelp"
+                      )
+                    }
                     onKeyDown={handleKeyDown}
                     disabled={
                       data.modalidadTransporteId === "01" &&
@@ -461,7 +495,9 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({ data, handleData }) => {
                     name="buttonVehiculoHelp"
                     title="Presione [ALT + E] para adjuntar vehículos."
                     accessKey="e"
-                    onClick={() => handleOpenModal("buttonVehiculoHelp")}
+                    onClick={() =>
+                      handleOpenModal(setGlobalContext, "buttonVehiculoHelp")
+                    }
                     onKeyDown={handleKeyDown}
                     className="button-base-anidado button-base-bg-primary"
                   >

@@ -25,6 +25,8 @@ import {
   defaultGuiaRemision,
   defaultGuiaRemisionAdicional,
   defaultGuiaRemisionTablas,
+  IClienteDireccion,
+  IClienteCompleto,
 } from "../../../../../models";
 import {
   get,
@@ -45,6 +47,7 @@ import {
 import { VehiculoGuiaModal } from "./components/Modal";
 import { TransportistaGuiaModal } from "./components/Modal/Transportista";
 import { GuiaRemisionCabecera, GuiaRemisionDetalle } from "./components";
+import { DocumentoVentaFindModal } from "../../../../../components/Helpers/Find/DocumentoVenta";
 
 const GuiaRemisionForm: React.FC = () => {
   //#region useState
@@ -118,13 +121,16 @@ const GuiaRemisionForm: React.FC = () => {
     handleLoad();
   }, [primer.tipo]);
 
-  // useEffect(() => {
-  //   retorno && retorno.origen === "clienteFind" && handleCliente(retorno);
-  // }, [retorno]);
+  useEffect(() => {
+    retorno && retorno.origen === "clienteFind" && handleCliente(retorno);
+    retorno &&
+      retorno.origen === "documentoVentaFind" &&
+      handleDocumentoVenta(retorno);
+  }, [retorno]);
 
-  // useEffect(() => {
-  //   data.detalles && handleTotales(data.detalles);
-  // }, [data.detalles]);
+  useEffect(() => {
+    data.detalles && handleTotales(data.detalles);
+  }, [data.detalles]);
 
   // useEffect(() => {
   //   data.detalles && handleTotales(data.detalles);
@@ -138,9 +144,107 @@ const GuiaRemisionForm: React.FC = () => {
   //#region Funciones
 
   const handleLoad = async (): Promise<void> => {
-    // handleGetClienteDireccion(data.clienteId);
+    handleGetClienteDireccion(data.clienteId);
   };
 
+  const handleDocumentoVenta = async (
+    documentoVenta: IDocumentoVenta
+  ): Promise<void> => {
+    try {
+      const documentoVentaCompleto: IDocumentoVenta = await getId(
+        globalContext,
+        documentoVenta.id,
+        "Venta/DocumentoVenta"
+      );
+      console.log(documentoVentaCompleto, "documentoVentaCompleto");
+      const {
+        clienteId,
+        clienteTipoDocumentoIdentidadId,
+        clienteNumeroDocumentoIdentidad,
+        clienteNombre,
+        clienteDireccionId,
+        clienteDireccion,
+        id,
+        numeroDocumento,
+        detalles,
+      } = documentoVentaCompleto;
+      await handleGetClienteDireccion(clienteId);
+      const newDetalle = detalles.map((x) => ({
+        ...x,
+        //Añadiendo campos faltantes
+        cantidadPendiente: x.cantidad,
+      }));
+      setData((x) => ({
+        ...x,
+        clienteTipoDocumentoIdentidadId,
+        clienteNumeroDocumentoIdentidad,
+        clienteNombre,
+        clienteDireccionId,
+        clienteDireccion,
+        ordenPedido: numeroDocumento,
+        detalles: newDetalle,
+      }));
+    } catch (error) {
+      handleSetErrorMensaje(setGlobalContext, error, "form");
+    }
+  };
+  const handleCliente = async (cliente: IClienteFind): Promise<void> => {
+    try {
+      const clienteCompleto: IClienteCompleto = await getId(
+        globalContext,
+        cliente.id,
+        "Mantenimiento/Cliente",
+        true
+      );
+
+      const {
+        id,
+        tipoDocumentoIdentidadId,
+        numeroDocumentoIdentidad,
+        nombre,
+        direccionPrincipalId,
+        direccionPrincipal,
+        direcciones,
+        telefono,
+      } = clienteCompleto;
+      const direccionFind = direcciones.find(
+        (x) => x.id === direccionPrincipalId
+      );
+      const { departamentoId, provinciaId, distritoId } =
+        direccionFind as IClienteDireccion;
+      setData((x) => ({
+        ...x,
+        clienteId: id,
+        clienteTipoDocumentoIdentidadId: tipoDocumentoIdentidadId,
+        clienteNumeroDocumentoIdentidad: numeroDocumentoIdentidad,
+        clienteNombre: nombre,
+        clienteDireccionId: direccionPrincipalId,
+        clienteDireccion: direccionPrincipal,
+        clienteTelefono: telefono,
+        departamentoId: departamentoId ?? "",
+        provinciaId: provinciaId ?? "",
+        distritoId: distritoId ?? "",
+      }));
+      handleUpdateTablas(setGlobalContext, "direcciones", direcciones);
+    } catch (error) {
+      handleSetErrorMensaje(setGlobalContext, error, "form");
+    }
+  };
+  const handleGetClienteDireccion = async (
+    clienteId: string
+  ): Promise<void> => {
+    try {
+      const urlParams = new URLSearchParams({ clienteId });
+      const response: IClienteDireccion[] = await get({
+        globalContext,
+        menu: "Mantenimiento/ClienteDireccion/ListarPorCliente",
+        urlParams,
+      });
+      handleUpdateTablas(setGlobalContext, "direcciones", response);
+    } catch (error) {
+      handleSetErrorMensaje(setGlobalContext, error, "form");
+    }
+  };
   const handleData = ({
     target,
   }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -163,7 +267,6 @@ const GuiaRemisionForm: React.FC = () => {
       return newData;
     });
   };
-
   const handleAdicional = ({
     target,
   }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -175,15 +278,37 @@ const GuiaRemisionForm: React.FC = () => {
     const retorno = { origen: name, [name]: value };
     handleSetRetorno(setGlobalContext, retorno);
   };
-
   const handleTransportista = (
     transportistas: IGuiaRemisionTransportista[]
   ): void => {
     setData((x) => ({ ...x, transportistas: transportistas }));
   };
-
   const handleVehiculos = (vehiculos: IGuiaRemisionVehiculo[]): void => {
     setData((x) => ({ ...x, vehiculos: vehiculos }));
+  };
+  const handleTotales = (detalles: IGuiaRemisionDetalle[]): void => {
+    const { porcentajeIGV, incluyeIGV, pesoBrutoTotal } = data;
+    const importeTotal = detalles.reduce((total, x) => total + x.importe, 0);
+    const pesoNetoTotal = detalles.reduce((total, x) => total + x.totalPeso, 0);
+
+    let subTotal = incluyeIGV
+      ? importeTotal / (1 + porcentajeIGV / 100)
+      : importeTotal;
+    let montoIGV = incluyeIGV
+      ? importeTotal - subTotal
+      : importeTotal * (porcentajeIGV / 100);
+    let totalNeto = incluyeIGV ? importeTotal : subTotal + montoIGV;
+    const total = subTotal + montoIGV;
+
+    setData((x) => ({
+      ...x,
+      montoIGV: roundNumber(montoIGV),
+      subTotal: roundNumber(subTotal),
+      totalNeto: roundNumber(totalNeto),
+      total: roundNumber(total),
+      pesoBrutoTotal: roundNumber(pesoBrutoTotal),
+      pesoNetoTotal: roundNumber(pesoNetoTotal),
+    }));
   };
 
   return (
@@ -197,7 +322,11 @@ const GuiaRemisionForm: React.FC = () => {
 
         <BasicKeyHandler selector={"guia-remision-form"}>
           <div className="form-base">
-            <GuiaRemisionCabecera data={data} handleData={handleData} />
+            <GuiaRemisionCabecera
+              data={data}
+              setData={setData}
+              handleData={handleData}
+            />
             <GuiaRemisionDetalle
               dataGeneral={data}
               setDataGeneral={setData}
@@ -248,7 +377,9 @@ const GuiaRemisionForm: React.FC = () => {
       {segundo.origen === "clienteFind" && (
         <ClienteFindModal inputFocus="clienteNombre" />
       )}
-
+      {segundo.origen === "documentoVentaFind" && (
+        <DocumentoVentaFindModal inputFocus="clienteId" />
+      )}
       {segundo.origen === "referenciaFind" && (
         <ReferenciaFindModal
           tipoDocumentoId={data.tipoDocumentoReferencia as string}

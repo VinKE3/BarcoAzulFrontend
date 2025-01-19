@@ -148,11 +148,13 @@ export const defaultDocumentoVenta: IDocumentoVenta = {
 
 export interface IDocumentoVentaDetalle extends IDetalleVenta {
   unidadMedida: string;
+  totalPeso: number;
 }
 
 export const defaultDocumentoVentaDetalle: IDocumentoVentaDetalle = {
   ...defaultDetalleVenta,
   unidadMedida: "",
+  totalPeso: 0,
 };
 export interface IDocumentoVentaPendiente {
   id: string;

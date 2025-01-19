@@ -61,7 +61,7 @@ const GuiaRemisionDetalle: React.FC<IProps> = ({
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { modal, form, mensajes, extra, api } = globalContext;
   const { primer, segundo } = modal;
-  const { retorno, tablas } = form;
+  const { retorno } = form;
   const { simplificado, element } = extra;
   const { inputs } = element;
   const mensaje = mensajes.filter((x) => x.origen === "detalle" && x.tipo >= 0);
