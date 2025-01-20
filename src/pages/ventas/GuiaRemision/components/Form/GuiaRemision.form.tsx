@@ -9,6 +9,7 @@ import {
   Messages,
   ReferenciaFindModal,
   TransportistaFindModal,
+  VehiculoFindModal,
 } from "../../../../../components";
 import { useFocus, useGlobalContext } from "../../../../../hooks";
 import {
@@ -156,7 +157,6 @@ const GuiaRemisionForm: React.FC = () => {
         documentoVenta.id,
         "Venta/DocumentoVenta"
       );
-      console.log(documentoVentaCompleto, "documentoVentaCompleto");
       const {
         clienteId,
         clienteTipoDocumentoIdentidadId,
@@ -176,12 +176,14 @@ const GuiaRemisionForm: React.FC = () => {
       }));
       setData((x) => ({
         ...x,
+        clienteId,
         clienteTipoDocumentoIdentidadId,
         clienteNumeroDocumentoIdentidad,
         clienteNombre,
         clienteDireccionId,
         clienteDireccion,
-        ordenPedido: numeroDocumento,
+        documentoVenta: numeroDocumento,
+        numeroFactura: numeroDocumento,
         detalles: newDetalle,
       }));
     } catch (error) {
@@ -196,7 +198,6 @@ const GuiaRemisionForm: React.FC = () => {
         "Mantenimiento/Cliente",
         true
       );
-
       const {
         id,
         tipoDocumentoIdentidadId,
@@ -373,6 +374,10 @@ const GuiaRemisionForm: React.FC = () => {
             handleVehiculos={handleVehiculos}
           />
         )}
+
+      {tercer.origen === "vehiculoFind" && (
+        <VehiculoFindModal inputFocus="observacion" />
+      )}
 
       {segundo.origen === "clienteFind" && (
         <ClienteFindModal inputFocus="clienteNombre" />

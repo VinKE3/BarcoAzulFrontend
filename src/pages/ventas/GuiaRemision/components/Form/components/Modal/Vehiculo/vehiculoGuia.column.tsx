@@ -22,11 +22,11 @@ const useVehiculoGuiaColumn = (
       },
       {
         Header: "Placa",
-        accessor: "placa",
+        accessor: "numeroPlaca",
       },
       {
-        Header: "Marca",
-        accessor: "vehiculoCodigo",
+        Header: "Vehículo Id",
+        accessor: "vehiculoId",
       },
       {
         Header: "-",

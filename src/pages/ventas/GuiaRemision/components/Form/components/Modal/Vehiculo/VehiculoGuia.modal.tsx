@@ -9,16 +9,21 @@ import { useFocus, useGlobalContext } from "../../../../../../../../hooks";
 import {
   IGuiaRemisionVehiculo,
   defaultGuiaRemisionVehiculo,
+  IVehiculo,
+  IVehiculoFind,
 } from "../../../../../../../../models";
 import {
+  getId,
   handleClearMensajes,
   handleClearModalProp,
   handleFocus,
+  handleHelpModal,
   handleInputType,
   handleSetInputs,
   handleSetTextos,
 } from "../../../../../../../../util";
 import useVehiculoGuiaColumn from "./vehiculoGuia.column";
+import { TbDeviceIpadSearch } from "react-icons/tb";
 
 interface IProp {
   dataVehiculo: IGuiaRemisionVehiculo[];
@@ -31,7 +36,7 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
 }) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { modal, form } = globalContext;
+  const { api, modal, form } = globalContext;
   const { segundo } = modal;
   const { retorno } = form;
   const columns = useVehiculoGuiaColumn(segundo.tipo);
@@ -39,7 +44,7 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
     defaultGuiaRemisionVehiculo
   );
   const [table, setTable] = useState<IGuiaRemisionVehiculo[]>(dataVehiculo);
-  const inputs = useFocus("placa");
+  const inputs = useFocus("numeroPlaca", "buttonSaveVehiculo");
   //#endregion
 
   //#region useEffect
@@ -51,6 +56,9 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
     retorno &&
       retorno.origen === "vehiculoDetalle" &&
       handleActionBar(retorno as IGuiaRemisionVehiculo);
+    retorno &&
+      retorno.origen === "vehiculoFind" &&
+      handleVehiculoFind(retorno as IVehiculoFind);
   }, [retorno]);
 
   useEffect(() => {
@@ -67,12 +75,30 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
     setData((x) => ({ ...x, [name]: value }));
   };
 
+  const handleVehiculoFind = async (find: IVehiculoFind): Promise<void> => {
+    const vehiculoCompleto: IVehiculo = await getId(
+      globalContext,
+      find.id,
+      "Mantenimiento/Vehiculo"
+    );
+
+    const { numeroPlaca, id } = vehiculoCompleto;
+
+    setData((x) => ({
+      ...x,
+      numeroPlaca,
+      vehiculoId: id,
+    }));
+
+    handleFocus(inputs["buttonSaveVehiculo"]);
+  };
+
   const handleActionBar = (detalle: IGuiaRemisionVehiculo): void => {
     if (detalle.tipo === "eliminar") {
       handleCrudDetalles(detalle);
       return;
     }
-    handleFocus(inputs["placa"]);
+    handleFocus(inputs["numeroPlaca"]);
     setData({ ...detalle, tipo: detalle.tipo });
   };
 
@@ -95,9 +121,13 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
   };
 
   const handleDelete = (vehiculo: IGuiaRemisionVehiculo): void => {
-    const existeDetalle = table.find((x) => x.placa === vehiculo.placa);
+    const existeDetalle = table.find(
+      (x) => x.numeroPlaca === vehiculo.numeroPlaca
+    );
     if (existeDetalle) {
-      const nuevosDetalles = table.filter((x) => x.placa !== vehiculo.placa);
+      const nuevosDetalles = table.filter(
+        (x) => x.numeroPlaca !== vehiculo.numeroPlaca
+      );
 
       const detallesActualizados = nuevosDetalles.map((x, index) => ({
         ...x,
@@ -105,6 +135,7 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
       }));
 
       setTable(detallesActualizados);
+      handleClear();
     }
   };
 
@@ -112,19 +143,19 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
     await handleClearMensajes(setGlobalContext);
 
     const textos: string[] = [];
-    const existe = table.find((x) => x.placa === data.placa);
+    const existe = table.find((x) => x.numeroPlaca === data.numeroPlaca);
     if (existe) {
       textos.push("El vehículo ya existe en el detalle, imposible registrar.");
     }
 
     // Validaciones específicas para el detalle general
-    if (!data.placa) {
+    if (!data.numeroPlaca) {
       textos.push("La placa es requerida");
     }
     if (
-      !data.placa ||
-      data.placa.trim().length !== 6 ||
-      data.placa.includes("-")
+      !data.numeroPlaca ||
+      data.numeroPlaca.trim().length !== 6 ||
+      data.numeroPlaca.includes("-")
     ) {
       textos.push(
         "La placa debe contener exactamente 6 caracteres sin espacios ni guiones."
@@ -141,7 +172,7 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
   const handleSave = async (): Promise<void> => {
     const detalleValido = await handleValidation();
     if (!detalleValido) {
-      handleFocus(inputs["placa"]);
+      handleFocus(inputs["numeroPlaca"]);
       return;
     }
 
@@ -151,7 +182,18 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
 
   const handleClear = (): void => {
     setData(defaultGuiaRemisionVehiculo);
-    handleFocus(inputs["placa"]);
+    handleFocus(inputs["numeroPlaca"]);
+  };
+
+  const handleOpen = async (origen: string): Promise<void> => {
+    await handleClearMensajes(setGlobalContext);
+
+    switch (origen) {
+      case "buttonVehiculoFind": {
+        handleHelpModal(setGlobalContext, "vehiculoFind", "tercer");
+        break;
+      }
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>): void => {
@@ -185,15 +227,15 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
               />
             </div>
             <div className="input-base-container-20">
-              <label htmlFor="placa" className="label-base">
+              <label htmlFor="numeroPlaca" className="label-base">
                 N° Placa
               </label>
               <input
-                ref={inputs["placa"]}
-                id="placa"
-                name="placa"
+                ref={inputs["numeroPlaca"]}
+                id="numeroPlaca"
+                name="numeroPlaca"
                 placeholder="N° Placa"
-                value={data.placa ?? ""}
+                value={data.numeroPlaca ?? ""}
                 onChange={handleData}
                 autoComplete="off"
                 autoFocus
@@ -203,16 +245,15 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
               />
             </div>
             <div className="input-base-container-100">
-              <label htmlFor="vehiculoCodigo" className="label-base">
-                Vehiculo Codigo
+              <label htmlFor="VehiculoId" className="label-base">
+                Vehiculo Id
               </label>
-
               <div className="input-base-container-button">
                 <input
-                  id="vehiculoCodigo"
-                  name="vehiculoCodigo"
-                  placeholder="vehiculoCodigo"
-                  value={data.vehiculoCodigo ?? ""}
+                  id="vehiculoId"
+                  name="vehiculoId"
+                  placeholder="vehiculoId"
+                  value={data.vehiculoId ?? ""}
                   onChange={handleData}
                   autoComplete="off"
                   disabled
@@ -226,9 +267,24 @@ const VehiculoGuiaModal: React.FC<IProp> = ({
                   onClick={handleSave}
                   onKeyDown={handleKeyDown}
                   disabled={data.tipo === "consultar"}
-                  className="button-base-anidado button-base-bg-secondary"
+                  className="button-base-anidado-plano button-base-bg-secondary"
                 >
                   <FaCar size="2rem" className="button-base-icon" />
+                </button>
+                <button
+                  id="buttonVehiculoFind"
+                  name="buttonVehiculoFind"
+                  title="Presione [ALT + C] para adjuntar Vehiculo."
+                  accessKey="c"
+                  onClick={() => handleOpen("buttonVehiculoFind")}
+                  onKeyDown={handleKeyDown}
+                  disabled={data.tipo === "consultar"}
+                  className="button-base-anidado button-base-bg-primary"
+                >
+                  <TbDeviceIpadSearch
+                    size="2rem"
+                    className="button-base-icon"
+                  />
                 </button>
               </div>
             </div>

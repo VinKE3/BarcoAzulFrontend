@@ -310,7 +310,7 @@ const DocumentoVentaForm: React.FC = () => {
         clienteNombre,
         clienteDireccionId,
         clienteDireccion,
-        numeroPedido: id,
+        numeroPedido: numeroDocumento,
         personalId,
         tipoVentaId,
         tipoCobroId,
@@ -479,7 +479,6 @@ const DocumentoVentaForm: React.FC = () => {
               urlParams,
             })
           : [];
-      console.log(response, "response");
       handleUpdateTablas(setGlobalContext, "documentosPendientes", response);
     } catch (error) {
       handleSetErrorMensaje(setGlobalContext, error, "form");
@@ -492,7 +491,6 @@ const DocumentoVentaForm: React.FC = () => {
     const documentoPendiente = documentosPendientes.find(
       (x) => x.id === data.documentoReferenciaId
     );
-    console.log(documentoPendiente, "aqui");
     // Si no se encuentra el documento pendiente, salimos de la función
     if (!documentoPendiente) return;
     try {

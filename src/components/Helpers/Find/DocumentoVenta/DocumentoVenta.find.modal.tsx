@@ -86,7 +86,7 @@ const DocumentoVentaFindModal: React.FC<IDocumentoVentaFindModal> = ({
         handleKeyDown={handleKeyDown}
         title="Consultar Documento de Venta"
         inputFocus={inputFocus}
-        classNameModal="documento-venta-find-modal md:min-w-[40%]"
+        classNameModal="documento-venta-find-modal md:min-w-[60%]"
         classNameTable="documento-venta-find-modal-table"
       >
         <div className="input-base-row">

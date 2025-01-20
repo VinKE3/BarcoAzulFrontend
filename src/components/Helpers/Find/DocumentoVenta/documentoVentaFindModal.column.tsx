@@ -2,7 +2,7 @@
 import { useMemo } from "react";
 import { Column } from "react-table";
 import { IDocumentoVentaFindTable } from "../../../../models";
-import { handleFormatRowDate, handleNumber } from "../../../../util";
+import { handleNumber } from "../../../../util";
 import { SelectButton } from "../../SelectButton";
 
 const useDocumentoVentaFindModalColumn = (
@@ -15,7 +15,7 @@ const useDocumentoVentaFindModalColumn = (
         Cell: ({ row }: { row: { original: IDocumentoVentaFindTable } }) => (
           <div className="helper-select-container">
             <SelectButton
-              retorno={{ origen: "notaPedidoFind", ...row.original }}
+              retorno={{ origen: "documentoVentaFind", ...row.original }}
               inputFocus={inputFocus}
             />
           </div>

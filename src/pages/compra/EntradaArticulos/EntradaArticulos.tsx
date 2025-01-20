@@ -84,8 +84,6 @@ const EntradaArticulos: React.FC = () => {
           tablas,
         }: { data: IEntradaArticulos; tablas: IEntradaArticulosTablas } =
           response;
-        const { serie } = tablas;
-        data.serie = serie.length > 0 ? serie : "";
         handlePrimaryModal(setGlobalContext, data, tablas);
       })
       .catch((error) => {

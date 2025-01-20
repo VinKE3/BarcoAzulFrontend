@@ -9,6 +9,7 @@ import {
   IGuiaRemisionTablas,
   IPuntoVenta,
   ISerie,
+  ITiposSumaResta,
   defaultDocumentoVenta,
   defaultGuiaRemision,
   defaultGuiaRemisionTablas,
@@ -46,8 +47,11 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
     motivosTraslado,
     modalidadesTransporte,
     direcciones,
+    tipos,
   }: IGuiaRemisionTablas = form.tablas || defaultGuiaRemisionTablas;
   const { inputs } = element;
+
+  console.log(data, "data");
 
   //#region Funciones
 
@@ -95,15 +99,11 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
               <option key="default" value="">
                 SELECCIONAR
               </option>
-              {series
-                .filter(
-                  (x: ISerie) => x.tipoDocumentoId === data.tipoDocumentoId
-                )
-                .map((x: ISerie) => (
-                  <option key={x.serie} value={x.serie}>
-                    {x.serie}
-                  </option>
-                ))}
+              {series.map((x: ISerie) => (
+                <option key={x.serie} value={x.serie}>
+                  {x.serie}
+                </option>
+              ))}
             </select>
           </div>
           <div className="input-base-container-25">
@@ -135,7 +135,7 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
           </div>
           <div className="input-base-container-25">
             <label htmlFor="fechaTraslado" className="label-base">
-              Emisión
+              Traslado
             </label>
             <input
               type="date"
@@ -150,15 +150,15 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
         </div>
         <div className="input-base-row">
           <div className="input-base-container-100">
-            <label htmlFor="ordenPedido" className="label-base">
+            <label htmlFor="documentoVenta" className="label-base">
               Documento de Venta
             </label>
             <div className="input-base-container-button">
               <input
-                id="ordenPedido"
-                name="ordenPedido"
+                id="documentoVenta"
+                name="documentoVenta"
                 placeholder="Adjuntar Documento de Venta..."
-                value={data.ordenPedido ?? ""}
+                value={data.documentoVenta ?? ""}
                 disabled
                 className={
                   primer.tipo !== "registrar"
@@ -174,7 +174,7 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
                     title="Presione [ALT + A] para borrar documento de venta."
                     accessKey="a"
                     onClick={handleClearDocumentoVenta}
-                    disabled={data.ordenPedido === null}
+                    disabled={data.documentoVenta === null}
                     className="button-base-anidado-plano button-base-bg-red"
                   >
                     <BsFillEraserFill
@@ -202,69 +202,6 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
             </div>
           </div>
         </div>
-        <div className="input-base-row">
-          <div className="input-base-container-100">
-            <label htmlFor="direccionPartida" className="label-base">
-              Dirección Partida
-            </label>
-            <input
-              id="direccionPartida"
-              name="direccionPartida"
-              placeholder="Dirección Partida"
-              value={data.direccionPartida ?? ""}
-              disabled
-              className="input-base"
-            />
-          </div>
-        </div>
-
-        <div className="input-base-row">
-          <div className="input-base-container-40">
-            <label htmlFor="motivoTrasladoId" className="label-base">
-              Motivo
-            </label>
-            <select
-              ref={inputs["motivoTrasladoId"]}
-              id="motivoTrasladoId"
-              name="motivoTrasladoId"
-              value={data.motivoTrasladoId ?? ""}
-              onChange={handleData}
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            >
-              <option key="default" value="">
-                SELECCIONAR
-              </option>
-              {motivosTraslado.map((x: ICombo) => (
-                <option key={x.id} value={x.id} disabled={!x.isActivo}>
-                  {x.descripcion}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div
-            className={
-              data.motivoTrasladoId === "04"
-                ? "input-base-container-33"
-                : "input-base-container-75"
-            }
-          >
-            <label htmlFor="motivoSustento" className="label-base">
-              Sustento Motivo
-            </label>
-            <input
-              id="motivoSustento"
-              name="motivoSustento"
-              placeholder="Sustento Motivo"
-              value={data.motivoSustento ?? ""}
-              onChange={handleData}
-              autoComplete="off"
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            />
-          </div>
-        </div>
-
         <div className="input-base-row">
           <div className="input-base-container-33">
             <label
@@ -328,6 +265,113 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
         </div>
         <div className="input-base-row">
           <div className="input-base-container-100">
+            <label htmlFor="direccionPartida" className="label-base">
+              Dirección Partida
+            </label>
+            <input
+              id="direccionPartida"
+              name="direccionPartida"
+              placeholder="Dirección Partida"
+              value={data.direccionPartida ?? ""}
+              disabled
+              className="input-base"
+            />
+          </div>
+        </div>
+        <div className="input-base-container-100">
+          <label htmlFor="clienteDireccionId" className="label-base">
+            Dirección Llegada
+          </label>
+          <select
+            id="clienteDireccionId"
+            name="clienteDireccionId"
+            value={data.clienteDireccionId ?? ""}
+            onChange={handleData}
+            disabled={primer.tipo === "consultar"}
+            className="input-base"
+          >
+            <option key="default" value="">
+              SELECCIONAR
+            </option>
+            {direcciones?.map((x: IClienteDireccion) => (
+              <option key={x.id} value={x.id}>
+                {x.direccion}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="input-base-row">
+          <div className="input-base-container-40">
+            <label htmlFor="motivoTrasladoId" className="label-base">
+              Motivo
+            </label>
+            <select
+              ref={inputs["motivoTrasladoId"]}
+              id="motivoTrasladoId"
+              name="motivoTrasladoId"
+              value={data.motivoTrasladoId ?? ""}
+              onChange={handleData}
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            >
+              <option key="default" value="">
+                SELECCIONAR
+              </option>
+              {motivosTraslado.map((x: ICombo) => (
+                <option key={x.id} value={x.id}>
+                  {x.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div
+            className={
+              data.motivoTrasladoId === "04"
+                ? "input-base-container-33"
+                : "input-base-container-75"
+            }
+          >
+            <label htmlFor="motivoSustento" className="label-base">
+              Sustento Motivo
+            </label>
+            <input
+              id="motivoSustento"
+              name="motivoSustento"
+              placeholder="Sustento Motivo"
+              value={data.motivoSustento ?? ""}
+              onChange={handleData}
+              autoComplete="off"
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            />
+          </div>
+          <div className="input-base-container-40">
+            <label htmlFor="ingresoEgresoStock" className="label-base">
+              Entrada Salida Stock
+            </label>
+            <select
+              ref={inputs["ingresoEgresoStock"]}
+              id="ingresoEgresoStock"
+              name="ingresoEgresoStock"
+              value={data.ingresoEgresoStock ?? ""}
+              onChange={handleData}
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            >
+              <option key="default" value="">
+                SELECCIONAR
+              </option>
+              {tipos.map((x: ITiposSumaResta) => (
+                <option key={x.valor} value={x.valor}>
+                  {x.valor}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="input-base-row">
+          <div className="input-base-container-100">
             <label htmlFor="clienteDireccion" className="label-base">
               Dirección Llegada
             </label>
@@ -356,28 +400,7 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
             />
           </div>
         </div>
-        <div className="input-base-container-100">
-          <label htmlFor="clienteDireccionId" className="label-base">
-            Dirección Llegada
-          </label>
-          <select
-            id="clienteDireccionId"
-            name="clienteDireccionId"
-            value={data.clienteDireccionId ?? ""}
-            onChange={handleData}
-            disabled={primer.tipo === "consultar"}
-            className="input-base"
-          >
-            <option key="default" value="">
-              SELECCIONAR
-            </option>
-            {direcciones?.map((x: IClienteDireccion) => (
-              <option key={x.id} value={x.id}>
-                {x.direccion}
-              </option>
-            ))}
-          </select>
-        </div>
+
         <div className="input-base-row">
           <div className="input-base-container-33">
             <label htmlFor="modalidadTransporteId" className="label-base">
@@ -510,28 +533,6 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
                 )}
             </div>
           </div>
-        </div>
-
-        <div className="input-base-row">
-          <div className="input-base-container-20">
-            <label htmlFor="cantidadBultos" className="label-base">
-              Cantidad Bultos
-            </label>
-            <input
-              type="number"
-              inputMode="numeric"
-              id="cantidadBultos"
-              name="cantidadBultos"
-              placeholder="Cantidad Bultos"
-              value={data.cantidadBultos}
-              onChange={handleData}
-              autoComplete="off"
-              min={0}
-              step={1}
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            />
-          </div>
           <div className="input-base-container-20">
             <label htmlFor="pesoBrutoTotal" className="label-base">
               Peso Bruto Total KG
@@ -551,6 +552,87 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
               className="input-base"
             />
           </div>
+        </div>
+        <div className="input-base-row">
+          <div className="input-base-container-33">
+            <label htmlFor="oficina" className="label-base">
+              Oficina
+            </label>
+            <input
+              id="oficina"
+              name="oficina"
+              placeholder="Oficina"
+              value={data.oficina ?? ""}
+              onChange={handleData}
+              autoComplete="off"
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            />
+          </div>
+          <div className="input-base-container-33">
+            <label htmlFor="almacen" className="label-base">
+              Almacen
+            </label>
+            <input
+              id="almacen"
+              name="almacen"
+              placeholder="Almacen"
+              value={data.almacen ?? ""}
+              onChange={handleData}
+              autoComplete="off"
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            />
+          </div>
+          <div className="input-base-container-33">
+            <label htmlFor="almacenOrigen" className="label-base">
+              Almacen Origen
+            </label>
+            <input
+              id="almacenOrigen"
+              name="almacenOrigen"
+              placeholder="Almacen Origen"
+              value={data.almacenOrigen ?? ""}
+              onChange={handleData}
+              autoComplete="off"
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            />
+          </div>
+        </div>
+        <div className="input-base-row">
+          <div className="input-base-container-50">
+            <label htmlFor="numeroFactura" className="label-base">
+              Factura N°
+            </label>
+            <input
+              id="numeroFactura"
+              name="numeroFactura"
+              placeholder="Factura N°"
+              value={data.numeroFactura ?? ""}
+              onChange={handleData}
+              autoComplete="off"
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            />
+          </div>
+          <div className="input-base-container-50">
+            <label htmlFor="ordenCompra" className="label-base">
+              Orden Compra
+            </label>
+            <input
+              id="ordenCompra"
+              name="ordenCompra"
+              placeholder="Orden Compra"
+              value={data.ordenCompra ?? ""}
+              onChange={handleData}
+              autoComplete="off"
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            />
+          </div>
+        </div>
+        <div className="input-base-row">
           <div className="input-base-container-100">
             <label htmlFor="observacion" className="label-base">
               Observación
@@ -564,6 +646,51 @@ const GuiaRemisionCabecera: React.FC<IProps> = ({
               autoComplete="off"
               disabled={primer.tipo === "consultar"}
               className="input-base"
+            />
+          </div>
+          <div className="input-base-container-20">
+            <label htmlFor="costoMinimo" className="label-base">
+              Costo Minimo
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              id="costoMinimo"
+              name="costoMinimo"
+              placeholder="Costo Minimo"
+              value={data.costoMinimo}
+              onChange={handleData}
+              autoComplete="off"
+              min={0}
+              step={0.1}
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            />
+          </div>
+        </div>
+        <div className="input-base-row">
+          <div className="input-base-container-auto">
+            {element.responsive === "full" && (
+              <span className="label-base-checkbox">-</span>
+            )}
+            <CheckBox
+              id="enviarSucursal"
+              value={data.enviarSucursal}
+              handleData={handleData}
+              disabled={primer.tipo === "consultar"}
+              label="Enviar a Sucursal"
+            />
+          </div>
+          <div className="input-base-container-auto">
+            {element.responsive === "full" && (
+              <span className="label-base-checkbox">-</span>
+            )}
+            <CheckBox
+              id="afectarStock"
+              value={data.afectarStock}
+              handleData={handleData}
+              disabled={primer.tipo === "consultar" || data.detalles.length > 0}
+              label="Afectar Stock"
             />
           </div>
         </div>

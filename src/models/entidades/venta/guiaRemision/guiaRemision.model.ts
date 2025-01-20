@@ -20,11 +20,18 @@ export interface IGuiaRemision {
   serie: string;
   numero: string;
   ordenPedido: string | null;
+  documentoVenta: string | null;
+  oficina: string | null;
+  almacen: string | null;
+  almacenOrigen: string | null;
+  numeroFactura: string | null;
+  ordenCompra: string | null;
+  costoMinimo: number;
 
   fechaEmision: string;
   fechaTraslado: string;
   horaEmision: string | null;
-
+  ingresoEgresoStock: string | null;
   tipoDocumentoReferencia: string | null;
   documentoReferenciaId: string | null;
   fechaDocumentoReferencia: string | null;
@@ -61,6 +68,7 @@ export interface IGuiaRemision {
   numeroDocumento: string | null;
   incluyeIGV: boolean;
   afectarStock: boolean;
+  enviarSucursal: boolean;
   porcentajeIGV: number;
   transportistas: IGuiaRemisionTransportista[];
   vehiculos: IGuiaRemisionVehiculo[];
@@ -73,6 +81,13 @@ export const defaultGuiaRemision: IGuiaRemision = {
   serie: "",
   numero: "",
   ordenPedido: null,
+  documentoVenta: null,
+  oficina: null,
+  almacen: null,
+  almacenOrigen: null,
+  numeroFactura: null,
+  ordenCompra: null,
+  costoMinimo: 0,
 
   fechaEmision: format(new Date(), "yyyy-MM-dd"),
   fechaTraslado: format(new Date(), "yyyy-MM-dd"),
@@ -81,18 +96,19 @@ export const defaultGuiaRemision: IGuiaRemision = {
   tipoDocumentoReferencia: null,
   documentoReferenciaId: null,
   fechaDocumentoReferencia: null,
-
+  ingresoEgresoStock: "-",
   clienteId: "",
   clienteNumeroDocumentoIdentidad: "",
   clienteNombre: "",
 
-  direccionPartida: "",
+  direccionPartida:
+    "GRUPO 13 MZA. C LOTE. 9 SEC. 3 (FRENTE MUNICIPALIDAD VILLA EL SALVADOR)",
   llegadaUbigeo: null,
   llegadaCodigoEstablecimiento: null,
 
-  motivoTrasladoId: "",
+  motivoTrasladoId: "01",
   motivoSustento: "",
-  modalidadTransporteId: "",
+  modalidadTransporteId: "02",
   motivoTrasladoDescripcion: null,
 
   trasladoVehiculoM1L: false,
@@ -113,6 +129,7 @@ export const defaultGuiaRemision: IGuiaRemision = {
   numeroDocumento: null,
   incluyeIGV: true,
   afectarStock: true,
+  enviarSucursal: false,
   porcentajeIGV: 18,
   transportistas: [],
   vehiculos: [],

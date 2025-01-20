@@ -37,6 +37,7 @@ const GuiaRemisionFilter: React.FC = () => {
     ...defaultGuiaRemisionFilter,
     fechaInicio: fechaInicio,
     fechaFin: fechaFin,
+    serie: "T001",
   });
   const search = useDebounce(filter);
   //#endregion

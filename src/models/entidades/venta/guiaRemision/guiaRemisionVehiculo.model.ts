@@ -4,14 +4,14 @@ export interface IGuiaRemisionVehiculo {
   tipo: CrudType; //Lo que retorna actionbar
 
   item: number;
-  vehiculoCodigo: string;
-  placa: string | null;
+  vehiculoId: string;
+  numeroPlaca: string | null;
 }
 
 export const defaultGuiaRemisionVehiculo: IGuiaRemisionVehiculo = {
   tipo: "registrar",
 
   item: 0,
-  vehiculoCodigo: "000",
-  placa: null,
+  vehiculoId: "000",
+  numeroPlaca: null,
 };

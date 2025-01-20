@@ -82,8 +82,6 @@ const GuiaRemision: React.FC = () => {
           data,
           tablas,
         }: { data: IGuiaRemision; tablas: IGuiaRemisionTablas } = response;
-        const { series } = tablas;
-        data.serie = series.length > 0 ? series[0]?.serie : "";
         handlePrimaryModal(setGlobalContext, data, tablas);
       })
       .catch((error) => {

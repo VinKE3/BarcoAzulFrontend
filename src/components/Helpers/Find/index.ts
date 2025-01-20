@@ -11,3 +11,4 @@ export * from "./Referencia";
 export * from "./Stock";
 export * from "./Total";
 export * from "./Transportista";
+export * from "./Vehiculo";
