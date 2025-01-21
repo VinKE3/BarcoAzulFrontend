@@ -16,13 +16,13 @@ export interface IMovimientoBancario {
   tipoMovimientoId: string | null;
   tipoOperacionId: string | null;
   numeroOperacion: string | null;
-  isCierreCaja: true;
+  isCierreCaja: boolean;
   tipoBeneficiarioId: string | null;
   clienteProveedorId: string | null;
   clienteProveedorNombre: string | null;
   concepto: string | null;
   documentoReferencia: string | null;
-  tieneDetraccion: true;
+  tieneDetraccion: boolean;
   porcentajeITF: number;
   montoITF: number;
   montoInteres: number;
@@ -43,13 +43,13 @@ export const defaultMovimientoBancario: IMovimientoBancario = {
   tipoMovimientoId: "IN",
   tipoOperacionId: "DE",
   numeroOperacion: null,
-  isCierreCaja: true,
+  isCierreCaja: false,
   tipoBeneficiarioId: "O",
   clienteProveedorId: null,
   clienteProveedorNombre: null,
   concepto: null,
   documentoReferencia: null,
-  tieneDetraccion: true,
+  tieneDetraccion: false,
   porcentajeITF: 0,
   montoITF: 0,
   montoInteres: 0,
@@ -64,23 +64,23 @@ export const defaultMovimientoBancario: IMovimientoBancario = {
 export interface IMovimientoBancarioDetalle {
   tipo: CrudType;
   detalleId: number;
-  documentoVentaCompraId: string;
-  documentoVentaCompraFechaEmision: string;
-  concepto: string;
+  documentoVentaCompraId: string | null;
+  documentoVentaCompraFechaEmision: string | null;
+  concepto: string | null;
   abono: number;
   saldo: number;
-  documentoRelacionado: string;
+  documentoRelacionado: string | null;
 }
 
 export const defaultMovimientoBancarioDetalle: IMovimientoBancarioDetalle = {
   tipo: "registrar",
   detalleId: 0,
-  documentoVentaCompraId: "",
+  documentoVentaCompraId: null,
   documentoVentaCompraFechaEmision: format(new Date(), "yyyy-MM-dd"),
-  concepto: "",
+  concepto: null,
   abono: 0,
   saldo: 0,
-  documentoRelacionado: "",
+  documentoRelacionado: null,
 };
 
 export interface IMovimientoBancarioTablas {

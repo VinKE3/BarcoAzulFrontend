@@ -337,6 +337,7 @@ const GuiaRemisionDetalle: React.FC<IProps> = ({
     setData(defaultGuiaRemisionDetalle);
     handleFocus(inputs["cantidad"]);
   };
+
   const handleKeyDown = async (e: any): Promise<void> => {
     if (e.key === "Enter") {
       await handleClearMensajes(setGlobalContext);

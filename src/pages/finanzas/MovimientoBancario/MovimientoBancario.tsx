@@ -47,7 +47,17 @@ const MovimientoBancario: React.FC = () => {
   //#region useEffect
   useEffect(() => {
     const resetContext = async () => {
-      handleResetContext(setGlobalContext);
+      const validarClearMensaje =
+        api.menu === menu && mensaje.length > 0 ? false : true;
+      handleResetContext(
+        setGlobalContext,
+        true,
+        true,
+        true,
+        true,
+        true,
+        validarClearMensaje
+      );
     };
     resetContext();
   }, []);

@@ -76,6 +76,8 @@ const MovimientoBancarioCabecera = ({
     handleHelpModal(setGlobalContext, "proveedorFind");
   };
 
+  console.log(data, "dataCabecera");
+
   //#endregion
   return (
     <div className="form-base-container nota-pedido-form">
@@ -434,7 +436,6 @@ const MovimientoBancarioCabecera = ({
               onChange={handleData}
               autoComplete="off"
               min={0}
-              step={0.1}
               disabled={primer.tipo === "consultar"}
               className="input-base"
             />
@@ -453,8 +454,6 @@ const MovimientoBancarioCabecera = ({
               value={data.montoITF ?? 0}
               onChange={handleData}
               autoComplete="off"
-              min={0}
-              step={0.1}
               disabled
               className="input-base"
             />
@@ -475,7 +474,7 @@ const MovimientoBancarioCabecera = ({
               autoComplete="off"
               min={0}
               step={0.1}
-              disabled
+              disabled={primer.tipo === "consultar" || data.detalles.length > 0}
               className="input-base"
             />
           </div>

@@ -8,6 +8,7 @@ import {
   defaultConceptoFindFilter,
 } from "../../../../models";
 import {
+  get,
   getListar,
   handleFocus,
   handleInputType,
@@ -24,7 +25,7 @@ const ConceptoFindModal: React.FC<IConceptoFindModal> = ({
 }) => {
   //#region useState
   const modoConsulta = modo === "EG" ? "CuentaPorPagar" : "CuentaPorCobrar";
-  const menu: string = `api/Finanzas/${modoConsulta}/ListarPendientes`;
+  const menu: string = `Finanzas/${modoConsulta}/ListarPendientes`;
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { extra } = globalContext;
   const { inputs } = extra.element;
@@ -51,17 +52,16 @@ const ConceptoFindModal: React.FC<IConceptoFindModal> = ({
   };
 
   const handleListar = async (): Promise<void> => {
+    const params = new URLSearchParams({
+      numeroDocumento: search.numeroDocumento,
+    });
+
     try {
-      const params = new URLSearchParams({
-        numeroDocumento: search.numeroDocumento,
-        clienteId: search.clienteId,
-        proveedorId: search.proveedorId,
-      });
-      const { data }: { data: IConceptoFindTable[] } = await getListar(
+      const { data }: { data: IConceptoFindTable[] } = await get({
         globalContext,
-        params,
-        menu
-      );
+        urlParams: params,
+        menu,
+      });
       setData(data);
     } catch (error) {
       handleSetErrorMensaje(setGlobalContext, error, "help");
@@ -82,13 +82,15 @@ const ConceptoFindModal: React.FC<IConceptoFindModal> = ({
         data={data}
         columns={columns}
         handleKeyDown={tableKeyDown}
-        title="Consultar Proveedores"
+        title={`Consultar ${
+          modo === "EG" ? "Cuenta Por Pagar" : "Cuenta Por Cobrar"
+        }`}
         inputFocus={inputFocus}
         classNameModal="proveedor-find-modal min-w-[50%]"
         classNameTable="proveedor-find-modal-table"
       >
         <div className="input-base-row">
-          <div className="input-base-container-50">
+          <div className="input-base-container-100">
             <label htmlFor="numeroDocumentoFilter" className="label-base">
               Documento
             </label>
@@ -103,37 +105,6 @@ const ConceptoFindModal: React.FC<IConceptoFindModal> = ({
               className="input-base"
             />
           </div>
-          {modo === "EG" ? (
-            <div className="input-base-container-100">
-              <label htmlFor="proveedorIdFilter" className="label-base">
-                Proveedor Id
-              </label>
-              <input
-                id="proveedorIdFilter"
-                name="proveedorId"
-                placeholder="Proveedor Id"
-                value={filter.proveedorId}
-                onChange={handleData}
-                autoComplete="off"
-                className="input-base"
-              />
-            </div>
-          ) : (
-            <div className="input-base-container-100">
-              <label htmlFor="clienteIdFilter" className="label-base">
-                Cliente Id
-              </label>
-              <input
-                id="clienteIdFilter"
-                name="clienteId"
-                placeholder="Cliente Id"
-                value={filter.clienteId}
-                onChange={handleData}
-                autoComplete="off"
-                className="input-base"
-              />
-            </div>
-          )}
         </div>
       </ModalHelp>
     </TableKeyHandler>

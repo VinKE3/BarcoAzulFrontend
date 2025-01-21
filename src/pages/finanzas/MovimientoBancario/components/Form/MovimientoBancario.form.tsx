@@ -55,12 +55,8 @@ const MovimientoBancarioForm: React.FC = () => {
   const { modal, form, mensajes, api } = globalContext;
   const { primer, segundo } = modal;
   const { retorno } = form;
-  const {
-    cuentasCorrientes,
-    tiposMovimiento,
-    tiposOperacion,
-    tiposRazonSocial,
-  }: IMovimientoBancarioTablas = form.tablas || defaultMovimientoBancarioTablas;
+  const { cuentasCorrientes }: IMovimientoBancarioTablas =
+    form.tablas || defaultMovimientoBancarioTablas;
   const mensaje = mensajes.filter((x) => x.origen === "form" && x.tipo >= 0);
   const [data, setData] = useState<IMovimientoBancario>(
     form.data || defaultMovimientoBancario
@@ -116,11 +112,8 @@ const MovimientoBancarioForm: React.FC = () => {
 
   useEffect(() => {
     data.detalles && handleTotales(data.detalles);
+    console.log(data.detalles);
   }, [data.detalles]);
-
-  useEffect(() => {
-    data.detalles && handleTotales(data.detalles);
-  }, [data.porcentajeITF]);
 
   useEffect(() => {
     handleLoad();
@@ -128,6 +121,7 @@ const MovimientoBancarioForm: React.FC = () => {
 
   useEffect(() => {
     retorno && retorno.origen === "proveedorFind" && handleProveedor(retorno);
+    retorno && retorno.origen === "clienteFind" && handleCliente(retorno);
   }, [retorno]);
 
   //#endregion
@@ -177,7 +171,33 @@ const MovimientoBancarioForm: React.FC = () => {
             "Si la fecha de emisión ha sido cambiada, no olvide consultar el tipo de cambio."
           );
           break;
-
+        case "tipoBeneficiarioId":
+          newData.clienteProveedorId = "";
+          newData.clienteProveedorNombre = null;
+          break;
+        case "tipoMovimientoId":
+          newData.tieneCuentaDestino = false;
+          newData.cuentaDestinoId = null;
+          newData.concepto = null;
+          break;
+        case "monto":
+          newData.montoITF = roundNumber(
+            newData.monto * (newData.porcentajeITF / 100)
+          );
+          break;
+        case "porcentajeITF":
+          newData.montoITF = roundNumber(
+            newData.monto * (newData.porcentajeITF / 100),
+            4
+          );
+          newData.total = roundNumber(newData.monto + newData.montoITF, 4);
+          break;
+        case "cuentaDestinoId":
+          const cuenta = cuentasCorrientes.find(
+            (x) => x.cuentaCorrienteId === value
+          );
+          newData.concepto = `TRANSFERENCIA: ${cuenta?.numero} | ${cuenta?.entidadBancariaNombre}`;
+          break;
         default:
           break;
       }
@@ -193,45 +213,34 @@ const MovimientoBancarioForm: React.FC = () => {
         true
       );
 
-      const {
-        id,
-        tipoDocumentoIdentidadId,
-        numeroDocumentoIdentidad,
-        nombre,
-        direccionPrincipalId,
-        direccionPrincipal,
-      } = clienteCompleto;
+      const { id, nombre } = clienteCompleto;
       setData((x) => ({
         ...x,
-        clienteId: id,
-        clienteTipoDocumentoIdentidadId: tipoDocumentoIdentidadId,
-        clienteNumeroDocumentoIdentidad: numeroDocumentoIdentidad,
-        clienteNombre: nombre,
-        clienteDireccionId: direccionPrincipalId,
-        clienteDireccion: direccionPrincipal,
+        clienteProveedorId: id,
+        clienteProveedorNombre: nombre,
       }));
     } catch (error) {
       handleSetErrorMensaje(setGlobalContext, error, "form");
     }
   };
   const handleProveedor = async (proveedor: IProveedorFind): Promise<void> => {
-    const { id, numeroDocumentoIdentidad, nombre, direccion } = proveedor;
+    const { id, nombre } = proveedor;
     setData((x) => ({
       ...x,
-      proveedorId: id,
-      proveedorNumeroDocumentoIdentidad: numeroDocumentoIdentidad,
-      proveedorNombre: nombre,
-      proveedorDireccion: direccion,
+      clienteProveedorId: id,
+      clienteProveedorNombre: nombre,
     }));
   };
   const handleTotales = (detalles: IMovimientoBancarioDetalle[]): void => {
-    const { montoITF, porcentajeITF } = data;
+    const { porcentajeITF, monto } = data;
     const importeTotal = detalles.reduce((total, x) => total + x.abono, 0);
-
+    let importeMontoITF = importeTotal * (porcentajeITF / 100);
     setData((x) => ({
       ...x,
+      montoITF: roundNumber(importeMontoITF),
     }));
   };
+
   return (
     <>
       <div className="main-base">
@@ -270,8 +279,11 @@ const MovimientoBancarioForm: React.FC = () => {
       {segundo.origen === "proveedorFind" && (
         <ProveedorFindModal inputFocus="concepto" />
       )}
-      {segundo.origen === "notaPedidoFind" && (
-        <ConceptoFindModal modo="EG" inputFocus="clienteId" />
+      {segundo.origen === "conceptoFind" && (
+        <ConceptoFindModal
+          modo={`${data.tipoMovimientoId}`}
+          inputFocus="clienteId"
+        />
       )}
     </>
   );

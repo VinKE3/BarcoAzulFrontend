@@ -20,7 +20,7 @@ const useMovientoBancarioDetalleColum = (
         },
       },
       {
-        Header: "Descripción",
+        Header: "Concepto",
         accessor: "concepto",
         Cell: ({ row }: { row: { original: IMovimientoBancarioDetalle } }) => {
           const { original } = row;
@@ -34,7 +34,7 @@ const useMovientoBancarioDetalleColum = (
         },
       },
       {
-        Header: "Cantidad",
+        Header: "Saldo",
         accessor: "saldo",
         Cell: ({ value }: { value: number }) => {
           return (
@@ -45,12 +45,12 @@ const useMovientoBancarioDetalleColum = (
         },
       },
       {
-        Header: "Precio",
+        Header: "Importe",
         accessor: "abono",
         Cell: ({ value }: { value: number }) => {
           return (
             <p className="table-body-td-right">
-              {handleNumber(value, true, true, 4)}
+              {handleNumber(value, true, true)}
             </p>
           );
         },

@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { BasicKeyHandler } from "../../../../../components";
 import { useDebounce, useGlobalContext } from "../../../../../hooks";
 import {
+  ICuentaCorrienteBancaria,
   IDocumentoCompraCuentaCorriente,
   IMovimientoBancarioFilter,
   IMovimientoBancarioTable,
@@ -12,6 +13,7 @@ import {
 import {
   getListar,
   handleInputType,
+  handleSelectCuentaBancaria,
   handleSetErrorMensaje,
   resetPagination,
 } from "../../../../../util";
@@ -108,9 +110,9 @@ const MovimientoBancarioFilter: React.FC<IProps> = ({ tablas }) => {
               onChange={handleData}
               className="input-base"
             >
-              {tablas.map((x) => (
+              {tablas.map((x: ICuentaCorrienteBancaria) => (
                 <option key={x.cuentaCorrienteId} value={x.cuentaCorrienteId}>
-                  {x.entidadBancariaNombre}
+                  {handleSelectCuentaBancaria(x)}
                 </option>
               ))}
             </select>

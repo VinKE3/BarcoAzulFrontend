@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export interface IConceptoFindModal {
   inputFocus: string;
   modo: string;
@@ -30,32 +32,24 @@ export interface IConceptoFindTable {
 
 export interface IConceptoCompleto {
   id: string;
-  empresaId: string;
-  proveedorId: string;
-  tipoDocumentoId: string;
-  serie: string;
-  numero: string;
-  clienteId: string;
-  fechaContable: string;
-  monedaId: string;
-  total: number;
-  abonado: number;
+  fechaEmision: string;
+  fechaVencimiento: string;
+  clienteNumero: string | null;
+  clienteNombre: string | null;
+  monedaId: string | null;
   saldo: number;
-  observacion: string;
+  descripcion: string | null;
+  numeroDocumento: string | null;
 }
 
 export const defaultConceptoCompleto: IConceptoCompleto = {
   id: "",
-  empresaId: "",
-  proveedorId: "",
-  tipoDocumentoId: "",
-  serie: "",
-  numero: "",
-  clienteId: "",
-  fechaContable: "",
-  monedaId: "",
-  total: 0,
-  abonado: 0,
+  fechaEmision: format(new Date(), "yyyy-MM-dd"),
+  fechaVencimiento: format(new Date(), "yyyy-MM-dd"),
+  clienteNumero: null,
+  clienteNombre: null,
+  monedaId: null,
   saldo: 0,
-  observacion: "",
+  descripcion: null,
+  numeroDocumento: null,
 };

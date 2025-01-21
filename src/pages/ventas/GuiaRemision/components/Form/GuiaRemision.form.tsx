@@ -132,22 +132,12 @@ const GuiaRemisionForm: React.FC = () => {
   useEffect(() => {
     data.detalles && handleTotales(data.detalles);
   }, [data.detalles]);
-
-  // useEffect(() => {
-  //   data.detalles && handleTotales(data.detalles);
-  // }, [
-  //   data.incluyeIGV,
-  //   data.porcentajeIGV,
-  //   data.porcentajePercepcion,
-  //   data.porcentajeRetencion,
-  // ]);
   //#endregion
-  //#region Funciones
 
+  //#region Funciones
   const handleLoad = async (): Promise<void> => {
     handleGetClienteDireccion(data.clienteId);
   };
-
   const handleDocumentoVenta = async (
     documentoVenta: IDocumentoVenta
   ): Promise<void> => {
