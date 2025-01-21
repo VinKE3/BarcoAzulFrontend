@@ -1,1 +1,1 @@
-export { default as MoviemientoBancarioDetalle } from "./MoviemientoBancario.detalle";
+export { default as MovimientoBancarioDetalle } from "./MoviemientoBancario.detalle";

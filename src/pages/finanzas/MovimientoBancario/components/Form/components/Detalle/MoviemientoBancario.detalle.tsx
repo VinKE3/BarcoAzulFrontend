@@ -35,11 +35,15 @@ import { useMovimientoBancarioDetalleColumn } from "../../../Column";
 interface IProps {
   dataGeneral: IMovimientoBancario;
   setDataGeneral: React.Dispatch<React.SetStateAction<IMovimientoBancario>>;
+  handleDataGeneral: (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => Promise<void> | void;
 }
 
-const MoviemientoBancarioDetalle: React.FC<IProps> = ({
+const MovimientoBancarioDetalle: React.FC<IProps> = ({
   dataGeneral,
   setDataGeneral,
+  handleDataGeneral,
 }) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
@@ -60,7 +64,52 @@ const MoviemientoBancarioDetalle: React.FC<IProps> = ({
     { text: "TOTAL", value: Number(dataGeneral.total), show: true },
   ];
   //#endregion
-  return <div>MoviemientoBancarioDetalle</div>;
+
+  //#region useEffect
+  // useEffect(() => {
+  //   retorno &&
+  //     retorno.origen === "conceptoFind" &&
+  //     handleConceptoCompleto(retorno.id as string);
+  //   retorno &&
+  //     retorno.origen === "detalle" &&
+  //     handleActionBar(retorno as IMovimientoBancarioDetalle);
+  // }, [retorno]);
+
+  // useEffect(() => {
+  //   data.tipo !== "registrar" && handleConceptoCompleto(data.conceptoId);
+  // }, [data.tipo]);
+
+  // useEffect(() => {
+  //   conceptoCompleto.id !== "" &&
+  //     data.tipo === "registrar" &&
+  //     handleFillDetalle();
+  // }, [conceptoCompleto]);
+  //#endregion
+
+  const handleData = ({
+    target,
+  }: ChangeEvent<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  >): void => {
+    const { name } = target;
+    const value = handleInputType(target);
+
+    setData((x) => {
+      const newData = { ...x, [name]: value };
+
+      switch (name) {
+        case "cantidad":
+          newData.abono;
+          break;
+
+        default:
+          break;
+      }
+      return newData;
+    });
+  };
+
+  return <div>MovimientoBancarioDetalle</div>;
 };
 
-export default MoviemientoBancarioDetalle;
+export default MovimientoBancarioDetalle;

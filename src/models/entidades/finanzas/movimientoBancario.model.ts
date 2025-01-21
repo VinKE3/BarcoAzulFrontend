@@ -28,7 +28,7 @@ export interface IMovimientoBancario {
   montoInteres: number;
   monto: number;
   total: number;
-  tieneCuentaDestino: true;
+  tieneCuentaDestino: boolean;
   cuentaDestinoId: string | null;
   monedaId: string | null;
   detalles: IMovimientoBancarioDetalle[];
@@ -40,11 +40,11 @@ export const defaultMovimientoBancario: IMovimientoBancario = {
   cuentaCorrienteId: "",
   fechaEmision: format(new Date(), "yyyy-MM-dd"),
   tipoCambio: 0,
-  tipoMovimientoId: null,
-  tipoOperacionId: null,
+  tipoMovimientoId: "IN",
+  tipoOperacionId: "DE",
   numeroOperacion: null,
   isCierreCaja: true,
-  tipoBeneficiarioId: null,
+  tipoBeneficiarioId: "O",
   clienteProveedorId: null,
   clienteProveedorNombre: null,
   concepto: null,
@@ -55,7 +55,7 @@ export const defaultMovimientoBancario: IMovimientoBancario = {
   montoInteres: 0,
   monto: 0,
   total: 0,
-  tieneCuentaDestino: true,
+  tieneCuentaDestino: false,
   cuentaDestinoId: null,
   monedaId: null,
   detalles: [],

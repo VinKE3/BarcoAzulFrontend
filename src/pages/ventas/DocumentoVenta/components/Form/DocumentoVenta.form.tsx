@@ -425,7 +425,7 @@ const DocumentoVentaForm: React.FC = () => {
     }
   };
   const handleTotales = (detalles: IDocumentoVentaDetalle[]): void => {
-    const { porcentajeIGV, incluyeIGV, isOperacionGratuita, monedaId } = data;
+    const { porcentajeIGV, incluyeIGV, isOperacionGratuita } = data;
     const importeTotal = detalles.reduce((total, x) => total + x.importe, 0);
     if (isOperacionGratuita) {
       setData((x) => ({

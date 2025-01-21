@@ -1,10 +1,7 @@
-import {
-  ICotizacionDetalle,
-} from "../../../models";
+import { ICotizacionDetalle } from "../../../models";
 
 /** Definición del tipo IDetalle que puede ser uno de varios tipos de detalles */
-type IDetalle =
-  | ICotizacionDetalle
+type IDetalle = ICotizacionDetalle;
 
 /**
  * Maneja las operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para los detalles de un documento específico.
@@ -43,7 +40,11 @@ export const handleCrudDetalles = (
  * @param setData La función para actualizar el estado de los datos.
  * @param detalle El detalle a agregar.
  */
-const handleAdd = (data: any, setData: React.Dispatch<React.SetStateAction<any>>, detalle: IDetalle): void => {
+const handleAdd = (
+  data: any,
+  setData: React.Dispatch<React.SetStateAction<any>>,
+  detalle: IDetalle
+): void => {
   // Calcula el nuevo ID del detalle basándose en la longitud actual de la lista de detalles
   const nuevoDetalleId = data.detalles.length + 1;
 
@@ -66,12 +67,16 @@ const handleModificarDetalle = (
   detalle: IDetalle
 ): void => {
   // Busca el detalle existente en la lista de detalles usando el ID del artículo
-  const existeDetalle = data.detalles.find((x: any) => x.articuloId === detalle.articuloId);
+  const existeDetalle = data.detalles.find(
+    (x: any) => x.articuloId === detalle.articuloId
+  );
 
   // Si el detalle existe, procede con la modificación
   if (existeDetalle) {
     // Encuentra el índice del detalle a modificar
-    const indiceDetalle = data.detalles.findIndex((x: any) => x.articuloId === detalle.articuloId);
+    const indiceDetalle = data.detalles.findIndex(
+      (x: any) => x.articuloId === detalle.articuloId
+    );
 
     // Crea una copia de la lista de detalles
     const nuevosDetalles = [...data.detalles];
@@ -90,20 +95,30 @@ const handleModificarDetalle = (
  * @param setData La función para actualizar el estado de los datos.
  * @param detalle El detalle que se va a eliminar.
  */
-const handleDelete = (data: any, setData: React.Dispatch<React.SetStateAction<any>>, detalle: IDetalle): void => {
+const handleDelete = (
+  data: any,
+  setData: React.Dispatch<React.SetStateAction<any>>,
+  detalle: IDetalle
+): void => {
   // Busca el detalle existente en la lista de detalles usando el ID del artículo
-  const existeDetalle = data.detalles.find((x: any) => x.articuloId === detalle.articuloId);
+  const existeDetalle = data.detalles.find(
+    (x: any) => x.articuloId === detalle.articuloId
+  );
 
   // Si el detalle existe, procede con la eliminación
   if (existeDetalle) {
     // Filtra la lista de detalles para excluir el detalle que se va a eliminar
-    const nuevosDetalles = data.detalles.filter((x: any) => x.articuloId !== detalle.articuloId);
+    const nuevosDetalles = data.detalles.filter(
+      (x: any) => x.articuloId !== detalle.articuloId
+    );
 
     // Reasigna los IDs de detalle a los detalles restantes para mantener una numeración secuencial
-    const detallesActualizados = nuevosDetalles.map((detalle: any, index: number) => ({
-      ...detalle,
-      detalleId: index + 1,
-    }));
+    const detallesActualizados = nuevosDetalles.map(
+      (detalle: any, index: number) => ({
+        ...detalle,
+        detalleId: index + 1,
+      })
+    );
 
     // Actualiza el estado con la lista de detalles actualizada
     setData((x: any) => ({ ...x, detalles: detallesActualizados }));

@@ -1,1 +1,1 @@
-export { default as MoviemientoBancarioCabecera } from "./MovimientoBancario.cabecera";
+export { default as MovimientoBancarioCabecera } from "./MovimientoBancario.cabecera";
