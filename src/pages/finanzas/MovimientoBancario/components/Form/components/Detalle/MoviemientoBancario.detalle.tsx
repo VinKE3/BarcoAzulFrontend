@@ -68,9 +68,6 @@ const MovimientoBancarioDetalle: React.FC<IProps> = ({
     "nombre",
     "buttonSaveTransportista"
   );
-  const footerItems = [
-    { text: "TOTAL", value: Number(dataGeneral.total), show: true },
-  ];
   //#endregion
 
   //#region useEffect
@@ -86,12 +83,6 @@ const MovimientoBancarioDetalle: React.FC<IProps> = ({
   useEffect(() => {
     setTable(dataGeneral.detalles);
   }, [dataGeneral.detalles]);
-
-  // useEffect(() => {
-  //   data.tipo !== "registrar" &&
-  //     handleConceptoCompleto(data.documentoRelacionado);
-  // }, [data.tipo]);
-
   //#endregion
 
   //#region Funciones
@@ -183,18 +174,29 @@ const MovimientoBancarioDetalle: React.FC<IProps> = ({
         break;
     }
   };
+
   const handleAdd = (detalle: IMovimientoBancarioDetalle): void => {
     const nuevoDetalleId = table.length + 1;
+    // Crea los nuevos detalles
+    const nuevosDetalles = [
+      ...dataGeneral.detalles,
+      {
+        ...detalle,
+        detalleId: nuevoDetalleId,
+      },
+    ];
+
+    // Calcula los conceptos basados en los nuevos detalles
+    const texto =
+      dataGeneral.tipoMovimientoId === "EG" ? "PAGO DE " : "COBRO DE ";
+    const conceptos = nuevosDetalles.map((x) => x.concepto?.substring(0, 16));
+    const concepto = texto + conceptos.join(", ");
+
+    // Actualiza el estado con los nuevos detalles y conceptos
     setDataGeneral((x) => ({
       ...x,
-      detalles: [
-        ...x.detalles,
-        {
-          ...detalle,
-          abono: detalle.saldo,
-          detalleId: nuevoDetalleId,
-        },
-      ],
+      detalles: nuevosDetalles,
+      concepto: concepto,
     }));
   };
 
@@ -218,16 +220,32 @@ const MovimientoBancarioDetalle: React.FC<IProps> = ({
     );
 
     if (existeDetalle) {
+      // Filtra los detalles para eliminar el seleccionado
       const nuevosDetalles = table.filter(
         (x) => x.documentoVentaCompraId !== detalle.documentoVentaCompraId
       );
 
+      // Reasigna los índices de los elementos restantes
       const detallesActualizados = nuevosDetalles.map((x, index) => ({
         ...x,
         item: index + 1,
       }));
 
-      setDataGeneral((x) => ({ ...x, detalles: detallesActualizados }));
+      // Genera un nuevo concepto basado en los detalles restantes
+      const texto =
+        dataGeneral.tipoMovimientoId === "EG" ? "PAGO DE " : "COBRO DE ";
+      const conceptos = detallesActualizados.map((x) =>
+        x.concepto?.substring(0, 16)
+      );
+      const conceptoActualizado = texto + conceptos.join(", ");
+
+      // Actualiza el estado con los nuevos detalles y concepto
+      setDataGeneral((x) => ({
+        ...x,
+        detalles: detallesActualizados,
+        concepto: conceptoActualizado,
+      }));
+
       handleClear();
     }
   };

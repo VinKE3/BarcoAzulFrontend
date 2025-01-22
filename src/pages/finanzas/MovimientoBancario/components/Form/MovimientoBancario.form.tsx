@@ -115,6 +115,10 @@ const MovimientoBancarioForm: React.FC = () => {
     console.log(data.detalles);
   }, [data.detalles]);
 
+  // useEffect(() => {
+  //   data.detalles && handleTotales(data.detalles);
+  // }, [data.porcentajeITF]);
+
   useEffect(() => {
     handleLoad();
   }, [primer.tipo]);
@@ -184,6 +188,7 @@ const MovimientoBancarioForm: React.FC = () => {
           newData.montoITF = roundNumber(
             newData.monto * (newData.porcentajeITF / 100)
           );
+          newData.total = roundNumber(newData.monto + newData.montoITF, 4);
           break;
         case "porcentajeITF":
           newData.montoITF = roundNumber(
@@ -232,12 +237,15 @@ const MovimientoBancarioForm: React.FC = () => {
     }));
   };
   const handleTotales = (detalles: IMovimientoBancarioDetalle[]): void => {
-    const { porcentajeITF, monto } = data;
+    const { porcentajeITF } = data;
     const importeTotal = detalles.reduce((total, x) => total + x.abono, 0);
     let importeMontoITF = importeTotal * (porcentajeITF / 100);
+    let importeTotalFinal = importeTotal + importeMontoITF;
     setData((x) => ({
       ...x,
-      montoITF: roundNumber(importeMontoITF),
+      montoITF: roundNumber(importeMontoITF, 2),
+      total: roundNumber(importeTotalFinal, 2),
+      monto: roundNumber(importeTotal, 2),
     }));
   };
 
@@ -245,12 +253,12 @@ const MovimientoBancarioForm: React.FC = () => {
     <>
       <div className="main-base">
         <div className="main-header">
-          <h4 className="main-header-sub-title">{`${modal.primer.tipo} Documento de Venta`}</h4>
+          <h4 className="main-header-sub-title">{`${modal.primer.tipo} Movimiento Bancario`}</h4>
         </div>
 
         {mensaje.length > 0 && <Messages />}
 
-        <BasicKeyHandler selector={"documento-venta-form"}>
+        <BasicKeyHandler selector={"movimiento-bancario-form"}>
           <div className="form-base">
             <MovimientoBancarioCabecera
               data={data}

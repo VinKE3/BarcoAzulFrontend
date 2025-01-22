@@ -218,6 +218,7 @@ const MovimientoBancarioCabecera = ({
               onChange={handleData}
               disabled={primer.tipo === "consultar"}
               className="input-base"
+              maxLength={10}
             />
           </div>
           {data.tipoMovimientoId === "EG" && data.tipoOperacionId === "TR" && (
