@@ -8,6 +8,7 @@ import { CrudType } from "../../types";
 import { IPersonal } from "./personal.model";
 
 export interface ICuadreStock {
+  id: string;
   empresaId: string;
   tipoDocumentoId: string;
   serie: string;
@@ -49,7 +50,7 @@ export interface ICuadreStockDetalle {
   tipoExistenciaId: string;
 }
 
-export const defaulCuadreStocktDetalle: ICuadreStockDetalle = {
+export const defaultCuadreStockDetalle: ICuadreStockDetalle = {
   tipo: "registrar",
   detalleId: 0,
   lineaId: "",
@@ -76,12 +77,13 @@ export const defaulCuadreStocktDetalle: ICuadreStockDetalle = {
 };
 
 export const defaultCuadreStock: ICuadreStock = {
+  id: "",
   empresaId: "",
   tipoDocumentoId: "",
   serie: "",
   numero: "",
   fechaRegistro: format(new Date(), "yyyy-MM-dd"),
-  monedaId: "",
+  monedaId: "S",
   tipoCambio: 0,
   responsableId: "",
   observacion: "",
@@ -139,3 +141,25 @@ export interface ICuadreStockDetalleTable {
   precioUnitario: number;
   monedaId: string;
 }
+
+export interface ICuadreStockDetalleFilter {
+  codigoBarras: string;
+  subLineaDescripcion: string;
+  descripcion: string;
+  unidadMedidaDescripcion: string;
+  stockFinal: number;
+  inventario: number;
+  precioUnitario: number;
+  monedaId: string;
+}
+
+export const defaultCuadreStockDetalleFilter: ICuadreStockDetalleFilter = {
+  codigoBarras: "",
+  subLineaDescripcion: "",
+  descripcion: "",
+  unidadMedidaDescripcion: "",
+  stockFinal: 0,
+  inventario: 0,
+  precioUnitario: 0,
+  monedaId: "",
+};

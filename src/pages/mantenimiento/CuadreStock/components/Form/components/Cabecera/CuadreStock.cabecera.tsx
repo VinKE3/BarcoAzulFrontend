@@ -74,35 +74,10 @@ const CuadreStockCabecera: React.FC<IProps> = ({
               value={data.fechaRegistro}
               onChange={handleData}
               autoFocus
-              disabled={primer.tipo === "consultar" || data.detalles.length > 0}
+              disabled={primer.tipo === "consultar"}
               className="input-base"
             />
           </div>
-        </div>
-        <div className="input-base-row">
-          <div className="input-base-container-33">
-            <label htmlFor="responsableId" className="label-base">
-              Vendedor
-            </label>
-            <select
-              id="responsableId"
-              name="responsableId"
-              value={data.responsableId ?? ""}
-              onChange={handleData}
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            >
-              <option key="default" value="">
-                SELECCIONAR
-              </option>
-              {vendedores.map((x: IPersonal) => (
-                <option key={x.id} value={x.id}>
-                  {handleSelectPersonal(x)}
-                </option>
-              ))}
-            </select>
-          </div>
-
           <div className="input-base-container-33">
             <label htmlFor="monedaId" className="label-base">
               Moneda
@@ -152,7 +127,7 @@ const CuadreStockCabecera: React.FC<IProps> = ({
                   accessKey="z"
                   onClick={() => handleGetTipoCambio(false)}
                   onKeyDown={handleKeyDown}
-                  disabled={data.detalles.length > 0}
+                  // disabled={data.detalles.length > 0}
                   className="button-base-anidado button-base-bg-primary"
                 >
                   <FaMoneyBillTransfer
@@ -163,6 +138,30 @@ const CuadreStockCabecera: React.FC<IProps> = ({
                 </button>
               )}
             </div>
+          </div>
+        </div>
+        <div className="input-base-row">
+          <div className="input-base-container-100">
+            <label htmlFor="responsableId" className="label-base">
+              Vendedor
+            </label>
+            <select
+              id="responsableId"
+              name="responsableId"
+              value={data.responsableId ?? ""}
+              onChange={handleData}
+              disabled={primer.tipo === "consultar"}
+              className="input-base"
+            >
+              <option key="default" value="">
+                SELECCIONAR
+              </option>
+              {vendedores.map((x: IPersonal) => (
+                <option key={x.id} value={x.id}>
+                  {handleSelectPersonal(x)}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="input-base-container-100">

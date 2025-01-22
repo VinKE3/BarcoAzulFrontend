@@ -21,9 +21,11 @@ import {
   handleResetMensajeError,
   handleSetPermisoYMenu,
 } from "../../../util";
+import { useNavigate } from "react-router-dom";
 
 const CuadreStock: React.FC = () => {
   //#region useState
+  const navigate = useNavigate();
   const menu: string = "Almacen/CuadreStock";
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, mensajes, table, modal, form } = globalContext;
@@ -37,7 +39,17 @@ const CuadreStock: React.FC = () => {
   //#region useEffect
   useEffect(() => {
     const resetContext = async () => {
-      handleResetContext(setGlobalContext);
+      const validarClearMensaje =
+        api.menu === menu && mensaje.length > 0 ? false : true;
+      handleResetContext(
+        setGlobalContext,
+        true,
+        true,
+        true,
+        true,
+        true,
+        validarClearMensaje
+      );
     };
     resetContext();
   }, []);
@@ -52,6 +64,10 @@ const CuadreStock: React.FC = () => {
   useEffect(() => {
     primer.tipo && !form.data && handleModal();
   }, [primer.tipo]);
+
+  useEffect(() => {
+    form.data && primer.tipo && api.menu === menu && navigate("form");
+  }, [form.data]);
   //#endregion
 
   //#region funciones
@@ -77,7 +93,7 @@ const CuadreStock: React.FC = () => {
     <div className="main-base">
       <div className="main-header">
         <h4 className="main-header-title">Cuadre Stock</h4>
-        {ready && visible && <ButtonGroup isTablas={true} />}
+        {ready && visible && <ButtonGroup isTablas={true} isPermitido={true} />}
       </div>
 
       <div className="main-body">

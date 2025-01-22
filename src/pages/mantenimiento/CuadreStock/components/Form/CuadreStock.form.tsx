@@ -20,6 +20,7 @@ import {
   IClienteFind,
   ICuadreStock,
   ICuadreStockDetalle,
+  defaultCuadreStockDetalle,
   ICuadreStockTablas,
   defaultCuadreStock,
   defaultCuadreStockTablas,
@@ -55,6 +56,13 @@ const CuadreStockForm: React.FC = () => {
   const [data, setData] = useState<ICuadreStock>(
     form.data || defaultCuadreStock
   );
+  const [dataDetalles, setDataDetalles] = useState<ICuadreStockDetalle[]>([
+    defaultCuadreStockDetalle,
+  ]);
+
+  const [dataDetallesPorId, setDataDetallesPorId] = useState<
+    ICuadreStockDetalle[]
+  >([defaultCuadreStockDetalle]);
 
   const inputs = useFocus(
     "tipoDocumentoId",
@@ -116,6 +124,41 @@ const CuadreStockForm: React.FC = () => {
     if (primer.tipo === "registrar") {
       const tipoCambio: number = await handleGetTipoCambio(true, false);
       setData((x) => ({ ...x, tipoCambio }));
+    }
+    handleGetDetalles();
+    handleGetDetallesPorId(data);
+  };
+
+  const handleGetDetalles = async (): Promise<void> => {
+    try {
+      const detalles: ICuadreStockDetalle[] = await get({
+        globalContext,
+        menu: "Almacen/CuadreStock/GetDetalles",
+      });
+
+      console.log(detalles, "detalles");
+      setDataDetalles(detalles);
+    } catch (error) {
+      handleSetErrorMensaje(setGlobalContext, error, "form");
+    }
+  };
+
+  const handleGetDetallesPorId = async (
+    cuadreStock: ICuadreStock
+  ): Promise<void> => {
+    try {
+      const urlParams = new URLSearchParams({
+        id: cuadreStock.id,
+      });
+      const detallesCompletos: ICuadreStockDetalle[] = await get({
+        globalContext,
+        menu: "Almacen/CuadreStock/GetDetalles",
+        urlParams,
+      });
+      console.log(detallesCompletos, "detallesCompletos");
+      setDataDetallesPorId(detallesCompletos);
+    } catch (error) {
+      handleSetErrorMensaje(setGlobalContext, error, "form");
     }
   };
 
@@ -180,23 +223,25 @@ const CuadreStockForm: React.FC = () => {
     <>
       <div className="main-base">
         <div className="main-header">
-          <h4 className="main-header-sub-title">{`${modal.primer.tipo} nota pedido`}</h4>
+          <h4 className="main-header-sub-title">{`${modal.primer.tipo} cuadre de stock`}</h4>
         </div>
 
         {mensaje.length > 0 && <Messages />}
 
-        <BasicKeyHandler selector={"nota-pedido-form"}>
+        <BasicKeyHandler selector={"cuadre-stock-form"}>
           <div className="form-base">
             <CuadreStockCabecera
               data={data}
               handleData={handleData}
               handleGetTipoCambio={handleGetTipoCambio}
             />
-            {/* <CuadreStockDetalle
+            <CuadreStockDetalle
               dataGeneral={data}
+              dataDetalles={dataDetalles}
+              dataDetallesPorId={dataDetallesPorId}
               setDataGeneral={setData}
               handleDataGeneral={handleData}
-            /> */}
+            />
           </div>
 
           <ButtonFooter
