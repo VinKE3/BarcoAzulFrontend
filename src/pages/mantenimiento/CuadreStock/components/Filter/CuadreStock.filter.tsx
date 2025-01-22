@@ -16,13 +16,17 @@ import {
 const CuadreStockFilter: React.FC = () => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
-  const { table, modal, mensajes } = globalContext;
+  const { table, modal, mensajes, extra } = globalContext;
+  const { simplificado } = extra;
+  const { fechaFin, fechaInicio } = simplificado;
   const { primer } = modal;
   const { pagina } = table;
   const mensaje = mensajes.filter((x) => x.tipo === 0);
-  const [filter, setFilter] = useState<ICuadreStockFilter>(
-    defaultCuadreStockFilter
-  );
+  const [filter, setFilter] = useState<ICuadreStockFilter>({
+    ...defaultCuadreStockFilter,
+    fechaInicio: fechaInicio,
+    fechaFin: fechaFin,
+  });
   const search = useDebounce(filter);
   //#endregion
 
@@ -47,7 +51,8 @@ const CuadreStockFilter: React.FC = () => {
   const handleListar = async (): Promise<void> => {
     try {
       const params = new URLSearchParams({
-        descripcion: search.numero,
+        fechaInicio: search.fechaInicio,
+        fechaFin: search.fechaFin,
       });
       const { data, total }: { data: ICuadreStockTable[]; total: number } =
         await getListar(globalContext, params);
@@ -60,19 +65,31 @@ const CuadreStockFilter: React.FC = () => {
   return (
     <div className="filter-base">
       <span className="filter-base-text">Filtrar por</span>
-      <BasicKeyHandler selector="articulo-filter">
-        <div className="input-base-row articulo-filter">
-          <div className="input-base-container-75">
-            <label htmlFor="numeroFilter" className="label-base">
-              Número
+      <BasicKeyHandler selector="cuadre-stock-filter">
+        <div className="input-base-row cuadre-stock-filter">
+          <div className="input-base-container-50">
+            <label htmlFor="fechaInicio" className="label-base">
+              Desde
             </label>
             <input
-              id="numeroFilter"
-              name="numero"
-              placeholder="Número"
-              value={filter.numero}
+              type="date"
+              id="fechaInicio"
+              name="fechaInicio"
+              value={filter.fechaInicio}
               onChange={handleData}
-              autoComplete="off"
+              className="input-base"
+            />
+          </div>
+          <div className="input-base-container-50">
+            <label htmlFor="fechaFin" className="label-base">
+              Hasta
+            </label>
+            <input
+              type="date"
+              id="fechaFin"
+              name="fechaFin"
+              value={filter.fechaFin}
+              onChange={handleData}
               className="input-base"
             />
           </div>

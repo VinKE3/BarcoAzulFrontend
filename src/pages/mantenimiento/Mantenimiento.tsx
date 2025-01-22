@@ -15,7 +15,7 @@ import { Vehiculo } from "./Vehiculo";
 import { Transportista } from "./Transportista";
 import { Articulo } from "./Articulo";
 import { MovimientoArticulo } from "./MovimientoArticulo";
-import { CuadreStock } from "./CuadreStock";
+import { CuadreStock, CuadreStockForm } from "./CuadreStock";
 import { Cliente } from "./Cliente";
 import { Proveedor } from "./Proveedor";
 import { Vendedor } from "./Vendedor";
@@ -73,6 +73,10 @@ const Mantenimiento = () => {
         <Route
           path={mantenimientoRoutes.CUADRESTOCK}
           element={<CuadreStock />}
+        />
+        <Route
+          path={mantenimientoRoutes.CUADRESTOCK_FORMULARIO}
+          element={<CuadreStockForm />}
         />
       </>
     </RoutesWithNotFound>

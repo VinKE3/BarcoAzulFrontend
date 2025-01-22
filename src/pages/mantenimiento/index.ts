@@ -11,6 +11,7 @@ export * from "./Correlativo/components/Modal";
 export * from "./CuadreStock/components/Column";
 export * from "./CuadreStock/components/Filter";
 export * from "./CuadreStock/components/Modal";
+export * from "./CuadreStock/components/Form";
 export * from "./CuadreStock/components";
 export * from "./CuadreStock";
 export * from "./Departamento/components/Column";

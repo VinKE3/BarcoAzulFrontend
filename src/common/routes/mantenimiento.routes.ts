@@ -27,6 +27,7 @@ export const mantenimientoRoutes = {
   ARTICULO: "articulo",
   MOVIMIENTOARTICULO: "movimientoArticulo",
   CUADRESTOCK: "cuadreStock",
+  CUADRESTOCK_FORMULARIO: "cuadreStock/form",
   FARMACOLOGIA: "farmacologia",
   GRUPOFARMACOLOGICO: "grupofarmacologico",
   PRESENTACIONGENERAL: "presentationgeneral",

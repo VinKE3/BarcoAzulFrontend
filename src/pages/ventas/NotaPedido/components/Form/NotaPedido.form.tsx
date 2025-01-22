@@ -240,6 +240,7 @@ const NotaPedidoForm: React.FC = () => {
     const retorno = { origen: name, [name]: value };
     handleSetRetorno(setGlobalContext, retorno);
   };
+
   const handleNumero = (): void => {
     let num = data.numero;
     if (num.length < 10) {

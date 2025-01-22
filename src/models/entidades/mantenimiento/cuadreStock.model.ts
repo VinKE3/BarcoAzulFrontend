@@ -1,4 +1,11 @@
-import {  IMoneda } from "../../global";
+import { format } from "date-fns";
+import {
+  IMoneda,
+  IDocumentoFilter,
+  defaultDocumentoFilter,
+} from "../../global";
+import { CrudType } from "../../types";
+import { IPersonal } from "./personal.model";
 
 export interface ICuadreStock {
   empresaId: string;
@@ -13,10 +20,11 @@ export interface ICuadreStock {
   totalSobra: number;
   totalFalta: number;
   saldoTotal: number;
-  detalles: IDetalleCuadreStock[];
+  detalles: ICuadreStockDetalle[];
 }
 
-export interface IDetalleCuadreStock {
+export interface ICuadreStockDetalle {
+  tipo: CrudType;
   detalleId: number;
   lineaId: string;
   subLineaId: string;
@@ -41,12 +49,38 @@ export interface IDetalleCuadreStock {
   tipoExistenciaId: string;
 }
 
+export const defaulCuadreStocktDetalle: ICuadreStockDetalle = {
+  tipo: "registrar",
+  detalleId: 0,
+  lineaId: "",
+  subLineaId: "",
+  articuloId: "",
+  marcaId: 0,
+  unidadMedidaId: "",
+  descripcion: "",
+  codigoBarras: "",
+  unidadMedidaDescripcion: "",
+  stockFinal: 0,
+  precioUnitario: 0,
+  inventario: 0,
+  cantidadFalta: 0,
+  totalFalta: 0,
+  cantidadSobra: 0,
+  totalSobra: 0,
+  cantidadSaldo: 0,
+  totalSaldo: 0,
+  marcaNombre: "",
+  lineaDescripcion: "",
+  subLineaDescripcion: "",
+  tipoExistenciaId: "",
+};
+
 export const defaultCuadreStock: ICuadreStock = {
   empresaId: "",
   tipoDocumentoId: "",
   serie: "",
   numero: "",
-  fechaRegistro: "",
+  fechaRegistro: format(new Date(), "yyyy-MM-dd"),
   monedaId: "",
   tipoCambio: 0,
   responsableId: "",
@@ -54,32 +88,7 @@ export const defaultCuadreStock: ICuadreStock = {
   totalSobra: 0,
   totalFalta: 0,
   saldoTotal: 0,
-  detalles: [
-    {
-      detalleId: 0,
-      lineaId: "",
-      subLineaId: "",
-      articuloId: "",
-      marcaId: 0,
-      unidadMedidaId: "",
-      descripcion: "",
-      codigoBarras: "",
-      unidadMedidaDescripcion: "",
-      stockFinal: 0,
-      precioUnitario: 0,
-      inventario: 0,
-      cantidadFalta: 0,
-      totalFalta: 0,
-      cantidadSobra: 0,
-      totalSobra: 0,
-      cantidadSaldo: 0,
-      totalSaldo: 0,
-      marcaNombre: "",
-      lineaDescripcion: "",
-      subLineaDescripcion: "",
-      tipoExistenciaId: "",
-    },
-  ],
+  detalles: [],
 };
 
 export interface IVendedores {
@@ -93,7 +102,7 @@ export interface IVendedores {
 }
 export interface ICuadreStockTablas {
   monedas: IMoneda[];
-  vendedores: IVendedores[];
+  vendedores: IPersonal[];
 }
 
 export const defaultCuadreStockTablas: ICuadreStockTablas = {
@@ -101,12 +110,10 @@ export const defaultCuadreStockTablas: ICuadreStockTablas = {
   vendedores: [],
 };
 
-export interface ICuadreStockFilter {
-  numero: string;
-}
+export interface ICuadreStockFilter extends IDocumentoFilter {}
 
 export const defaultCuadreStockFilter: ICuadreStockFilter = {
-  numero: "",
+  ...defaultDocumentoFilter,
 };
 
 export interface ICuadreStockTable {
@@ -120,4 +127,15 @@ export interface ICuadreStockTable {
   totalSobra: number;
   totalFalta: number;
   saldoTotal: number;
+}
+
+export interface ICuadreStockDetalleTable {
+  codigoBarras: string;
+  subLineaDescripcion: string;
+  descripcion: string;
+  unidadMedidaDescripcion: string;
+  stockFinal: number;
+  inventario: number;
+  precioUnitario: number;
+  monedaId: string;
 }
