@@ -17,12 +17,13 @@ import { BasicKeyHandler } from "../../../../../../../components";
 
 interface IProps {
   dataDetalles: ICuadreStockDetalle[];
-  setData: React.Dispatch<React.SetStateAction<ICuadreStockDetalle>>;
+
+  setDataDetalles: React.Dispatch<React.SetStateAction<ICuadreStockDetalle[]>>;
 }
 
 const CuadreStockDetalleFilter: React.FC<IProps> = ({
   dataDetalles,
-  setData,
+  setDataDetalles,
 }) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
@@ -98,12 +99,7 @@ const CuadreStockDetalleFilter: React.FC<IProps> = ({
 
       return descripcionMatch && subLineaMatch && codigoBarrasMatch;
     });
-    console.log(filtrado, "filtrado");
-    console.log(filtrado.length, "filtrado.length");
-    setGlobalContext((x) => ({
-      ...x,
-      table: { ...x.table, data: filtrado, total: filtrado.length },
-    }));
+    setDataDetalles(filtrado);
   };
   return (
     <div className="filter-base">

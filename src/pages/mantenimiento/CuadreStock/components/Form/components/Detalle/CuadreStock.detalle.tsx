@@ -15,8 +15,8 @@ import { Table } from "../../../../../../../components";
 interface IProps {
   dataGeneral: ICuadreStock;
   dataDetalles: ICuadreStockDetalle[];
-  dataDetallesPorId: ICuadreStockDetalle[];
   setDataGeneral: React.Dispatch<React.SetStateAction<ICuadreStock>>;
+  setDataDetalles: React.Dispatch<React.SetStateAction<ICuadreStockDetalle[]>>;
   handleDataGeneral: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => Promise<void> | void;
@@ -25,7 +25,7 @@ interface IProps {
 const CuadreStockDetalle: React.FC<IProps> = ({
   dataGeneral,
   dataDetalles,
-  dataDetallesPorId,
+  setDataDetalles,
   setDataGeneral,
   handleDataGeneral,
 }) => {
@@ -78,26 +78,18 @@ const CuadreStockDetalle: React.FC<IProps> = ({
   }
   return (
     <div className="form-base-container cuadre-stock-detalle-form">
-      <CuadreStockDetalleFilter dataDetalles={dataDetalles} setData={setData} />
-      {dataGeneral.id ? (
-        <Table
-          data={dataDetallesPorId}
-          columns={columns}
-          doubleClick={false}
-          selectable={false}
-          border={true}
-          tableClassName="cuadre-stock-detalle-table"
-        />
-      ) : (
-        <Table
-          data={dataDetalles}
-          columns={columns}
-          doubleClick={false}
-          selectable={false}
-          border={true}
-          tableClassName="cuadre-stock-detalle-table"
-        />
-      )}
+      <CuadreStockDetalleFilter
+        dataDetalles={dataDetalles}
+        setDataDetalles={setDataDetalles}
+      />
+      <Table
+        data={dataDetalles}
+        columns={columns}
+        doubleClick={false}
+        selectable={false}
+        border={true}
+        tableClassName="cuadre-stock-detalle-table"
+      />
     </div>
   );
 };

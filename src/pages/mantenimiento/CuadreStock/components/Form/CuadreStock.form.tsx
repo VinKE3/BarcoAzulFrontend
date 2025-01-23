@@ -60,10 +60,6 @@ const CuadreStockForm: React.FC = () => {
     defaultCuadreStockDetalle,
   ]);
 
-  const [dataDetallesPorId, setDataDetallesPorId] = useState<
-    ICuadreStockDetalle[]
-  >([defaultCuadreStockDetalle]);
-
   const inputs = useFocus(
     "tipoDocumentoId",
     "clienteId",
@@ -125,38 +121,21 @@ const CuadreStockForm: React.FC = () => {
       const tipoCambio: number = await handleGetTipoCambio(true, false);
       setData((x) => ({ ...x, tipoCambio }));
     }
-    handleGetDetalles();
-    handleGetDetallesPorId(data);
+    handleGetDetallesConId(data?.id || "");
   };
 
-  const handleGetDetalles = async (): Promise<void> => {
+  const handleGetDetallesConId = async (id: string): Promise<void> => {
     try {
+      const urlParams = id ? new URLSearchParams({ id }) : undefined;
+
       const detalles: ICuadreStockDetalle[] = await get({
-        globalContext,
-        menu: "Almacen/CuadreStock/GetDetalles",
-      });
-
-      console.log(detalles, "detalles");
-      setDataDetalles(detalles);
-    } catch (error) {
-      handleSetErrorMensaje(setGlobalContext, error, "form");
-    }
-  };
-
-  const handleGetDetallesPorId = async (
-    cuadreStock: ICuadreStock
-  ): Promise<void> => {
-    try {
-      const urlParams = new URLSearchParams({
-        id: cuadreStock.id,
-      });
-      const detallesCompletos: ICuadreStockDetalle[] = await get({
         globalContext,
         menu: "Almacen/CuadreStock/GetDetalles",
         urlParams,
       });
-      console.log(detallesCompletos, "detallesCompletos");
-      setDataDetallesPorId(detallesCompletos);
+
+      console.log(detalles, id ? "detallesCompletos" : "detalles");
+      setDataDetalles(detalles);
     } catch (error) {
       handleSetErrorMensaje(setGlobalContext, error, "form");
     }
@@ -238,7 +217,7 @@ const CuadreStockForm: React.FC = () => {
             <CuadreStockDetalle
               dataGeneral={data}
               dataDetalles={dataDetalles}
-              dataDetallesPorId={dataDetallesPorId}
+              setDataDetalles={setDataDetalles}
               setDataGeneral={setData}
               handleDataGeneral={handleData}
             />
