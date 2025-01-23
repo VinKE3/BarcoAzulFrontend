@@ -11,10 +11,12 @@ import {
 import { useGlobalContext, usePermisos } from "../../../hooks";
 import {
   ICuadreStock,
+  ICuadreStockDetalle,
   ICuadreStockTablas,
   defaultCuadreStock,
 } from "../../../models";
 import {
+  get,
   handleInitialData,
   handlePrimaryModal,
   handleResetContext,
@@ -76,12 +78,22 @@ const CuadreStock: React.FC = () => {
       return;
     }
 
+    const urlParams = new URLSearchParams({ id: primer.id ?? "" });
+
+    const detalles: ICuadreStockDetalle[] = await get({
+      globalContext,
+      menu: "Almacen/CuadreStock/GetDetalles",
+      urlParams,
+    });
+    console.log(detalles, "resultRESULTS");
+
     handleInitialData(globalContext, defaultCuadreStock)
       .then((response) => {
         const {
           data,
           tablas,
         }: { data: ICuadreStock; tablas: ICuadreStockTablas } = response;
+        data.detalles = detalles;
         handlePrimaryModal(setGlobalContext, data, tablas);
       })
       .catch((error) => {

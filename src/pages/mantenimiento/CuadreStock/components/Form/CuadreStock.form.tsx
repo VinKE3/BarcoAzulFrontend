@@ -39,6 +39,7 @@ import {
   handleTipoCambio,
   handleToast,
   handleUpdateTablas,
+  put,
   roundNumber,
 } from "../../../../../util";
 import { CuadreStockCabecera, CuadreStockDetalle } from "./components";
@@ -56,9 +57,12 @@ const CuadreStockForm: React.FC = () => {
   const [data, setData] = useState<ICuadreStock>(
     form.data || defaultCuadreStock
   );
-  const [dataDetalles, setDataDetalles] = useState<ICuadreStockDetalle[]>([
-    defaultCuadreStockDetalle,
-  ]);
+  const [dataDetalles, setDataDetalles] = useState<ICuadreStockDetalle[]>(
+    data.detalles || []
+  );
+  const [dataInventario, setDataInventario] = useState<ICuadreStockDetalle>(
+    defaultCuadreStockDetalle
+  );
 
   const inputs = useFocus(
     "tipoDocumentoId",
@@ -125,20 +129,18 @@ const CuadreStockForm: React.FC = () => {
   };
 
   const handleGetDetallesConId = async (id: string): Promise<void> => {
-    try {
-      const urlParams = id ? new URLSearchParams({ id }) : undefined;
-
-      const detalles: ICuadreStockDetalle[] = await get({
-        globalContext,
-        menu: "Almacen/CuadreStock/GetDetalles",
-        urlParams,
-      });
-
-      console.log(detalles, id ? "detallesCompletos" : "detalles");
-      setDataDetalles(detalles);
-    } catch (error) {
-      handleSetErrorMensaje(setGlobalContext, error, "form");
-    }
+    // try {
+    //   const urlParams = id ? new URLSearchParams({ id }) : undefined;
+    //   const detalles: ICuadreStockDetalle[] = await get({
+    //     globalContext,
+    //     menu: "Almacen/CuadreStock/GetDetalles",
+    //     urlParams,
+    //   });
+    //   console.log(detalles, id ? "detallesCompletos" : "detalles");
+    //   setDataDetalles(detalles);
+    // } catch (error) {
+    //   handleSetErrorMensaje(setGlobalContext, error, "form");
+    // }
   };
 
   const handleGetTipoCambio = async (
@@ -162,6 +164,55 @@ const CuadreStockForm: React.FC = () => {
 
     if (precioVenta === 0) return 0;
     return precioVenta;
+  };
+
+  const Inventario = async (
+    dataDetalle: ICuadreStockDetalle[]
+  ): Promise<void> => {
+    let detalle = dataDetalle.map((x) => {
+      if (x.detalleId == dataInventario.detalleId) {
+        //Calculos
+        let cantidad = x.stockFinal - Number(dataInventario.inventario);
+        let precioUnitario = x.precioUnitario;
+        let cantidadSobra = 0;
+        let cantidadFalta = 0;
+        if (cantidad < 0) {
+          cantidadSobra = cantidad;
+        } else {
+          cantidadFalta = cantidad;
+        }
+        let totalSobra = cantidadSobra * precioUnitario;
+        let totalFalta = cantidadFalta * precioUnitario;
+        //Calculos
+        return {
+          ...x,
+          inventario: roundNumber(dataInventario.inventario, 2),
+          cantidadSobra: roundNumber(cantidadSobra, 2),
+          cantidadFalta: roundNumber(cantidadFalta, 2),
+          totalSobra: roundNumber(totalSobra, 2),
+          totalFalta: roundNumber(totalFalta, 2),
+        };
+      } else {
+        return x;
+      }
+    });
+    setDataDetalles(detalle);
+  };
+
+  const RecalcularStock = async (): Promise<void> => {
+    //almacenamos el detalle
+    let detalle: ICuadreStockDetalle[] = dataDetalles;
+    const result = await put({
+      globalContext,
+      menu: "Almacen/CuadreStock/RecalcularStock",
+      data: data,
+    });
+    if (result) {
+      handleToast("success", "Se ha recalculado el stock", "top");
+    }
+    console.log(result.data, "RESULTDATADATADATA");
+
+    //*Mapeamos lo que retorna el endpoint
   };
 
   const handleData = ({
@@ -189,12 +240,15 @@ const CuadreStockForm: React.FC = () => {
   };
 
   const handleTotales = (detalles: ICuadreStockDetalle[]): void => {
-    const {} = data;
-
-    const importeTotal = detalles.reduce((total, x) => total + x.totalSaldo, 0);
-
+    //suma los importes de los detalles
+    let totalFalta = detalles.reduce((total, x) => total + x.totalFalta, 0);
+    let totalSobra = detalles.reduce((total, x) => total + x.totalSobra, 0);
+    let saldoTotal = totalFalta + totalSobra;
     setData((x) => ({
       ...x,
+      totalFalta: roundNumber(totalFalta, 2),
+      totalSobra: roundNumber(totalSobra, 2),
+      saldoTotal: roundNumber(saldoTotal, 2),
     }));
   };
 
@@ -213,6 +267,7 @@ const CuadreStockForm: React.FC = () => {
               data={data}
               handleData={handleData}
               handleGetTipoCambio={handleGetTipoCambio}
+              RecalcularStock={RecalcularStock}
             />
             <CuadreStockDetalle
               dataGeneral={data}

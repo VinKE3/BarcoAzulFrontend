@@ -11,6 +11,7 @@ import {
   IPersonal,
 } from "../../../../../../../models";
 import { handleSelectPersonal } from "../../../../../../../util";
+import { BiLoader } from "react-icons/bi";
 
 interface IProps {
   data: ICuadreStock;
@@ -18,12 +19,14 @@ interface IProps {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => Promise<void> | void;
   handleGetTipoCambio: (retorno: boolean) => Promise<number>;
+  RecalcularStock: () => Promise<void>;
 }
 
 const CuadreStockCabecera: React.FC<IProps> = ({
   data,
   handleData,
   handleGetTipoCambio,
+  RecalcularStock,
 }) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
@@ -65,18 +68,43 @@ const CuadreStockCabecera: React.FC<IProps> = ({
         <div className="input-base-row">
           <div className="input-base-container-33">
             <label htmlFor="fechaRegistro" className="label-base">
-              F. Emisión
+              F. Registro
             </label>
-            <input
-              type="date"
-              id="fechaRegistro"
-              name="fechaRegistro"
-              value={data.fechaRegistro}
-              onChange={handleData}
-              autoFocus
-              disabled={primer.tipo === "consultar"}
-              className="input-base"
-            />
+            <div className="input-base-container-button">
+              {" "}
+              <input
+                type="date"
+                id="fechaRegistro"
+                name="fechaRegistro"
+                value={data.fechaRegistro}
+                onChange={handleData}
+                autoFocus
+                disabled={primer.tipo === "consultar"}
+                className={
+                  primer.tipo !== "consultar" && !api.loading
+                    ? "input-base-button"
+                    : "input-base"
+                }
+              />
+              {primer.tipo !== "consultar" && !api.loading && (
+                <button
+                  id="buttonConsultarTipoCambio"
+                  name="buttonConsultarTipoCambio"
+                  title="Presione [ALT + Z] para consultar a SUNAT."
+                  accessKey="z"
+                  onClick={() => RecalcularStock()}
+                  onKeyDown={handleKeyDown}
+                  // disabled={data.detalles.length > 0}
+                  className="button-base-anidado button-base-bg-primary"
+                >
+                  <BiLoader
+                    strokeWidth={2}
+                    size="2rem"
+                    className="button-base-icon"
+                  />
+                </button>
+              )}
+            </div>
           </div>
           <div className="input-base-container-33">
             <label htmlFor="monedaId" className="label-base">

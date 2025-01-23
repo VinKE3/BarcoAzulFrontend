@@ -34,6 +34,8 @@ const EmpresaDatosTab: React.FC<IProps> = ({
   //#region useEffect
   //#endregion
 
+  console.log(dataGeneral, "dataEMPRESA");
+
   //#region Funciones
   const provincias = useMemo(() => {
     const departamento = departamentos.find(
@@ -272,6 +274,101 @@ const EmpresaDatosTab: React.FC<IProps> = ({
                     name="filtroFechaFin"
                     value={dataGeneral.filtroFechaFin}
                     onChange={handleDataGeneral}
+                    className="input-base"
+                  />
+                </div>
+              </div>
+              <div className="input-base-row">
+                <div className="input-base-container-25">
+                  <label htmlFor="concarEmpresaId" className="label-base">
+                    Compañia
+                  </label>
+                  <input
+                    id="concarEmpresaId"
+                    name="concarEmpresaId"
+                    placeholder="Compañia"
+                    value={dataGeneral.concarEmpresaId ?? ""}
+                    onChange={handleDataGeneral}
+                    autoComplete="off"
+                    disabled
+                    className="input-base"
+                  />
+                </div>
+                <div className="input-base-container-75">
+                  <label htmlFor="concarEmpresaNombre" className="label-base">
+                    Empresa Nombre
+                  </label>
+                  <input
+                    id="concarEmpresaNombre"
+                    name="concarEmpresaNombre"
+                    placeholder="Compañia"
+                    value={dataGeneral.concarEmpresaNombre ?? ""}
+                    onChange={handleDataGeneral}
+                    autoComplete="off"
+                    disabled
+                    className="input-base"
+                  />
+                </div>
+              </div>
+
+              <div className="input-base-row">
+                <div className="input-base-container-25">
+                  <label htmlFor="concarUsuarioPago" className="label-base">
+                    Usuario Pago
+                  </label>
+                  <input
+                    id="concarUsuarioPago"
+                    name="concarUsuarioPago"
+                    placeholder="Usuario Pago"
+                    value={dataGeneral.concarUsuarioPago ?? ""}
+                    onChange={handleDataGeneral}
+                    autoComplete="off"
+                    disabled
+                    className="input-base"
+                  />
+                </div>
+                <div className="input-base-container-25">
+                  <label htmlFor="concarUsuarioCobro" className="label-base">
+                    Usuario Cobro
+                  </label>
+                  <input
+                    id="concarUsuarioCobro"
+                    name="concarUsuarioCobro"
+                    placeholder="Usuario Cobro"
+                    value={dataGeneral.concarUsuarioCobro ?? ""}
+                    onChange={handleDataGeneral}
+                    autoComplete="off"
+                    disabled
+                    className="input-base"
+                  />
+                </div>
+                <div className="input-base-container-25">
+                  <label htmlFor="concarUsuarioCompra" className="label-base">
+                    Usuario Compra
+                  </label>
+                  <input
+                    id="concarUsuarioCompra"
+                    name="concarUsuarioCompra"
+                    placeholder="Usuario Compra"
+                    value={dataGeneral.concarUsuarioCompra ?? ""}
+                    onChange={handleDataGeneral}
+                    autoComplete="off"
+                    disabled
+                    className="input-base"
+                  />
+                </div>
+                <div className="input-base-container-25">
+                  <label htmlFor="concarUsuarioVenta" className="label-base">
+                    Usuario Venta
+                  </label>
+                  <input
+                    id="concarUsuarioVenta"
+                    name="concarUsuarioVenta"
+                    placeholder="Usuario Venta"
+                    value={dataGeneral.concarUsuarioVenta ?? ""}
+                    onChange={handleDataGeneral}
+                    autoComplete="off"
+                    disabled
                     className="input-base"
                   />
                 </div>
