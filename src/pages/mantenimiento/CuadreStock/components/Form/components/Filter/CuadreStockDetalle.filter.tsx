@@ -37,7 +37,6 @@ const CuadreStockDetalleFilter: React.FC<IProps> = ({
   const [dataCompleta, setDataCompleta] = useState<ICuadreStockDetalleTable[]>(
     []
   );
-  console.log(dataDetalles, "datadata");
 
   //#region useEffect
   useEffect(() => {

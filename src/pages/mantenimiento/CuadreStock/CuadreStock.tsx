@@ -85,7 +85,6 @@ const CuadreStock: React.FC = () => {
       menu: "Almacen/CuadreStock/GetDetalles",
       urlParams,
     });
-    console.log(detalles, "resultRESULTS");
 
     handleInitialData(globalContext, defaultCuadreStock)
       .then((response) => {

@@ -163,3 +163,20 @@ export const defaultCuadreStockDetalleFilter: ICuadreStockDetalleFilter = {
   precioUnitario: 0,
   monedaId: "",
 };
+
+export interface IArticuloCuadreStock {
+  lineaId: string;
+  subLineaId: string;
+  articuloId: string;
+  stock: number;
+}
+
+export interface IResultCuadreStock {
+  success: boolean;
+  data: {
+    data: {
+      fecha: string;
+      articulos: IArticuloCuadreStock[];
+    };
+  };
+}

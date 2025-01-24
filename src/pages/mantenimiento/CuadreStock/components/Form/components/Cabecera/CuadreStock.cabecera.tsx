@@ -1,25 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { useGlobalContext } from "../../../../../../../hooks";
 import {
   defaultCuadreStockTablas,
   ICuadreStock,
+  ICuadreStockDetalle,
   ICuadreStockTablas,
   IMoneda,
   IPersonal,
 } from "../../../../../../../models";
 import { handleSelectPersonal } from "../../../../../../../util";
 import { BiLoader } from "react-icons/bi";
-
+import { ClipLoader } from "react-spinners";
 interface IProps {
   data: ICuadreStock;
   handleData: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => Promise<void> | void;
   handleGetTipoCambio: (retorno: boolean) => Promise<number>;
-  RecalcularStock: () => Promise<void>;
+  RecalcularStock: (
+    fecha: string,
+    dataDetalle: ICuadreStockDetalle[]
+  ) => Promise<void>;
+  loading: boolean;
 }
 
 const CuadreStockCabecera: React.FC<IProps> = ({
@@ -27,6 +32,7 @@ const CuadreStockCabecera: React.FC<IProps> = ({
   handleData,
   handleGetTipoCambio,
   RecalcularStock,
+  loading,
 }) => {
   //#region useState
   const { globalContext, setGlobalContext } = useGlobalContext();
@@ -39,7 +45,6 @@ const CuadreStockCabecera: React.FC<IProps> = ({
   }: ICuadreStockTablas = form.tablas || defaultCuadreStockTablas;
   const { element } = extra;
   const { inputs } = element;
-
   //#region Funciones
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>): void => {
     if (e.key !== "Enter") return;
@@ -92,16 +97,27 @@ const CuadreStockCabecera: React.FC<IProps> = ({
                   name="buttonConsultarTipoCambio"
                   title="Presione [ALT + Z] para consultar a SUNAT."
                   accessKey="z"
-                  onClick={() => RecalcularStock()}
+                  onClick={() =>
+                    RecalcularStock(data.fechaRegistro, data.detalles)
+                  }
                   onKeyDown={handleKeyDown}
                   // disabled={data.detalles.length > 0}
                   className="button-base-anidado button-base-bg-primary"
                 >
-                  <BiLoader
-                    strokeWidth={2}
-                    size="2rem"
-                    className="button-base-icon"
-                  />
+                  {loading ? (
+                    <ClipLoader
+                      color="#ffffff"
+                      size={20}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                    />
+                  ) : (
+                    <BiLoader
+                      strokeWidth={2}
+                      size="2rem"
+                      className="button-base-icon"
+                    />
+                  )}
                 </button>
               )}
             </div>

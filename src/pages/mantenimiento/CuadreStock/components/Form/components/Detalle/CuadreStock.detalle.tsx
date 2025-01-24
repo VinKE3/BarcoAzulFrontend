@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import {
   defaultCuadreStockTablas,
   ICuadreStock,
@@ -20,6 +20,7 @@ interface IProps {
   handleDataGeneral: (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => Promise<void> | void;
+  handleTotal: (e: ChangeEvent<HTMLInputElement>) => Promise<void> | void;
 }
 
 const CuadreStockDetalle: React.FC<IProps> = ({
@@ -27,6 +28,7 @@ const CuadreStockDetalle: React.FC<IProps> = ({
   dataDetalles,
   setDataDetalles,
   setDataGeneral,
+  handleTotal,
   handleDataGeneral,
 }) => {
   //#region useState
@@ -41,41 +43,7 @@ const CuadreStockDetalle: React.FC<IProps> = ({
     defaultCuadreStockDetalle
   );
   const columns = useCuadreStockDetalleColumn(handleTotal);
-  console.log(dataGeneral, "dataGeneral");
   //#endregion
-
-  const handleData = ({
-    target,
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-    const { name } = target;
-    const value = handleInputType(target);
-    setData((x) => ({ ...x, [name]: value }));
-  };
-
-  function handleTotal({ target }: ChangeEvent<HTMLInputElement>): void {
-    const { name } = target;
-    const value = handleInputType(target);
-
-    const regex = /^totales\[(\d+)\]\.(\w+)$/; // Captura el índice y el campo
-    const match = name.match(regex);
-
-    if (match) {
-      const index = parseInt(match[1], 10);
-      const field = match[2];
-
-      // setData((x) => {
-      //   const newtotales = [...x.totales];
-      //   const item = { ...newtotales[index], [field]: Number(value) };
-
-      //   // Recalcular las diferencias
-      //   item.diferenciaPEN = item.totalCuadrePEN - item.totalSistemaPEN;
-      //   item.diferenciaUSD = item.totalCuadreUSD - item.totalSistemaUSD;
-
-      //   newtotales[index] = item;
-      //   return { ...x, totales: newtotales };
-      // });
-    }
-  }
   return (
     <div className="form-base-container cuadre-stock-detalle-form">
       <CuadreStockDetalleFilter

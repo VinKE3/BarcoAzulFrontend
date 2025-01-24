@@ -98,6 +98,50 @@ const cuadreStockDetalleColumn = (
           />
         ),
       },
+      {
+        Header: "Cant. Falta",
+        accessor: "cantidadFalta",
+        Cell: ({ value }: { value: number }) => {
+          return (
+            <p className="table-base-body-td-right">
+              {handleNumber(value, true, true)}
+            </p>
+          );
+        },
+      },
+      {
+        Header: "Total Falta",
+        accessor: "totalFalta",
+        Cell: ({ value }: { value: number }) => {
+          return (
+            <p className="table-base-body-td-right">
+              {handleNumber(value, true, true)}
+            </p>
+          );
+        },
+      },
+      {
+        Header: "Cant. Sobra",
+        accessor: "cantidadSobra",
+        Cell: ({ value }: { value: number }) => {
+          return (
+            <p className="table-base-body-td-right">
+              {handleNumber(value, true, true)}
+            </p>
+          );
+        },
+      },
+      {
+        Header: "Total Sobra",
+        accessor: "totalSobra",
+        Cell: ({ value }: { value: number }) => {
+          return (
+            <p className="table-base-body-td-right">
+              {handleNumber(value, true, true)}
+            </p>
+          );
+        },
+      },
     ],
     []
   );

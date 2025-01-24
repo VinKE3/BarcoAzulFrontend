@@ -24,6 +24,7 @@ import {
   ICuadreStockTablas,
   defaultCuadreStock,
   defaultCuadreStockTablas,
+  IResultCuadreStock,
 } from "../../../../../models";
 import {
   get,
@@ -43,6 +44,7 @@ import {
   roundNumber,
 } from "../../../../../util";
 import { CuadreStockCabecera, CuadreStockDetalle } from "./components";
+import { ClipLoader } from "react-spinners";
 
 const CuadreStockForm: React.FC = () => {
   //#region useState
@@ -60,9 +62,9 @@ const CuadreStockForm: React.FC = () => {
   const [dataDetalles, setDataDetalles] = useState<ICuadreStockDetalle[]>(
     data.detalles || []
   );
-  const [dataInventario, setDataInventario] = useState<ICuadreStockDetalle>(
-    defaultCuadreStockDetalle
-  );
+  const [loading, setLoading] = useState(false);
+
+  console.log(primer.tipo, "que tipo es");
 
   const inputs = useFocus(
     "tipoDocumentoId",
@@ -116,6 +118,15 @@ const CuadreStockForm: React.FC = () => {
   useEffect(() => {
     handleLoad();
   }, [primer.tipo]);
+
+  useEffect(() => {
+    console.log("Updated dataDetalles:", dataDetalles);
+  }, [dataDetalles]);
+
+  useEffect(() => {
+    handleTotales(dataDetalles);
+  }, [dataDetalles]);
+
   //#endregion
 
   //#region Funciones
@@ -166,53 +177,106 @@ const CuadreStockForm: React.FC = () => {
     return precioVenta;
   };
 
-  const Inventario = async (
-    dataDetalle: ICuadreStockDetalle[]
-  ): Promise<void> => {
-    let detalle = dataDetalle.map((x) => {
-      if (x.detalleId == dataInventario.detalleId) {
-        //Calculos
-        let cantidad = x.stockFinal - Number(dataInventario.inventario);
-        let precioUnitario = x.precioUnitario;
+  function handleTotal({ target }: ChangeEvent<HTMLInputElement>): void {
+    const { name } = target;
+    const value = handleInputType(target);
+
+    const regex = /^totales\[(\d+)\]\.(\w+)$/; // Captura el índice y el campo
+    const match = name.match(regex);
+
+    if (match) {
+      const index = parseInt(match[1], 10);
+      const field = match[2];
+
+      setDataDetalles((x) => {
+        const newDetalles = [...x];
+        const item = { ...newDetalles[index], [field]: Number(value) };
+
+        // Realizar cálculos
+        const cantidad = item.stockFinal - item.inventario;
         let cantidadSobra = 0;
         let cantidadFalta = 0;
+
         if (cantidad < 0) {
           cantidadSobra = cantidad;
         } else {
           cantidadFalta = cantidad;
         }
-        let totalSobra = cantidadSobra * precioUnitario;
-        let totalFalta = cantidadFalta * precioUnitario;
-        //Calculos
-        return {
-          ...x,
-          inventario: roundNumber(dataInventario.inventario, 2),
-          cantidadSobra: roundNumber(cantidadSobra, 2),
-          cantidadFalta: roundNumber(cantidadFalta, 2),
-          totalSobra: roundNumber(totalSobra, 2),
-          totalFalta: roundNumber(totalFalta, 2),
-        };
-      } else {
-        return x;
-      }
-    });
-    setDataDetalles(detalle);
-  };
 
-  const RecalcularStock = async (): Promise<void> => {
-    //almacenamos el detalle
+        const totalSobra = cantidadSobra * item.precioUnitario;
+        const totalFalta = cantidadFalta * item.precioUnitario;
+
+        // Asignar los valores calculados y redondearlos
+        item.cantidadSobra = Math.abs(roundNumber(cantidadSobra, 2));
+        item.cantidadFalta = Math.abs(roundNumber(cantidadFalta, 2));
+        item.totalSobra = Math.abs(roundNumber(totalSobra, 2));
+        item.totalFalta = Math.abs(roundNumber(totalFalta, 2));
+
+        newDetalles[index] = item;
+
+        return newDetalles;
+      });
+    }
+  }
+
+  const RecalcularStock = async (fecha: string): Promise<void> => {
+    setLoading(true);
     let detalle: ICuadreStockDetalle[] = dataDetalles;
     const result = await put({
       globalContext,
       menu: "Almacen/CuadreStock/RecalcularStock",
-      data: data,
+      data: {
+        fecha: fecha,
+        articulos: dataDetalles.map((x) => ({
+          lineaId: x.lineaId,
+          subLineaId: x.subLineaId,
+          articuloId: x.articuloId,
+          stock: x.stockFinal,
+        })),
+      },
+      allData: true,
     });
+
     if (result) {
       handleToast("success", "Se ha recalculado el stock", "top");
-    }
-    console.log(result.data, "RESULTDATADATADATA");
 
-    //*Mapeamos lo que retorna el endpoint
+      // actualizamos el stock en base a los nuevos valores
+      detalle = detalle.map((map: ICuadreStockDetalle) => {
+        const matchingArticle = result.data.data.articulos.find(
+          (x: any) =>
+            map.articuloId === x.articuloId &&
+            map.lineaId === x.lineaId &&
+            map.subLineaId === x.subLineaId
+        );
+
+        if (matchingArticle) {
+          const inventario =
+            primer.tipo === "registrar"
+              ? matchingArticle.stock
+              : map.inventario;
+          const stockFinal = matchingArticle.stock;
+          const cantidad = stockFinal - inventario;
+          const precioUnitario = map.precioUnitario;
+          const cantidadSobra = cantidad < 0 ? cantidad : 0;
+          const cantidadFalta = cantidad >= 0 ? cantidad : 0;
+          const totalSobra = cantidadSobra * precioUnitario;
+          const totalFalta = cantidadFalta * precioUnitario;
+
+          return {
+            ...map,
+            stockFinal: roundNumber(stockFinal, 2),
+            inventario: roundNumber(inventario, 2),
+            cantidadSobra: Math.abs(roundNumber(cantidadSobra, 2)),
+            cantidadFalta: Math.abs(roundNumber(cantidadFalta, 2)),
+            totalSobra: roundNumber(totalSobra, 2),
+            totalFalta: roundNumber(totalFalta, 2),
+          };
+        }
+        return map;
+      });
+      setDataDetalles(detalle);
+      setLoading(false);
+    }
   };
 
   const handleData = ({
@@ -243,7 +307,7 @@ const CuadreStockForm: React.FC = () => {
     //suma los importes de los detalles
     let totalFalta = detalles.reduce((total, x) => total + x.totalFalta, 0);
     let totalSobra = detalles.reduce((total, x) => total + x.totalSobra, 0);
-    let saldoTotal = totalFalta + totalSobra;
+    let saldoTotal = totalSobra - totalFalta;
     setData((x) => ({
       ...x,
       totalFalta: roundNumber(totalFalta, 2),
@@ -268,6 +332,7 @@ const CuadreStockForm: React.FC = () => {
               handleData={handleData}
               handleGetTipoCambio={handleGetTipoCambio}
               RecalcularStock={RecalcularStock}
+              loading={loading}
             />
             <CuadreStockDetalle
               dataGeneral={data}
@@ -275,6 +340,7 @@ const CuadreStockForm: React.FC = () => {
               setDataDetalles={setDataDetalles}
               setDataGeneral={setData}
               handleDataGeneral={handleData}
+              handleTotal={handleTotal}
             />
           </div>
 
