@@ -1,6 +1,14 @@
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
-import { ICombo, IGlobalContext, ILoteModalTable, ITipoUsuarioTable } from "../../models";
+import {
+  IBloquearCompraTable,
+  IBloquearMovimientoBancarioTable,
+  IBloquearVentaTable,
+  ICombo,
+  IGlobalContext,
+  ILoteModalTable,
+  ITipoUsuarioTable,
+} from "../../models";
 import { handleToast } from "../global";
 
 //#region Columns
@@ -8,7 +16,9 @@ import { handleToast } from "../global";
  * Restablece la paginación de la tabla a la página 0 en el contexto global.
  * @param setGlobalContext Función para actualizar el estado del contexto global.
  */
-export const resetPagination = (setGlobalContext: React.Dispatch<React.SetStateAction<IGlobalContext>>): void => {
+export const resetPagination = (
+  setGlobalContext: React.Dispatch<React.SetStateAction<IGlobalContext>>
+): void => {
   setGlobalContext((x) => ({
     ...x, // Mantener el resto del contexto global sin cambios
     table: {
@@ -51,10 +61,19 @@ export const handleFormatRowDate = (date: string): string => {
  *                  Si es true, devuelve "S/." para soles o "US$" para dólares. Si es false, devuelve "SOLES" para soles o "DÓLARES AMERICANOS" para dólares.
  * @returns La representación de la moneda en formato abreviado o completo según el valor de `abreviado`.
  */
-export const handleMonedaRow = (id: string, abreviado: boolean = true): string => {
+export const handleMonedaRow = (
+  id: string,
+  abreviado: boolean = true
+): string => {
   // Si abreviado es true, retorna la abreviatura correspondiente: "S/." para soles o "US$" para dólares
   // Si abreviado es false, retorna el nombre completo: "SOLES" para soles o "DÓLARES AMERICANOS" para dólares
-  return id === "S" ? (abreviado ? "S/." : "SOLES") : abreviado ? "US$" : "DÓLARES AMERICANOS";
+  return id === "S"
+    ? abreviado
+      ? "S/."
+      : "SOLES"
+    : abreviado
+    ? "US$"
+    : "DÓLARES AMERICANOS";
 };
 
 /**
@@ -64,7 +83,11 @@ export const handleMonedaRow = (id: string, abreviado: boolean = true): string =
  * @param prop La propiedad del elemento que se desea obtener.
  * @returns El valor de la propiedad del elemento si se encuentra, una cadena vacía en caso contrario.
  */
-export const handleTextDescripcion = (tablas: ICombo[], id: any, prop: keyof ICombo = "descripcion"): string => {
+export const handleTextDescripcion = (
+  tablas: ICombo[],
+  id: any,
+  prop: keyof ICombo = "descripcion"
+): string => {
   // Buscar el elemento en la tabla que tenga el ID proporcionado
   const row = tablas.find((x: ICombo) => x.id === id);
   // Devolver el valor de la propiedad del elemento si se encuentra, o una cadena vacía si no se encuentra
@@ -126,7 +149,7 @@ export const handleTextEstadoSUNAT = (estado: string): string => {
 
 /**
  * Función que determina qué columna se modificará en base al check que se marque
- * 
+ *
  * @param {React.Dispatch<React.SetStateAction<IGlobalContext>>} setGlobalContext - Función para actualizar el estado del contexto global.
  * @param {string} origen - Indica el origen de la acción (puede ser "venta" o "defecto").
  * @param {ILoteModalTable} row - La fila completa de la tabla que contiene los datos del lote.
@@ -138,7 +161,45 @@ export const handleLoteCheck = (
 ): void => {
   setGlobalContext((x) => ({
     ...x,
-    form: { ...x.form, retorno: { origen, row } }
+    form: { ...x.form, retorno: { origen, row } },
+  }));
+};
+
+/**
+ * Función que determina qué columna se modificará en base al check que se marque
+ *
+ * @param {React.Dispatch<React.SetStateAction<IGlobalContext>>} setGlobalContext - Función para actualizar el estado del contexto global.
+ * @param {string} origen - Indica el origen de la acción (puede ser "venta" o "defecto").
+ * @param {ILoteModalTable} row - La fila completa de la tabla que contiene los datos del lote.
+ */
+export const handleBloquearCompraCheck = (
+  setGlobalContext: React.Dispatch<React.SetStateAction<IGlobalContext>>,
+  origen: string, // Origen venta | defecto
+  row: IBloquearCompraTable // Fila completa de la tabla
+): void => {
+  setGlobalContext((x) => ({
+    ...x,
+    form: { ...x.form, retorno: { origen, row } },
+  }));
+};
+export const handleBloquearVentaCheck = (
+  setGlobalContext: React.Dispatch<React.SetStateAction<IGlobalContext>>,
+  origen: string, // Origen venta | defecto
+  row: IBloquearVentaTable // Fila completa de la tabla
+): void => {
+  setGlobalContext((x) => ({
+    ...x,
+    form: { ...x.form, retorno: { origen, row } },
+  }));
+};
+export const handleBloquearMovimientoBancarioCheck = (
+  setGlobalContext: React.Dispatch<React.SetStateAction<IGlobalContext>>,
+  origen: string, // Origen venta | defecto
+  row: IBloquearMovimientoBancarioTable // Fila completa de la tabla
+): void => {
+  setGlobalContext((x) => ({
+    ...x,
+    form: { ...x.form, retorno: { origen, row } },
   }));
 };
 //#endregion

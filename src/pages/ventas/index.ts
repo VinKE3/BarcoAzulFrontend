@@ -1,3 +1,6 @@
+export * from "./BloquearVenta/BloquearVenta";
+export * from "./BloquearVenta/components/Column/bloquearVenta.column";
+export * from "./BloquearVenta/components/Filter/BloquearVenta.filter";
 export * from "./CuentaPorCobrar/CuentaPorCobrar";
 export * from "./CuentaPorCobrar/components/Column/cuentaPorCobrar.column";
 export * from "./CuentaPorCobrar/components/Column/cuentaPorCobrarDetalle.column";

@@ -1,50 +1,28 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { mantenimientoRoutes, privateRoutes } from "../../../../../common";
 import {
-  mantenimientoRoutes,
-  privateRoutes,
-  ventasRoute,
-} from "../../../../../common";
-import {
-  ArticuloFindModal,
   BasicKeyHandler,
   ButtonFooter,
-  ClienteFindModal,
   Messages,
 } from "../../../../../components";
 import { useFocus, useGlobalContext } from "../../../../../hooks";
 import {
-  IClienteCompleto,
-  IClienteContacto,
-  IClienteDireccion,
-  IClienteFind,
+  defaultCuadreStock,
   ICuadreStock,
   ICuadreStockDetalle,
-  defaultCuadreStockDetalle,
-  ICuadreStockTablas,
-  defaultCuadreStock,
-  defaultCuadreStockTablas,
-  IResultCuadreStock,
 } from "../../../../../models";
 import {
-  get,
-  getId,
   handleBackPage,
-  handleFocus,
   handleInputType,
   handleResetContext,
-  handleSelectTipoPago,
-  handleSetErrorMensaje,
   handleSetInputs,
-  handleSetRetorno,
   handleTipoCambio,
   handleToast,
-  handleUpdateTablas,
   put,
   roundNumber,
 } from "../../../../../util";
 import { CuadreStockCabecera, CuadreStockDetalle } from "./components";
-import { ClipLoader } from "react-spinners";
 
 const CuadreStockForm: React.FC = () => {
   //#region useState
@@ -63,8 +41,6 @@ const CuadreStockForm: React.FC = () => {
     data.detalles || []
   );
   const [loading, setLoading] = useState(false);
-
-  console.log(primer.tipo, "que tipo es");
 
   const inputs = useFocus(
     "tipoDocumentoId",

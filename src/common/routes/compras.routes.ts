@@ -5,4 +5,5 @@ export const comprasRoutes = {
   ENTRADAARTICULOS_FORMULARIO: "entradaArticulos/form",
   CUENTASPORPAGAR: "cuentasPorPagar",
   CUENTASPORPAGAR_FORMULARIO: "cuentasPorPagar/form",
+  BLOQUEARCOMPRAS: "bloquearCompra",
 };

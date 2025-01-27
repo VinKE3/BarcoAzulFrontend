@@ -99,8 +99,7 @@ const CuentaPorCobrar: React.FC = () => {
           <ButtonGroup
             isTablas={true}
             isPermitido={true}
-            showAnular={true}
-            showImprimir={false}
+            showRegistrar={false}
           />
         )}
       </div>

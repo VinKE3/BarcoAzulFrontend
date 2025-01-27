@@ -1,7 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CuentaPorPagarFilter, useCuentaPorPagarColumn } from ".";
+import {
+  BloquearMovimientoBancarioFilter,
+  useBloquearMovimientoBancarioColumn,
+} from ".";
 import {
   ButtonGroup,
   DeleteModal,
@@ -12,31 +16,40 @@ import {
 } from "../../../components";
 import { useGlobalContext, usePermisos } from "../../../hooks";
 import {
-  ICuentaPorPagar,
-  ICuentaPorPagarTablas,
-  defaultCuentaPorPagar,
+  defaultBloquearMovimientoBancario,
+  IBloquearMovimientoBancario,
+  IBloquearMovimientoBancarioTablas,
+  IBloquearMovimientoBancarioTable,
+  ICombo,
+  IMensajes,
 } from "../../../models";
 import {
+  get,
+  getListar,
   handleInitialData,
   handlePrimaryModal,
   handleResetContext,
   handleResetMensajeError,
+  handleSetErrorMensaje,
+  handleSetMensajes,
   handleSetPermisoYMenu,
+  handleToast,
+  put,
 } from "../../../util";
 
-const CuentaPorPagar: React.FC = () => {
+const BloquearMovimientoBancario: React.FC = () => {
   //#region useState
   const navigate = useNavigate();
-  const menu: string = "Finanzas/CuentaPorPagar";
+  const menu: string = "Finanzas/BloquearMovimientoBancario";
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, mensajes, table, modal, form } = globalContext;
+  const { retorno } = form;
   const { primer } = modal;
-  const { visible, permisos } = usePermisos("CuentaPorPagar");
   const mensaje = mensajes.filter((x) => x.origen === "global" && x.tipo >= 0);
   const [ready, setReady] = useState(false);
-  const columns = useCuentaPorPagarColumn();
-  //#endregion
+  const { visible, permisos } = usePermisos("BloquearMovimientoBancario");
 
+  const [tiposDocumento, setTiposDocumento] = useState<ICombo[]>([]);
   //#region useEffect
   useEffect(() => {
     const resetContext = async () => {
@@ -69,38 +82,67 @@ const CuentaPorPagar: React.FC = () => {
   useEffect(() => {
     form.data && primer.tipo && api.menu === menu && navigate("form");
   }, [form.data]);
+
+  useEffect(() => {
+    retorno && bloquearMovimientoBancario();
+  }, [retorno]);
+
   //#endregion
 
-  //#region Funciones
+  //#region funciones
   const handleModal = async (): Promise<void> => {
     if (primer.tipo === "eliminar" || primer.tipo === "anular") {
       return;
     }
 
-    handleInitialData(globalContext, defaultCuentaPorPagar)
+    handleInitialData(globalContext, defaultBloquearMovimientoBancario)
       .then((response) => {
         const {
           data,
           tablas,
-        }: { data: ICuentaPorPagar; tablas: ICuentaPorPagarTablas } = response;
+        }: {
+          data: IBloquearMovimientoBancario;
+          tablas: IBloquearMovimientoBancarioTablas;
+        } = response;
         handlePrimaryModal(setGlobalContext, data, tablas);
       })
       .catch((error) => {
         handleResetMensajeError(setGlobalContext, true, true, error);
       });
   };
-  //#endregion
+  const bloquearMovimientoBancario = async (): Promise<void> => {
+    try {
+      const { row }: { origen: string; row: IBloquearMovimientoBancarioTable } =
+        retorno;
+      const { id, isBloqueado } = row;
+      const resultMessage: IMensajes[] = await put({
+        globalContext,
+        menu,
+        data: {
+          ids: [id],
+          isBloqueado: !isBloqueado,
+        },
+      });
 
+      handleToast("success", "Se ha actualizado el bloqueo", "top");
+      handleSetMensajes(setGlobalContext, resultMessage, "form");
+      console.log(resultMessage);
+    } catch (error) {
+      handleSetErrorMensaje(setGlobalContext, error);
+    }
+  };
+  const columns = useBloquearMovimientoBancarioColumn(
+    api.loading,
+    setGlobalContext
+  );
+
+  //#endregion
   return (
     <div className="main-base">
       <div className="main-header">
-        <h4 className="main-header-title">Cuentas Por Pagar</h4>
+        <h4 className="main-header-title">Bloquear Movimientos Bancarios</h4>
         {ready && visible && (
-          <ButtonGroup
-            isTablas={true}
-            isPermitido={true}
-            showRegistrar={false}
-          />
+          <ButtonGroup isTablas={true} showRegistrar={false} />
         )}
       </div>
 
@@ -111,21 +153,18 @@ const CuentaPorPagar: React.FC = () => {
         {ready && visible && (
           <>
             {mensaje.length > 0 && <Messages mensajes={mensajes} />}
-            {visible && <CuentaPorPagarFilter />}
+            {visible && <BloquearMovimientoBancarioFilter />}
             {visible && (
               <Table
                 data={table.data}
                 columns={columns}
-                isPermitido={true}
                 isTablas={true}
-                tableClassName="cuenta-por-pagar-table"
+                tableClassName="bloquear-movimiento-bancario-table"
               />
             )}
+
             {primer.tipo === "eliminar" && (
-              <DeleteModal propText={"numeroDocumento"} />
-            )}
-            {primer.tipo === "anular" && (
-              <DeleteModal origen="anular" propText={"numeroDocumento"} />
+              <DeleteModal propText={"descripcion"} />
             )}
           </>
         )}
@@ -134,4 +173,4 @@ const CuentaPorPagar: React.FC = () => {
   );
 };
 
-export default CuentaPorPagar;
+export default BloquearMovimientoBancario;

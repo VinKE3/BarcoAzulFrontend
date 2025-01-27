@@ -6,6 +6,7 @@ import { SalidaArticulos, SalidaArticulosForm } from "./SalidaArticulos";
 import { NotaPedido, NotaPedidoForm } from "./NotaPedido";
 import { GuiaRemision, GuiaRemisionForm } from "./GuiaRemision";
 import { DocumentoVenta, DocumentoVentaForm } from "./DocumentoVenta";
+import { BloquearVenta } from "./BloquearVenta";
 
 const Ventas = () => {
   return (
@@ -46,6 +47,7 @@ const Ventas = () => {
           path={ventasRoute.SALIDAPRODUCCION_FORMULARIO}
           element={<SalidaArticulosForm />}
         />
+        <Route path={ventasRoute.BLOQUEARVENTA} element={<BloquearVenta />} />
       </>
     </RoutesWithNotFound>
   );

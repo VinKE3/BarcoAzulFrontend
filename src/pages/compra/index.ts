@@ -1,4 +1,7 @@
 export * from "./Compras";
+export * from "./BloquearCompra";
+export * from "./BloquearCompra/components/index";
+export * from "./BloquearCompra/components/Filter/index";
 export * from "./CuentaPorPagar/CuentaPorPagar";
 export * from "./CuentaPorPagar/components/Column/cuentaPorPagar.column";
 export * from "./CuentaPorPagar/components/Column/cuentaPorPagarDetalle.column";

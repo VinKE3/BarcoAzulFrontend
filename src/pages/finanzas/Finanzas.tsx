@@ -2,6 +2,7 @@ import { Navigate, Route } from "react-router-dom";
 import { finanzasRoutes } from "../../common";
 import { RoutesWithNotFound } from "../../util";
 import { MovientoBancarioForm, MovimientoBancario } from "./MovimientoBancario";
+import { BloquearMovimientoBancario } from "./BloquearMovimientoBancario";
 
 const Finanzas = () => {
   return (
@@ -18,6 +19,10 @@ const Finanzas = () => {
         <Route
           path={finanzasRoutes.MOVIMIENTOBANCARIO_FORMULARIO}
           element={<MovientoBancarioForm />}
+        />
+        <Route
+          path={finanzasRoutes.BLOQUEARMOVIMIENTOBANCARIO}
+          element={<BloquearMovimientoBancario />}
         />
       </>
     </RoutesWithNotFound>

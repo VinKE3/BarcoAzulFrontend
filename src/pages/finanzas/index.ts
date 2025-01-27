@@ -3,3 +3,7 @@ export * from "./MovimientoBancario/components/Column/movientobancariodetalle.co
 export * from "./MovimientoBancario/components/Column/movimientobancario.column";
 export * from "./MovimientoBancario/components/Filter/MovimientoBancario.filter";
 export * from "./MovimientoBancario/components/Form/MovimientoBancario.form";
+export * from "./BloquearMovimientoBancario";
+export * from "./BloquearMovimientoBancario/components";
+export * from "./BloquearMovimientoBancario/components/Filter/BloquearMovimientoBancario.filter";
+export * from "./BloquearMovimientoBancario/components/Column/bloquearMovimientoBancario.column";

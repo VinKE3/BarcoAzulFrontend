@@ -34,15 +34,17 @@ const {
   CUADRESTOCK,
   TIPOCAMBIO,
 } = mantenimientoRoutes;
-const { TODASLASCOMPRAS, CUENTASPORPAGAR, ENTRADAARTICULOS } = comprasRoutes;
+const { TODASLASCOMPRAS, CUENTASPORPAGAR, ENTRADAARTICULOS, BLOQUEARCOMPRAS } =
+  comprasRoutes;
 const {
   DOCUMENTOVENTA,
   GUIASREMISION,
   CUENTASPORCOBRAR,
   NOTAPEDIDO,
   SALIDAPRODUCCION,
+  BLOQUEARVENTA,
 } = ventasRoute;
-const { MOVIMIENTOBANCARIO, MOVIMIENTOBANCARIO_FORMULARIO } = finanzasRoutes;
+const { MOVIMIENTOBANCARIO, BLOQUEARMOVIMIENTOBANCARIO } = finanzasRoutes;
 const createSubMenu = (items: ISubMenuElement[]) => items;
 //#endregion
 
@@ -123,6 +125,10 @@ export function navbarMenu(): IMenuElement[] {
           text: "Movimiento Bancario",
           path: `${FINANZAS}/${MOVIMIENTOBANCARIO}`,
         },
+        {
+          text: "Bloquear Movimiento Bancario",
+          path: `${FINANZAS}/${BLOQUEARMOVIMIENTOBANCARIO}`,
+        },
       ]),
     },
     {
@@ -141,6 +147,10 @@ export function navbarMenu(): IMenuElement[] {
         {
           text: "Cuentas por pagar",
           path: `${COMPRAS}/${CUENTASPORPAGAR}`,
+        },
+        {
+          text: "Bloquear Compras",
+          path: `${COMPRAS}/${BLOQUEARCOMPRAS}`,
         },
       ]),
     },
@@ -168,6 +178,10 @@ export function navbarMenu(): IMenuElement[] {
         {
           text: "Cuentas por cobrar",
           path: `${VENTAS}/${CUENTASPORCOBRAR}`,
+        },
+        {
+          text: "Bloquear Ventas",
+          path: `${VENTAS}/${BLOQUEARVENTA}`,
         },
       ]), // Sin submenús definidos
     },

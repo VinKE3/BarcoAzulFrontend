@@ -5,6 +5,7 @@ import { DocumentoCompra } from "./DocumentoCompra";
 import DocumentoCompraForm from "./DocumentoCompra/components/Form/DocumentoCompra.form";
 import { CuentaPorPagar, CuentaPorPagarForm } from "./CuentaPorPagar";
 import { EntradaArticulos, EntradaArticulosForm } from "./EntradaArticulos";
+import { BloquearCompra } from "./BloquearCompra";
 const Compras = () => {
   return (
     <RoutesWithNotFound>
@@ -36,6 +37,10 @@ const Compras = () => {
         <Route
           path={comprasRoutes.ENTRADAARTICULOS_FORMULARIO}
           element={<EntradaArticulosForm />}
+        />
+        <Route
+          path={comprasRoutes.BLOQUEARCOMPRAS}
+          element={<BloquearCompra />}
         />
       </>
     </RoutesWithNotFound>

@@ -3,4 +3,5 @@ export const finanzasRoutes = {
   MOVIMIENTOBANCARIO_FORMULARIO: "movimientoBancario/form",
   TODASLASCOMPRAS_FORMULARIO: "todasLasComprasFormulario",
   REPORTECUENTABANCARIA: "reporteCuentaBancaria",
+  BLOQUEARMOVIMIENTOBANCARIO: "bloquearMovimientoBancario",
 };

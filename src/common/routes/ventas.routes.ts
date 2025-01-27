@@ -9,4 +9,5 @@ export const ventasRoute = {
   SALIDAPRODUCCION_FORMULARIO: "salidaProduccion/form",
   CUENTASPORCOBRAR: "cuentasPorCobrar",
   CUENTASPORCOBRAR_FORMULARIO: "cuentasPorCobrar/form",
+  BLOQUEARVENTA: "bloquearVenta",
 };
