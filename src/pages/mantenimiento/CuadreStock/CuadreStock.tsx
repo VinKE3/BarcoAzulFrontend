@@ -13,17 +13,27 @@ import {
   ICuadreStock,
   ICuadreStockDetalle,
   ICuadreStockTablas,
+  ICuadreStockTable,
+  IMensajes,
   defaultCuadreStock,
 } from "../../../models";
 import {
   get,
+  getIsPermitido,
   handleInitialData,
   handlePrimaryModal,
   handleResetContext,
   handleResetMensajeError,
+  handleRow,
+  handleSecondaryModal,
+  handleSetMensajes,
   handleSetPermisoYMenu,
+  handleToast,
+  put,
 } from "../../../util";
 import { useNavigate } from "react-router-dom";
+import { FaClipboardCheck } from "react-icons/fa6";
+import Swal from "sweetalert2";
 
 const CuadreStock: React.FC = () => {
   //#region useState
@@ -31,6 +41,7 @@ const CuadreStock: React.FC = () => {
   const menu: string = "Almacen/CuadreStock";
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, mensajes, table, modal, form } = globalContext;
+  const { data, row } = table as { data: ICuadreStockTable[]; row: number };
   const { primer } = modal;
   const mensaje = mensajes.filter((x) => x.origen === "global" && x.tipo >= 0);
   const [ready, setReady] = useState(false);
@@ -99,12 +110,71 @@ const CuadreStock: React.FC = () => {
         handleResetMensajeError(setGlobalContext, true, true, error);
       });
   };
+
+  const handleCerrar = (): void => {
+    if (!handleRow(row)) return;
+    const permitido = getIsPermitido({ globalContext, accion: "adicional" });
+    console.log(permitido, "permitido");
+    const { estado } = data[row];
+    let id = data[row].id;
+    const cerrado = data.find((x) => x.id === id);
+    const title = cerrado?.estado
+      ? "Abrir Cuadre De Stock"
+      : "Cerrar Cuadre De Stock";
+    const status = !cerrado?.estado;
+    Swal.fire({
+      title: title,
+      icon: "warning",
+      iconColor: "#F7BF3A",
+      showCancelButton: true,
+      color: "#fff",
+      background: "#171B23",
+      confirmButtonColor: "#3B8407",
+      confirmButtonText: "Confirmar",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+    }).then(async (x) => {
+      if (x.isConfirmed) {
+        const resultMessage: IMensajes[] = await put({
+          globalContext,
+          menu: `Almacen/CuadreStock/AbrirCerrar/${id}?estado=${status}`,
+        });
+        handleSetMensajes(setGlobalContext, resultMessage);
+      } else {
+        handleToast("info", "Seleccione una fila");
+      }
+    });
+  };
   //#endregion
   return (
     <div className="main-base">
       <div className="main-header">
         <h4 className="main-header-title">Cuadre Stock</h4>
-        {ready && visible && <ButtonGroup isTablas={true} isPermitido={true} />}
+        {ready && visible && (
+          <ButtonGroup isPermitido={true} showImprimir={true} isTablas={true}>
+            {(permisos.registrar || permisos.modificar) && (
+              <>
+                <button
+                  title="Presione [ALT + Q] para abrir/cerrar cuadre de stock."
+                  accessKey="q"
+                  onClick={handleCerrar}
+                  className="button-base button-base-bg-red"
+                >
+                  <FaClipboardCheck
+                    size={"2rem"}
+                    className="button-base-icon"
+                  />
+                  <span className="button-base-text-hidden-info">
+                    [ ALT + Q ]
+                  </span>
+                  <span className="button-base-text-hidden">
+                    Cerrar/Abrir Cuadre
+                  </span>
+                </button>
+              </>
+            )}
+          </ButtonGroup>
+        )}
       </div>
 
       <div className="main-body">
@@ -117,6 +187,7 @@ const CuadreStock: React.FC = () => {
             {visible && <CuadreStockFilter />}
             {visible && (
               <Table
+                isPermitido={true}
                 data={table.data}
                 columns={columns}
                 isTablas={true}

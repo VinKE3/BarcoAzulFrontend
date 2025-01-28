@@ -38,11 +38,8 @@ const CuadreStockCabecera: React.FC<IProps> = ({
   const { globalContext, setGlobalContext } = useGlobalContext();
   const { api, modal, form, extra } = globalContext;
   const { primer } = modal;
-  const {
-    vendedores,
-
-    monedas,
-  }: ICuadreStockTablas = form.tablas || defaultCuadreStockTablas;
+  const { vendedores, monedas }: ICuadreStockTablas =
+    form.tablas || defaultCuadreStockTablas;
   const { element } = extra;
   const { inputs } = element;
   //#region Funciones
@@ -137,7 +134,7 @@ const CuadreStockCabecera: React.FC<IProps> = ({
               <option key="default" value="">
                 SELECCIONAR
               </option>
-              {monedas.map((x: IMoneda) => (
+              {monedas?.map((x: IMoneda) => (
                 <option key={x.id} value={x.id}>
                   {x.descripcion}
                 </option>
@@ -200,7 +197,7 @@ const CuadreStockCabecera: React.FC<IProps> = ({
               <option key="default" value="">
                 SELECCIONAR
               </option>
-              {vendedores.map((x: IPersonal) => (
+              {vendedores?.map((x: IPersonal) => (
                 <option key={x.id} value={x.id}>
                   {handleSelectPersonal(x)}
                 </option>

@@ -69,6 +69,7 @@ const useCuadreStockColumn = (): Column<ICuadreStockTable>[] => {
             id={row.original.id}
             rowData={row.original}
             isTablas={true}
+            isPermitido={true}
           />
         ),
       },

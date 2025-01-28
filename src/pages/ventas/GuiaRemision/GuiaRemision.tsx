@@ -32,6 +32,7 @@ const GuiaRemision: React.FC = () => {
   const { api, mensajes, table, modal, form } = globalContext;
   const { primer } = modal;
   const { visible, permisos } = usePermisos("GuiaRemision");
+  console.log(permisos);
   const mensaje = mensajes.filter((x) => x.origen === "global" && x.tipo >= 0);
   const [ready, setReady] = useState(false);
   const columns = useGuiaRemisionColumn();

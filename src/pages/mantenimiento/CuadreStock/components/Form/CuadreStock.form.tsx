@@ -95,9 +95,7 @@ const CuadreStockForm: React.FC = () => {
     handleLoad();
   }, [primer.tipo]);
 
-  useEffect(() => {
-    console.log("Updated dataDetalles:", dataDetalles);
-  }, [dataDetalles]);
+  useEffect(() => {}, [dataDetalles]);
 
   useEffect(() => {
     handleTotales(dataDetalles);
