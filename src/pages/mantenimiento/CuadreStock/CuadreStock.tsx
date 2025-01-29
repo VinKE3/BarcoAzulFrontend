@@ -26,6 +26,7 @@ import {
   handleResetMensajeError,
   handleRow,
   handleSecondaryModal,
+  handleSetErrorMensaje,
   handleSetMensajes,
   handleSetPermisoYMenu,
   handleToast,
@@ -113,9 +114,7 @@ const CuadreStock: React.FC = () => {
 
   const handleCerrar = (): void => {
     if (!handleRow(row)) return;
-    const permitido = getIsPermitido({ globalContext, accion: "adicional" });
-    console.log(permitido, "permitido");
-    const { estado } = data[row];
+
     let id = data[row].id;
     const cerrado = data.find((x) => x.id === id);
     const title = cerrado?.estado
@@ -135,16 +134,19 @@ const CuadreStock: React.FC = () => {
       cancelButtonText: "Cancelar",
     }).then(async (x) => {
       if (x.isConfirmed) {
-        const resultMessage: IMensajes[] = await put({
-          globalContext,
-          menu: `Almacen/CuadreStock/AbrirCerrar/${id}?estado=${status}`,
-        });
-        handleSetMensajes(setGlobalContext, resultMessage);
-      } else {
-        handleToast("info", "Seleccione una fila");
+        try {
+          const resultMessage: IMensajes[] = await put({
+            globalContext,
+            menu: `Almacen/CuadreStock/AbrirCerrar/${id}?estado=${status}`,
+          });
+          handleSetMensajes(setGlobalContext, resultMessage);
+        } catch (error: any) {
+          handleSetErrorMensaje(setGlobalContext, error[0].textos.join("\n"));
+        }
       }
     });
   };
+
   //#endregion
   return (
     <div className="main-base">
